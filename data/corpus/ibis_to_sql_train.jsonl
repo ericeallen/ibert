@@ -1,0 +1,4 @@
+{"ibis_code": "t1.join(t2, t1.id == t2.id)", "sql_code": "SELECT * FROM t1 JOIN t2 ON t1.id = t2.id", "description": "Inner join on ID", "type": "synthetic"}
+{"ibis_code": "t.filter(t.column > 10)", "sql_code": "SELECT * FROM t WHERE column > 10", "description": "Simple filter condition", "type": "synthetic"}
+{"ibis_code": "t.group_by(\"category\").aggregate(count=t.count())", "sql_code": "SELECT category, COUNT(*) as count FROM t GROUP BY category", "description": "Group by with aggregation", "type": "synthetic"}
+{"ibis_code": "t.order_by(t.date.desc()).limit(10)", "sql_code": "SELECT * FROM t ORDER BY date DESC LIMIT 10", "description": "Order by with limit", "type": "synthetic"}

@@ -1,0 +1,786 @@
+{"file": "ibis/config.py", "error_type": "com.IbisError", "message": "You have used a function that relies on the default backend, but the default\nbackend (DuckDB) is not installed.\n\nYou may specify an alternate backend to use, e.g.\n\nibis.set_backend(\"polars\")\n\nor to install the DuckDB backend, run:\n\n    pip install 'ibis-framework[duckdb]'\n\nor\n\n    conda install -c conda-forge ibis-framework\n\nFor more information on available backends, visit https://ibis-project.org/install\n", "context": "# Code from lines 163 to 182"}
+{"file": "ibis/util.py", "error_type": "TypeError", "message": "flatten is only defined for non-str iterables", "context": "# Code from lines 294 to 294"}
+{"file": "ibis/util.py", "error_type": "ValueError", "message": "Slice step can only be 1", "context": "# Code from lines 540 to 540"}
+{"file": "ibis/util.py", "error_type": "ImportError", "message": null, "context": "# Code from lines 450 to 450"}
+{"file": "ibis/util.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 612 to 612"}
+{"file": "ibis/util.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 261 to 263"}
+{"file": "ibis/__init__.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 66 to 66"}
+{"file": "ibis/__init__.py", "error_type": "RuntimeError", "message": null, "context": "# Code from lines 69 to 74"}
+{"file": "ibis/__init__.py", "error_type": "ImportError", "message": null, "context": "# Code from lines 84 to 89"}
+{"file": "ibis/selectors.py", "error_type": "exc.IbisInputError", "message": null, "context": "# Code from lines 400 to 402"}
+{"file": "ibis/selectors.py", "error_type": "exc.IbisInputError", "message": null, "context": "# Code from lines 856 to 858"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 375 to 375"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 378 to 378"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 388 to 388"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 171 to 173"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "ValueError", "message": "Arrow interval type is not supported", "context": "# Code from lines 92 to 92"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 247 to 249"}
+{"file": "ibis/formats/pyarrow.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 136 to 136"}
+{"file": "ibis/formats/pandas.py", "error_type": "ValueError", "message": "schema names don't match input data columns", "context": "# Code from lines 120 to 120"}
+{"file": "ibis/formats/pandas.py", "error_type": "TypeError", "message": "Column names must be strings to ingest a pandas DataFrame", "context": "# Code from lines 100 to 102"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 38 to 38"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 56 to 56"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 74 to 74"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 90 to 90"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 110 to 110"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 126 to 126"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 150 to 150"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 168 to 168"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 186 to 186"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 202 to 202"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 218 to 218"}
+{"file": "ibis/formats/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 234 to 234"}
+{"file": "ibis/formats/numpy.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 63 to 63"}
+{"file": "ibis/formats/numpy.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 95 to 95"}
+{"file": "ibis/formats/polars.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 100 to 100"}
+{"file": "ibis/formats/polars.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 113 to 115"}
+{"file": "ibis/backends/conftest.py", "error_type": "pytest.PytestCollectionWarning", "message": null, "context": "# Code from lines 234 to 234"}
+{"file": "ibis/backends/conftest.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 273 to 277"}
+{"file": "ibis/backends/conftest.py", "error_type": "ValueError", "message": "notimpl requires a raises", "context": "# Code from lines 317 to 317"}
+{"file": "ibis/backends/conftest.py", "error_type": "ValueError", "message": "notyet requires a raises", "context": "# Code from lines 331 to 331"}
+{"file": "ibis/backends/conftest.py", "error_type": "ValueError", "message": "never requires a reason", "context": "# Code from lines 341 to 341"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 340 to 340"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 402 to 404"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 426 to 428"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 450 to 452"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 474 to 476"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 651 to 653"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1408 to 1410"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1423 to 1425"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1496 to 1498"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1554 to 1554"}
+{"file": "ibis/backends/__init__.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 62 to 62"}
+{"file": "ibis/backends/__init__.py", "error_type": "exc.IbisError", "message": "Cannot reconnect to unconfigured {self.name} backend", "context": "# Code from lines 1067 to 1067"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1260 to 1260"}
+{"file": "ibis/backends/__init__.py", "error_type": "exc.IbisError", "message": null, "context": "# Code from lines 1269 to 1269"}
+{"file": "ibis/backends/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1510 to 1510"}
+{"file": "ibis/backends/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 1771 to 1771"}
+{"file": "ibis/backends/__init__.py", "error_type": "KeyError", "message": null, "context": "# Code from lines 58 to 58"}
+{"file": "ibis/backends/__init__.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 66 to 66"}
+{"file": "ibis/backends/__init__.py", "error_type": "ModuleNotFoundError", "message": "Exporting to arrow formats requires `pyarrow` but it is not installed", "context": "# Code from lines 100 to 102"}
+{"file": "ibis/backends/__init__.py", "error_type": "ImportError", "message": "The deltalake extra is required to use the to_delta method. You can install it using pip:\n\npip install 'ibis-framework[deltalake]'\n", "context": "# Code from lines 619 to 623"}
+{"file": "ibis/backends/__init__.py", "error_type": "exc.BackendConfigurationNotRegistered", "message": null, "context": "# Code from lines 1255 to 1255"}
+{"file": "ibis/backends/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 1763 to 1763"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "Window frame's start point must be greater than its end point", "context": "# Code from lines 188 to 190"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "Can only specify one window side when you want an off-center window", "context": "# Code from lines 254 to 256"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "Window frame can only depend on a single relation", "context": "# Code from lines 162 to 162"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "Cannot bind window frame without a table", "context": "# Code from lines 226 to 226"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "preceding end point cannot be None", "context": "# Code from lines 260 to 260"}
+{"file": "ibis/expr/builders.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 302 to 302"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "preceding end point must be non-negative", "context": "# Code from lines 262 to 262"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "following start point cannot be None", "context": "# Code from lines 272 to 272"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "preceding start point must be non-negative", "context": "# Code from lines 264 to 264"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "following start point must be non-negative", "context": "# Code from lines 274 to 274"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "following end point must be non-negative", "context": "# Code from lines 276 to 276"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "preceding end point must be non-negative", "context": "# Code from lines 288 to 288"}
+{"file": "ibis/expr/builders.py", "error_type": "IbisInputError", "message": "following end point must be non-negative", "context": "# Code from lines 292 to 292"}
+{"file": "ibis/expr/rewrites.py", "error_type": "ExpressionError", "message": null, "context": "# Code from lines 325 to 327"}
+{"file": "ibis/expr/rewrites.py", "error_type": "ExpressionError", "message": "Unable to merge windows with conflicting `start` boundary", "context": "# Code from lines 329 to 331"}
+{"file": "ibis/expr/rewrites.py", "error_type": "ExpressionError", "message": "Unable to merge windows with conflicting `end` boundary", "context": "# Code from lines 333 to 333"}
+{"file": "ibis/expr/rewrites.py", "error_type": "IbisInputError", "message": null, "context": "# Code from lines 178 to 180"}
+{"file": "ibis/expr/format.py", "error_type": "ValueError", "message": "limit must be >= 1", "context": "# Code from lines 63 to 63"}
+{"file": "ibis/expr/format.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 173 to 173"}
+{"file": "ibis/expr/rules.py", "error_type": "AssertionError", "message": "unreachable", "context": "# Code from lines 131 to 131"}
+{"file": "ibis/expr/api.py", "error_type": "TypeError", "message": "Creating an `ibis.memtable` from a `pyarrow.RecordBatchReader` would load _all_ data into memory. If you want to do this, please do so explicitly like `ibis.memtable(reader.read_all())`", "context": "# Code from lines 537 to 541"}
+{"file": "ibis/expr/api.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 2408 to 2408"}
+{"file": "ibis/expr/api.py", "error_type": "ValueError", "message": "Schema names and types must have the same length", "context": "# Code from lines 254 to 254"}
+{"file": "ibis/expr/api.py", "error_type": "ValueError", "message": "A catalog-only namespace is invalid in Ibis, please specify a database as well.", "context": "# Code from lines 318 to 321"}
+{"file": "ibis/expr/api.py", "error_type": "NotImplementedError", "message": "passing `columns` and schema` is ambiguous; pass one or the other but not both", "context": "# Code from lines 410 to 413"}
+{"file": "ibis/expr/api.py", "error_type": "IbisInputError", "message": null, "context": "# Code from lines 483 to 485"}
+{"file": "ibis/expr/api.py", "error_type": "IbisInputError", "message": "Must only specify either `rows`, `range`, `between` or `preceding`/`following`", "context": "# Code from lines 1843 to 1845"}
+{"file": "ibis/expr/api.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 471 to 474"}
+{"file": "ibis/expr/api.py", "error_type": "NotImplementedError", "message": "Timezone currently not supported when creating a timestamp from components", "context": "# Code from lines 891 to 893"}
+{"file": "ibis/expr/api.py", "error_type": "TypeError", "message": "Use ibis.literal(...).as_timestamp() instead", "context": "# Code from lines 896 to 896"}
+{"file": "ibis/expr/api.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 1172 to 1172"}
+{"file": "ibis/expr/api.py", "error_type": "TypeError", "message": "value must be an integer or timedelta", "context": "# Code from lines 1183 to 1183"}
+{"file": "ibis/expr/decompile.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 83 to 83"}
+{"file": "ibis/expr/decompile.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 446 to 446"}
+{"file": "ibis/expr/decompile.py", "error_type": "ValueError", "message": "No metrics to aggregate", "context": "# Code from lines 186 to 186"}
+{"file": "ibis/expr/decompile.py", "error_type": "ImportError", "message": "The 'format' option requires the 'black' package to be installed", "context": "# Code from lines 474 to 476"}
+{"file": "ibis/expr/sql.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 95 to 95"}
+{"file": "ibis/expr/sql.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 528 to 528"}
+{"file": "ibis/expr/sql.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 525 to 525"}
+{"file": "ibis/expr/schema.py", "error_type": "InputTypeError", "message": null, "context": "# Code from lines 419 to 419"}
+{"file": "ibis/expr/schema.py", "error_type": "InputTypeError", "message": null, "context": "# Code from lines 425 to 425"}
+{"file": "ibis/expr/schema.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 105 to 107"}
+{"file": "ibis/expr/schema.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 150 to 150"}
+{"file": "ibis/common/temporal.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 226 to 226"}
+{"file": "ibis/common/temporal.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 200 to 200"}
+{"file": "ibis/common/temporal.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 240 to 240"}
+{"file": "ibis/common/temporal.py", "error_type": "TypeError", "message": "Unable to convert np.datetime64 without pandas", "context": "# Code from lines 276 to 276"}
+{"file": "ibis/common/temporal.py", "error_type": "CoercionError", "message": null, "context": "# Code from lines 37 to 37"}
+{"file": "ibis/common/temporal.py", "error_type": "CoercionError", "message": null, "context": "# Code from lines 53 to 53"}
+{"file": "ibis/common/temporal.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 130 to 130"}
+{"file": "ibis/common/temporal.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 221 to 221"}
+{"file": "ibis/common/patterns.py", "error_type": "ValueError", "message": "The type to match has fewer `__match_args__` than the number of positional arguments in the pattern", "context": "# Code from lines 1317 to 1320"}
+{"file": "ibis/common/patterns.py", "error_type": "TypeError", "message": "Only variables can be used as capture keys", "context": "# Code from lines 355 to 355"}
+{"file": "ibis/common/patterns.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 715 to 717"}
+{"file": "ibis/common/patterns.py", "error_type": "ValueError", "message": "Can't specify both exactly and at_least/at_most", "context": "# Code from lines 1014 to 1014"}
+{"file": "ibis/common/patterns.py", "error_type": "TypeError", "message": "Callable has mandatory keyword-only arguments which cannot be specified", "context": "# Code from lines 1410 to 1412"}
+{"file": "ibis/common/patterns.py", "error_type": "NotImplementedError", "message": "Only covariant typevars are supported for now", "context": "# Code from lines 108 to 110"}
+{"file": "ibis/common/patterns.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 124 to 124"}
+{"file": "ibis/common/patterns.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 196 to 198"}
+{"file": "ibis/common/dispatch.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 91 to 91"}
+{"file": "ibis/common/dispatch.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 38 to 38"}
+{"file": "ibis/common/dispatch.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 45 to 45"}
+{"file": "ibis/common/dispatch.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 49 to 49"}
+{"file": "ibis/common/graph.py", "error_type": "ValueError", "message": "cycle detected in the graph", "context": "# Code from lines 671 to 671"}
+{"file": "ibis/common/graph.py", "error_type": "TypeError", "message": "finder must be callable, type, tuple of types or a pattern", "context": "# Code from lines 198 to 198"}
+{"file": "ibis/common/graph.py", "error_type": "TypeError", "message": "replacer must be callable, mapping or a pattern", "context": "# Code from lines 243 to 243"}
+{"file": "ibis/common/graph.py", "error_type": "TypeError", "message": "First item of the returned tuple must be an instance of boolean or iterable", "context": "# Code from lines 716 to 719"}
+{"file": "ibis/common/egraph.py", "error_type": "ValueError", "message": "Variable name cannot be None", "context": "# Code from lines 279 to 279"}
+{"file": "ibis/common/egraph.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 453 to 453"}
+{"file": "ibis/common/egraph.py", "error_type": "RuntimeError", "message": null, "context": "# Code from lines 259 to 261"}
+{"file": "ibis/common/egraph.py", "error_type": "TypeError", "message": "applier must be a Pattern or a Variable returning an ENode", "context": "# Code from lines 468 to 470"}
+{"file": "ibis/common/egraph.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 565 to 565"}
+{"file": "ibis/common/deferred.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 104 to 104"}
+{"file": "ibis/common/deferred.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 107 to 109"}
+{"file": "ibis/common/deferred.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 100 to 100"}
+{"file": "ibis/common/deferred.py", "error_type": "CoercionError", "message": null, "context": "# Code from lines 57 to 59"}
+{"file": "ibis/common/deferred.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 257 to 257"}
+{"file": "ibis/common/deferred.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 404 to 404"}
+{"file": "ibis/common/collections.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 112 to 112"}
+{"file": "ibis/common/collections.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 295 to 297"}
+{"file": "ibis/common/collections.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 300 to 300"}
+{"file": "ibis/common/collections.py", "error_type": "ConflictingValuesError", "message": null, "context": "# Code from lines 214 to 214"}
+{"file": "ibis/common/collections.py", "error_type": "ValueError", "message": "No checkpoint to rewind to.", "context": "# Code from lines 362 to 362"}
+{"file": "ibis/common/numeric.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 28 to 30"}
+{"file": "ibis/common/numeric.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 20 to 20"}
+{"file": "ibis/common/numeric.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 34 to 37"}
+{"file": "ibis/common/numeric.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 43 to 46"}
+{"file": "ibis/common/exceptions.py", "error_type": "UnsupportedOperationError", "message": null, "context": "# Code from lines 165 to 167"}
+{"file": "ibis/common/typing.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 280 to 280"}
+{"file": "ibis/common/typing.py", "error_type": "TypeError", "message": "Sentinels are not constructible", "context": "# Code from lines 255 to 255"}
+{"file": "ibis/common/typing.py", "error_type": "TypeError", "message": "Sentinels cannot be subclassed", "context": "# Code from lines 251 to 251"}
+{"file": "ibis/common/annotations.py", "error_type": "AttributeValidationError", "message": null, "context": "# Code from lines 128 to 132"}
+{"file": "ibis/common/annotations.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 287 to 289"}
+{"file": "ibis/common/annotations.py", "error_type": "SignatureValidationError", "message": "{call} has failed due to the following errors:{errors}\n\nExpected signature: {sig}", "context": "# Code from lines 501 to 508"}
+{"file": "ibis/common/annotations.py", "error_type": "SignatureValidationError", "message": "{call} has failed due to the following errors:{errors}\n\nExpected signature: {sig}", "context": "# Code from lines 528 to 535"}
+{"file": "ibis/common/annotations.py", "error_type": "ReturnValidationError", "message": null, "context": "# Code from lines 560 to 564"}
+{"file": "ibis/common/annotations.py", "error_type": "SignatureValidationError", "message": "{call} {cause}\n\nExpected signature: {sig}", "context": "# Code from lines 481 to 487"}
+{"file": "ibis/common/annotations.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 518 to 518"}
+{"file": "ibis/common/annotations.py", "error_type": "TypeError", "message": "only one variadic *args parameter is allowed", "context": "# Code from lines 342 to 342"}
+{"file": "ibis/common/annotations.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 390 to 390"}
+{"file": "ibis/common/annotations.py", "error_type": "TypeError", "message": "only one variadic **kwargs parameter is allowed", "context": "# Code from lines 346 to 346"}
+{"file": "ibis/common/annotations.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 456 to 456"}
+{"file": "ibis/common/bases.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 92 to 95"}
+{"file": "ibis/common/bases.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 123 to 123"}
+{"file": "ibis/common/grounds.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 237 to 237"}
+{"file": "ibis/examples/__init__.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 127 to 127"}
+{"file": "ibis/common/tests/test_grounds_py310.py", "error_type": "ValueError", "message": "Unable to match", "context": "# Code from lines 42 to 42"}
+{"file": "ibis/common/tests/test_grounds_py310.py", "error_type": "ValueError", "message": "Unable to match", "context": "# Code from lines 49 to 49"}
+{"file": "ibis/common/tests/test_patterns.py", "error_type": "ValueError", "message": "raise on coercion", "context": "# Code from lines 1173 to 1173"}
+{"file": "ibis/common/tests/test_grounds.py", "error_type": "IndexError", "message": null, "context": "# Code from lines 122 to 122"}
+{"file": "ibis/common/tests/test_grounds.py", "error_type": "KeyError", "message": null, "context": "# Code from lines 157 to 157"}
+{"file": "ibis/common/tests/test_graph.py", "error_type": "AssertionError", "message": "must not be called", "context": "# Code from lines 289 to 289"}
+{"file": "ibis/common/tests/test_graph.py", "error_type": "AssertionError", "message": "must not be called", "context": "# Code from lines 300 to 300"}
+{"file": "ibis/expr/types/arrays.py", "error_type": "NotImplementedError", "message": "step can only be 1", "context": "# Code from lines 145 to 145"}
+{"file": "ibis/expr/types/arrays.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 404 to 406"}
+{"file": "ibis/expr/types/temporal.py", "error_type": "ValueError", "message": "Must specify either interval value or components, but not both", "context": "# Code from lines 1083 to 1085"}
+{"file": "ibis/expr/types/logical.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 335 to 338"}
+{"file": "ibis/expr/types/joins.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 224 to 224"}
+{"file": "ibis/expr/types/joins.py", "error_type": "IbisTypeError", "message": null, "context": "# Code from lines 239 to 241"}
+{"file": "ibis/expr/types/joins.py", "error_type": "IbisInputError", "message": "use table.asof_join(...) instead", "context": "# Code from lines 246 to 246"}
+{"file": "ibis/expr/types/joins.py", "error_type": "ExpressionError", "message": "Join key tuple must be length 2", "context": "# Code from lines 177 to 177"}
+{"file": "ibis/expr/types/joins.py", "error_type": "TypeError", "message": "`on` must be a string or a ValueExpr", "context": "# Code from lines 318 to 318"}
+{"file": "ibis/expr/types/joins.py", "error_type": "InputTypeError", "message": "`on` must be a comparison expression", "context": "# Code from lines 314 to 314"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.ExpressionError", "message": "Use .count() instead", "context": "# Code from lines 1089 to 1089"}
+{"file": "ibis/expr/types/relations.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 1147 to 1147"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 499 to 501"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisError", "message": null, "context": "# Code from lines 865 to 867"}
+{"file": "ibis/expr/types/relations.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 1143 to 1145"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisTypeError", "message": "rowid() is only valid for physical tables, not for generic table expressions", "context": "# Code from lines 1292 to 1295"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisError", "message": "At least one sort key must be provided", "context": "# Code from lines 1975 to 1975"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.ExpressionError", "message": "Table must have exactly one column when viewed as array", "context": "# Code from lines 2260 to 2262"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisTypeError", "message": "You must select at least one column for a valid projection", "context": "# Code from lines 2558 to 2560"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": "You must pass at least one predicate to filter", "context": "# Code from lines 2913 to 2913"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": "Selector returned no columns to pivot on", "context": "# Code from lines 4410 to 4410"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 4416 to 4420"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": "At least one selector or `before` or `after` must be provided", "context": "# Code from lines 5081 to 5083"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": "Cannot specify both `before` and `after`", "context": "# Code from lines 5086 to 5086"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 5158 to 5160"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": "Keyword arguments cannot produce more than one value", "context": "# Code from lines 635 to 637"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisError", "message": null, "context": "# Code from lines 1582 to 1584"}
+{"file": "ibis/expr/types/relations.py", "error_type": "ValueError", "message": "duplicate new names passed for renaming {old_name!r}", "context": "# Code from lines 2701 to 2701"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 4877 to 4879"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisError", "message": null, "context": "# Code from lines 1567 to 1570"}
+{"file": "ibis/expr/types/relations.py", "error_type": "ValueError", "message": "Format strings must take a single parameter `name`", "context": "# Code from lines 2737 to 2737"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 3138 to 3141"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 3146 to 3149"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 3158 to 3162"}
+{"file": "ibis/expr/types/relations.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 4428 to 4430"}
+{"file": "ibis/expr/types/generic.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 1551 to 1554"}
+{"file": "ibis/expr/types/generic.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 3074 to 3074"}
+{"file": "ibis/expr/types/generic.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 3078 to 3080"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.IbisTypeError", "message": "Unexpected window type: {window!r}", "context": "# Code from lines 900 to 900"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.RelationError", "message": "Cannot use window with multiple tables", "context": "# Code from lines 909 to 909"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.IbisTypeError", "message": "No reduction or analytic function found to construct a window expression", "context": "# Code from lines 915 to 917"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.RelationError", "message": "The scalar expression cannot be converted to a table expression because it involves multiple base table references", "context": "# Code from lines 1530 to 1534"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.RelationError", "message": null, "context": "# Code from lines 1731 to 1734"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.RelationError", "message": null, "context": "# Code from lines 1753 to 1756"}
+{"file": "ibis/expr/types/generic.py", "error_type": "com.IbisTypeError", "message": "TopK must depend on exactly one table.", "context": "# Code from lines 2269 to 2269"}
+{"file": "ibis/expr/types/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 93 to 93"}
+{"file": "ibis/expr/types/core.py", "error_type": "ValueError", "message": "The truth value of an Ibis expression is not defined", "context": "# Code from lines 138 to 138"}
+{"file": "ibis/expr/types/core.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 938 to 940"}
+{"file": "ibis/expr/types/core.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 944 to 946"}
+{"file": "ibis/expr/types/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 132 to 134"}
+{"file": "ibis/expr/types/core.py", "error_type": "IbisError", "message": "Multiple backends found for this expression", "context": "# Code from lines 344 to 344"}
+{"file": "ibis/expr/types/core.py", "error_type": "CoercionError", "message": "Unable to coerce value to an expression", "context": "# Code from lines 102 to 102"}
+{"file": "ibis/expr/types/core.py", "error_type": "IbisError", "message": "Expression contains unbound tables and therefore cannot be executed. Use `<backend>.execute(expr)` to execute against an explicit backend, or rebuild the expression using bound tables instead.", "context": "# Code from lines 330 to 335"}
+{"file": "ibis/expr/types/core.py", "error_type": "IbisError", "message": "Expression depends on no backends, and found no default", "context": "# Code from lines 338 to 340"}
+{"file": "ibis/expr/types/dataframe_interchange.py", "error_type": "TypeError", "message": "describe_categorical only works on a column with categorical dtype", "context": "# Code from lines 145 to 147"}
+{"file": "ibis/expr/types/structs.py", "error_type": "KeyError", "message": null, "context": "# Code from lines 207 to 207"}
+{"file": "ibis/expr/types/structs.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 283 to 283"}
+{"file": "ibis/expr/types/structs.py", "error_type": "IbisError", "message": "StructValue must depend on exactly one table", "context": "# Code from lines 353 to 353"}
+{"file": "ibis/expr/types/numeric.py", "error_type": "ValueError", "message": "at least one of lower and upper must be provided", "context": "# Code from lines 211 to 211"}
+{"file": "ibis/expr/types/numeric.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 1395 to 1397"}
+{"file": "ibis/expr/types/numeric.py", "error_type": "ValueError", "message": "`nbins` is required if `binwidth` is not provided", "context": "# Code from lines 1404 to 1404"}
+{"file": "ibis/expr/types/temporal_windows.py", "error_type": "com.IbisInputError", "message": "Window aggregations require `time_col` as an argument", "context": "# Code from lines 34 to 36"}
+{"file": "ibis/expr/types/groupby.py", "error_type": "AttributeError", "message": null, "context": "# Code from lines 53 to 53"}
+{"file": "ibis/expr/types/json.py", "error_type": "exc.IbisTypeError", "message": null, "context": "# Code from lines 250 to 253"}
+{"file": "ibis/expr/types/strings.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 111 to 111"}
+{"file": "ibis/expr/types/strings.py", "error_type": "TypeError", "message": "Use string_expr.contains(arg)", "context": "# Code from lines 412 to 412"}
+{"file": "ibis/expr/types/strings.py", "error_type": "NotImplementedError", "message": "`end` parameter is not yet implemented", "context": "# Code from lines 707 to 707"}
+{"file": "ibis/expr/types/strings.py", "error_type": "ValueError", "message": "Step can only be 1", "context": "# Code from lines 97 to 97"}
+{"file": "ibis/expr/types/strings.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 99 to 101"}
+{"file": "ibis/expr/types/strings.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 103 to 105"}
+{"file": "ibis/expr/datatypes/cast.py", "error_type": "IbisTypeError", "message": null, "context": "# Code from lines 21 to 23"}
+{"file": "ibis/expr/datatypes/cast.py", "error_type": "IbisTypeError", "message": null, "context": "# Code from lines 137 to 139"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 213 to 215"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "CoercionError", "message": "Unable to coerce to a DataType", "context": "# Code from lines 201 to 201"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 237 to 237"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 299 to 301"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 886 to 888"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "ValueError", "message": "Decimal type precision cannot be negative", "context": "# Code from lines 890 to 890"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "ValueError", "message": "Decimal type precision cannot be zero", "context": "# Code from lines 892 to 892"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": "Decimal type scale must be an integer", "context": "# Code from lines 895 to 895"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "ValueError", "message": "Decimal type scale cannot be negative", "context": "# Code from lines 897 to 897"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 899 to 902"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 262 to 265"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 309 to 309"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 739 to 739"}
+{"file": "ibis/expr/datatypes/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 295 to 297"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "InputTypeError", "message": null, "context": "# Code from lines 35 to 37"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": "Empty struct type not supported", "context": "# Code from lines 46 to 46"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "ValueError", "message": "Unable to infer interval type from mixed units, use ibis.interval(timedelta) instead", "context": "# Code from lines 96 to 99"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 263 to 263"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "ValueError", "message": "Unable to infer interval type from zero value", "context": "# Code from lines 110 to 110"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 270 to 270"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 277 to 280"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 275 to 275"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 287 to 287"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 293 to 293"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 312 to 312"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 314 to 316"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 365 to 365"}
+{"file": "ibis/expr/datatypes/value.py", "error_type": "IbisTypeError", "message": null, "context": "# Code from lines 344 to 344"}
+{"file": "ibis/expr/tests/test_visualize.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 66 to 66"}
+{"file": "ibis/expr/tests/test_visualize.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 69 to 69"}
+{"file": "ibis/expr/operations/histograms.py", "error_type": "ValidationError", "message": "Must be at least one bucket edge", "context": "# Code from lines 36 to 36"}
+{"file": "ibis/expr/operations/histograms.py", "error_type": "ValidationError", "message": "If one bucket edge provided, must have include_under=True and include_over=True", "context": "# Code from lines 39 to 42"}
+{"file": "ibis/expr/operations/window.py", "error_type": "com.IbisTypeError", "message": "Row-based window frame start boundary must be an integer", "context": "# Code from lines 83 to 85"}
+{"file": "ibis/expr/operations/window.py", "error_type": "com.IbisTypeError", "message": "Row-based window frame end boundary must be an integer", "context": "# Code from lines 87 to 89"}
+{"file": "ibis/expr/operations/window.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 103 to 105"}
+{"file": "ibis/expr/operations/window.py", "error_type": "com.IbisTypeError", "message": "Window frame start and end boundaries must have the same datatype", "context": "# Code from lines 99 to 101"}
+{"file": "ibis/expr/operations/window.py", "error_type": "CoercionError", "message": null, "context": "# Code from lines 63 to 63"}
+{"file": "ibis/expr/operations/logical.py", "error_type": "IbisTypeError", "message": null, "context": "# Code from lines 68 to 71"}
+{"file": "ibis/expr/operations/logical.py", "error_type": "ValidationError", "message": null, "context": "# Code from lines 123 to 126"}
+{"file": "ibis/expr/operations/logical.py", "error_type": "ValidationError", "message": null, "context": "# Code from lines 128 to 131"}
+{"file": "ibis/expr/operations/subqueries.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 43 to 46"}
+{"file": "ibis/expr/operations/subqueries.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 75 to 78"}
+{"file": "ibis/expr/operations/subqueries.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 81 to 81"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "IbisTypeError", "message": null, "context": "# Code from lines 96 to 99"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "RelationError", "message": null, "context": "# Code from lines 317 to 319"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "RelationError", "message": null, "context": "# Code from lines 353 to 353"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 48 to 48"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 115 to 117"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 233 to 235"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 284 to 287"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "IntegrityError", "message": null, "context": "# Code from lines 289 to 291"}
+{"file": "ibis/expr/operations/relations.py", "error_type": "RelationError", "message": null, "context": "# Code from lines 346 to 346"}
+{"file": "ibis/expr/operations/generic.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 302 to 305"}
+{"file": "ibis/expr/operations/core.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 24 to 26"}
+{"file": "ibis/expr/operations/core.py", "error_type": "CoercionError", "message": null, "context": "# Code from lines 77 to 77"}
+{"file": "ibis/expr/operations/structs.py", "error_type": "ValidationError", "message": null, "context": "# Code from lines 45 to 48"}
+{"file": "ibis/expr/operations/reductions.py", "error_type": "ValidationError", "message": "`collect` with `order_by` and `distinct=True` and may only order by the collected column", "context": "# Code from lines 398 to 401"}
+{"file": "ibis/expr/operations/reductions.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 180 to 180"}
+{"file": "ibis/expr/operations/udf.py", "error_type": "exc.UnsupportedArgumentError", "message": "schema` is not a valid argument.\n                You can use the `catalog` and `database` keywords to specify a UDF location.", "context": "# Code from lines 113 to 116"}
+{"file": "ibis/expr/operations/udf.py", "error_type": "exc.MissingReturnAnnotationError", "message": null, "context": "# Code from lines 121 to 121"}
+{"file": "ibis/expr/operations/tests/test_core_py310.py", "error_type": "ValueError", "message": "Unable to match", "context": "# Code from lines 16 to 16"}
+{"file": "ibis/expr/operations/tests/test_core_py310.py", "error_type": "ValueError", "message": "Unable to match", "context": "# Code from lines 23 to 23"}
+{"file": "ibis/expr/operations/tests/test_core_py310.py", "error_type": "ValueError", "message": "Unable to match", "context": "# Code from lines 30 to 30"}
+{"file": "ibis/legacy/udf/vectorized.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 186 to 186"}
+{"file": "ibis/legacy/udf/validate.py", "error_type": "com.IbisTypeError", "message": "The output type of a UDF must be a single datatype.", "context": "# Code from lines 69 to 69"}
+{"file": "ibis/legacy/udf/validate.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 55 to 60"}
+{"file": "ibis/tests/expr/test_table.py", "error_type": "ValueError", "message": "\u00a1moo!", "context": "# Code from lines 2107 to 2107"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 67 to 67"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 70 to 70"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 73 to 73"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 76 to 76"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 79 to 79"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 82 to 82"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 85 to 85"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 88 to 88"}
+{"file": "ibis/tests/expr/mocks.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 91 to 91"}
+{"file": "ibis/backends/clickhouse/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "`catalog` namespaces are not supported by ClickHouse", "context": "# Code from lines 500 to 502"}
+{"file": "ibis/backends/clickhouse/__init__.py", "error_type": "com.IbisInputError", "message": "Cannot specify both `temp=True` and `overwrite=True` for ClickHouse", "context": "# Code from lines 667 to 669"}
+{"file": "ibis/backends/clickhouse/__init__.py", "error_type": "com.IbisError", "message": "The `schema` or `obj` parameter is required", "context": "# Code from lines 672 to 672"}
+{"file": "ibis/backends/clickhouse/__init__.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 227 to 227"}
+{"file": "ibis/backends/clickhouse/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 229 to 233"}
+{"file": "ibis/backends/clickhouse/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 509 to 509"}
+{"file": "ibis/backends/flink/ddl.py", "error_type": "exc.IbisError", "message": null, "context": "# Code from lines 105 to 109"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 969 to 973"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisTypeError", "message": null, "context": "# Code from lines 280 to 282"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisTypeError", "message": null, "context": "# Code from lines 394 to 397"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": "`schema` or `obj` is required", "context": "# Code from lines 501 to 501"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": "`temp` cannot be False when `obj` is in-memory. Currently can create only TEMPORARY VIEW for in-memory data.", "context": "# Code from lines 503 to 506"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": "`temp` cannot be False when `obj` is in-memory. Currently supports creating only temporary view for in-memory data.", "context": "# Code from lines 685 to 688"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 798 to 800"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": "`obj` is of type ibis.expr.types.Table but it is not in-memory. Currently, only in-memory tables are supported. See ibis.memtable() for info on creating in-memory table.", "context": "# Code from lines 526 to 530"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": "`tbl_properties` is required when creating table with schema", "context": "# Code from lines 551 to 553"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": null, "context": "# Code from lines 725 to 725"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.TableNotFound", "message": null, "context": "# Code from lines 335 to 335"}
+{"file": "ibis/backends/flink/__init__.py", "error_type": "exc.IbisError", "message": "connector must be defined in `tbl_properties`", "context": "# Code from lines 557 to 557"}
+{"file": "ibis/backends/flink/utils.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 310 to 310"}
+{"file": "ibis/backends/flink/utils.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 67 to 69"}
+{"file": "ibis/backends/flink/utils.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 81 to 83"}
+{"file": "ibis/backends/flink/utils.py", "error_type": "ValueError", "message": "NaN is not supported in Flink SQL", "context": "# Code from lines 266 to 266"}
+{"file": "ibis/backends/flink/utils.py", "error_type": "ValueError", "message": "Infinity is not supported in Flink SQL", "context": "# Code from lines 268 to 268"}
+{"file": "ibis/backends/flink/utils.py", "error_type": "ValueError", "message": "The precision can be up to 38 in Flink", "context": "# Code from lines 277 to 277"}
+{"file": "ibis/backends/trino/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 179 to 179"}
+{"file": "ibis/backends/trino/__init__.py", "error_type": "com.IbisError", "message": "One of the `schema` or `obj` parameter is required", "context": "# Code from lines 427 to 427"}
+{"file": "ibis/backends/trino/__init__.py", "error_type": "NotImplementedError", "message": "Temporary tables are not supported in the Trino backend", "context": "# Code from lines 432 to 434"}
+{"file": "ibis/backends/trino/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 538 to 541"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 195 to 197"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.UnsupportedArgumentError", "message": "Catalogs are not supported in pyspark < 3.4", "context": "# Code from lines 270 to 272"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "PySpark backend does not yet support temporary tables", "context": "# Code from lines 670 to 672"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Reading a Delta Lake table in streaming mode is not supported", "context": "# Code from lines 827 to 829"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Pyspark in streaming mode does not support direction registration of parquet files. Please use `read_parquet_dir` instead.", "context": "# Code from lines 859 to 862"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Pyspark in streaming mode does not support direction registration of CSV files. Please use `read_csv_dir` instead.", "context": "# Code from lines 898 to 901"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Pyspark in streaming mode does not support direction registration of JSON files. Please use `read_json_dir` instead.", "context": "# Code from lines 941 to 944"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Writing to a Delta Lake table in streaming mode is not supported", "context": "# Code from lines 984 to 986"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Writing to a Parquet file in streaming mode is not supported.", "context": "# Code from lines 1023 to 1025"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "PySpark in streaming mode does not support to_pyarrow", "context": "# Code from lines 1040 to 1042"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "PySpark in streaming mode does not support to_pyarrow_batches", "context": "# Code from lines 1067 to 1069"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Reading from Kafka in batch mode is not supported", "context": "# Code from lines 1113 to 1115"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "Writing to Kafka in batch mode is not supported", "context": "# Code from lines 1181 to 1181"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.IbisError", "message": "The schema or obj parameter is required", "context": "# Code from lines 696 to 696"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.IbisError", "message": "When auto_parse is True, a schema must be provided to parse the messages", "context": "# Code from lines 1124 to 1126"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.IbisInputError", "message": "Watermark is not supported in batch mode", "context": "# Code from lines 1233 to 1233"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.IbisInputError", "message": "Watermark is not supported in batch mode", "context": "# Code from lines 1288 to 1288"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.IbisInputError", "message": "Watermark is not supported in batch mode", "context": "# Code from lines 1338 to 1338"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 615 to 615"}
+{"file": "ibis/backends/pyspark/__init__.py", "error_type": "NotImplementedError", "message": "pyarrow UDFs are only supported in pyspark >= 3.5", "context": "# Code from lines 420 to 422"}
+{"file": "ibis/backends/pyspark/datatypes.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 73 to 73"}
+{"file": "ibis/backends/pyspark/datatypes.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 109 to 111"}
+{"file": "ibis/backends/pyspark/datatypes.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 82 to 84"}
+{"file": "ibis/backends/oracle/__init__.py", "error_type": "exc.IbisInputError", "message": "Values provided for both service_name and database. Both of these values map to an Oracle service_name, please provide only one of them.", "context": "# Code from lines 175 to 179"}
+{"file": "ibis/backends/oracle/__init__.py", "error_type": "exc.UnsupportedArgumentError", "message": "No cross-catalog schema access in Oracle", "context": "# Code from lines 328 to 330"}
+{"file": "ibis/backends/oracle/__init__.py", "error_type": "exc.TableNotFound", "message": null, "context": "# Code from lines 363 to 363"}
+{"file": "ibis/backends/oracle/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 417 to 417"}
+{"file": "ibis/backends/oracle/__init__.py", "error_type": "exc.IbisTypeError", "message": null, "context": "# Code from lines 506 to 509"}
+{"file": "ibis/backends/databricks/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": "Temporary tables not yet supported", "context": "# Code from lines 169 to 169"}
+{"file": "ibis/backends/databricks/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 177 to 177"}
+{"file": "ibis/backends/databricks/__init__.py", "error_type": "exc.TableNotFound", "message": null, "context": "# Code from lines 323 to 326"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "NotImplementedError", "message": "No support for source or imports missing", "context": "# Code from lines 752 to 752"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 236 to 239"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "DataFusion does not support dropping databases", "context": "# Code from lines 348 to 350"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 413 to 413"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 635 to 635"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "TypeError", "message": "Input to ibis.datafusion.connect must be a mapping", "context": "# Code from lines 124 to 124"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "ImportError", "message": "The deltalake extra is required to use the read_delta method. You can install it using pip:\n\npip install 'ibis-framework[deltalake]'\n", "context": "# Code from lines 513 to 517"}
+{"file": "ibis/backends/datafusion/__init__.py", "error_type": "ValueError", "message": "`source` must be either a string or a pathlib.Path", "context": "# Code from lines 216 to 216"}
+{"file": "ibis/backends/datafusion/udfs.py", "error_type": "com.IbisError", "message": "Only a single scalar pattern is supported for DataFusion re_split", "context": "# Code from lines 127 to 129"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 12 to 12"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 17 to 17"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 22 to 22"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 27 to 27"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 32 to 32"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 37 to 37"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 42 to 42"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 47 to 47"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 52 to 52"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 57 to 57"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 62 to 62"}
+{"file": "ibis/backends/tests/test_markers.py", "error_type": "Exception", "message": null, "context": "# Code from lines 67 to 67"}
+{"file": "ibis/backends/tests/test_window.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 61 to 66"}
+{"file": "ibis/backends/tests/test_client.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 439 to 439"}
+{"file": "ibis/backends/impala/ddl.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 23 to 23"}
+{"file": "ibis/backends/impala/ddl.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 303 to 303"}
+{"file": "ibis/backends/impala/metadata.py", "error_type": "StopIteration", "message": null, "context": "# Code from lines 105 to 105"}
+{"file": "ibis/backends/impala/metadata.py", "error_type": "ValueError", "message": "Table information not present", "context": "# Code from lines 133 to 133"}
+{"file": "ibis/backends/impala/metadata.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 140 to 142"}
+{"file": "ibis/backends/impala/metadata.py", "error_type": "ValueError", "message": "Storage information not present", "context": "# Code from lines 175 to 175"}
+{"file": "ibis/backends/impala/metadata.py", "error_type": "KeyError", "message": null, "context": "# Code from lines 273 to 273"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "NotImplementedError", "message": "Ibis has not yet implemented `catalog` parameter of drop_database() for Impala", "context": "# Code from lines 297 to 299"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.IbisError", "message": "The schema or obj parameter is required", "context": "# Code from lines 486 to 486"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "NotImplementedError", "message": "Impala backend does not yet support temporary tables", "context": "# Code from lines 491 to 493"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 495 to 495"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 1394 to 1397"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.IntegrityError", "message": null, "context": "# Code from lines 329 to 331"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 365 to 365"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 910 to 910"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 285 to 285"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.IbisInputError", "message": "Schemas have different names", "context": "# Code from lines 773 to 773"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.DuplicateUDFError", "message": null, "context": "# Code from lines 955 to 955"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.MissingUDFError", "message": null, "context": "# Code from lines 966 to 966"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 779 to 779"}
+{"file": "ibis/backends/impala/__init__.py", "error_type": "e", "message": null, "context": "# Code from lines 863 to 863"}
+{"file": "ibis/backends/impala/udf.py", "error_type": "ValueError", "message": "Invalid file type. Must be .so or .ll ", "context": "# Code from lines 96 to 96"}
+{"file": "ibis/backends/impala/udf.py", "error_type": "com.IbisInputError", "message": "LLVM IR UDAs are not yet supported", "context": "# Code from lines 145 to 145"}
+{"file": "ibis/backends/impala/udf.py", "error_type": "ValueError", "message": "Invalid file type. Must be .so", "context": "# Code from lines 147 to 147"}
+{"file": "ibis/backends/bigquery/client.py", "error_type": "NotADirectoryError", "message": null, "context": "# Code from lines 38 to 38"}
+{"file": "ibis/backends/bigquery/client.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 170 to 172"}
+{"file": "ibis/backends/bigquery/client.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 56 to 56"}
+{"file": "ibis/backends/bigquery/client.py", "error_type": "TypeError", "message": "ARRAY<ARRAY<T>> is not supported in BigQuery", "context": "# Code from lines 59 to 59"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "NotImplementedError", "message": "Reading from a directory is not supported.", "context": "# Code from lines 318 to 318"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "ValueError", "message": "Project ID could not be identified. Provide either explicit `project_id`, `client` with project, or don't provide an explicit `credentials` object.", "context": "# Code from lines 556 to 560"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "ValueError", "message": "Unable to determine BigQuery dataset.", "context": "# Code from lines 643 to 643"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "com.IbisError", "message": "One of the `schema` or `obj` parameter is required", "context": "# Code from lines 1133 to 1133"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "TypeError", "message": "generate_job_id_prefix must be a callable function", "context": "# Code from lines 596 to 596"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "com.IbisInputError", "message": "Cannot specify catalog both in the table name and as an argument", "context": "# Code from lines 725 to 727"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "com.IbisInputError", "message": "Cannot specify database both in the table name and as an argument", "context": "# Code from lines 735 to 737"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 765 to 765"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "com.IbisTypeError", "message": "Provided schema and Ibis table schema are incompatible. Please align the two schemas, or provide only one of the two arguments.", "context": "# Code from lines 1139 to 1142"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "com.IbisInputError", "message": "Cannot specify database for temporary table", "context": "# Code from lines 1181 to 1181"}
+{"file": "ibis/backends/bigquery/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 540 to 543"}
+{"file": "ibis/backends/bigquery/datatypes.py", "error_type": "TypeError", "message": "Nested arrays are not supported in BigQuery", "context": "# Code from lines 21 to 21"}
+{"file": "ibis/backends/bigquery/datatypes.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 63 to 63"}
+{"file": "ibis/backends/snowflake/__init__.py", "error_type": "com.IbisError", "message": "Reconnecting is not supported when using a Snowpark session", "context": "# Code from lines 445 to 447"}
+{"file": "ibis/backends/snowflake/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Dropping the current catalog is not supported because its behavior is undefined", "context": "# Code from lines 670 to 672"}
+{"file": "ibis/backends/snowflake/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Dropping the current database is not supported because its behavior is undefined", "context": "# Code from lines 727 to 729"}
+{"file": "ibis/backends/snowflake/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 781 to 781"}
+{"file": "ibis/backends/snowflake/__init__.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 869 to 872"}
+{"file": "ibis/backends/snowflake/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 569 to 569"}
+{"file": "ibis/backends/sqlite/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 247 to 247"}
+{"file": "ibis/backends/sqlite/__init__.py", "error_type": "TypeError", "message": "sqlite doesn't support `catalog`, use `database` instead", "context": "# Code from lines 306 to 306"}
+{"file": "ibis/backends/sqlite/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 483 to 483"}
+{"file": "ibis/backends/sqlite/__init__.py", "error_type": "com.IbisError", "message": null, "context": "# Code from lines 271 to 271"}
+{"file": "ibis/backends/sqlite/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 410 to 413"}
+{"file": "ibis/backends/sqlite/__init__.py", "error_type": "ValueError", "message": "SQLite doesn't support creating temporary tables in an explicit database", "context": "# Code from lines 500 to 502"}
+{"file": "ibis/backends/sqlite/udf.py", "error_type": "TypeError", "message": "Only positional arguments without defaults are supported in Ibis SQLite function registration", "context": "# Code from lines 55 to 58"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "com.UnsupportedArgumentError", "message": "Setting `quote_ident` to anything other than `True` is not supported. Ibis requires all identifiers to be quoted to work correctly.", "context": "# Code from lines 112 to 115"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 275 to 278"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 371 to 371"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 376 to 378"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "NotImplementedError", "message": "`catalog` argument is not supported for the Exasol backend", "context": "# Code from lines 443 to 445"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "NotImplementedError", "message": "`catalog` argument is not supported for the Exasol backend", "context": "# Code from lines 458 to 460"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "NotImplementedError", "message": "`catalog` argument is not supported for the Exasol backend", "context": "# Code from lines 481 to 483"}
+{"file": "ibis/backends/exasol/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 233 to 233"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "exc.IbisTypeError", "message": null, "context": "# Code from lines 86 to 89"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "exc.MissingUDFError", "message": null, "context": "# Code from lines 422 to 422"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 494 to 494"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": null, "context": "# Code from lines 531 to 533"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": null, "context": "# Code from lines 551 to 553"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 604 to 604"}
+{"file": "ibis/backends/postgres/__init__.py", "error_type": "exc.AmbiguousUDFError", "message": null, "context": "# Code from lines 424 to 424"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 306 to 306"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": null, "context": "# Code from lines 340 to 342"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": null, "context": "# Code from lines 359 to 361"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 524 to 524"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "When creating tables with connector, both encode_format and data_format are required", "context": "# Code from lines 531 to 533"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 538 to 540"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 609 to 612"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "ValueError", "message": "Either `sink_from` or `obj` must be specified", "context": "# Code from lines 855 to 855"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "ValueError", "message": "Only one of `sink_from` or `obj` can be specified", "context": "# Code from lines 857 to 857"}
+{"file": "ibis/backends/risingwave/__init__.py", "error_type": "com.UnsupportedArgumentError", "message": "When creating sinks, both encode_format and data_format must be provided, or neither should be", "context": "# Code from lines 860 to 862"}
+{"file": "ibis/backends/mysql/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 389 to 389"}
+{"file": "ibis/backends/mysql/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 457 to 460"}
+{"file": "ibis/backends/mysql/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 221 to 221"}
+{"file": "ibis/backends/mysql/datatypes.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 40 to 40"}
+{"file": "ibis/backends/mysql/datatypes.py", "error_type": "AssertionError", "message": "invalid field length for BIT type", "context": "# Code from lines 57 to 57"}
+{"file": "ibis/backends/druid/__init__.py", "error_type": "NotImplementedError", "message": "Ibis has not implemented the `current_datalog` property for Druid", "context": "# Code from lines 70 to 72"}
+{"file": "ibis/backends/druid/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 208 to 208"}
+{"file": "ibis/backends/druid/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 211 to 211"}
+{"file": "ibis/backends/druid/__init__.py", "error_type": "NotImplementedError", "message": "Ibis has not yet implemented the `database` param for Druid.list_tables()", "context": "# Code from lines 217 to 219"}
+{"file": "ibis/backends/druid/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 176 to 176"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1780 to 1783"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "KeyError", "message": null, "context": "# Code from lines 68 to 68"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "exc.UnsupportedArgumentError", "message": "DuckDB can only create temporary tables in the `temp` catalog. Don't specify a catalog to enable temp table creation.", "context": "# Code from lines 157 to 160"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 166 to 166"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "exc.IbisTypeError", "message": null, "context": "# Code from lines 196 to 200"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": "DuckDB cannot create a database in another catalog.", "context": "# Code from lines 511 to 513"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "exc.UnsupportedOperationError", "message": "DuckDB cannot drop a database in another catalog.", "context": "# Code from lines 523 to 525"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "ValueError", "message": "`table_name` is required when registering a postgres table", "context": "# Code from lines 921 to 923"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "ValueError", "message": "`table_name` is required when registering a mysql table", "context": "# Code from lines 964 to 964"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "ValueError", "message": "`table_name` is required when registering a sqlite table", "context": "# Code from lines 1024 to 1024"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "exc.TableNotFound", "message": null, "context": "# Code from lines 314 to 314"}
+{"file": "ibis/backends/duckdb/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 365 to 367"}
+{"file": "ibis/backends/polars/rewrites.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 83 to 83"}
+{"file": "ibis/backends/polars/rewrites.py", "error_type": "TypeError", "message": "Only equality join predicates supported with pandas", "context": "# Code from lines 73 to 73"}
+{"file": "ibis/backends/polars/rewrites.py", "error_type": "ValueError", "message": "Join predicate does not reference both tables", "context": "# Code from lines 81 to 81"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.TranslationError", "message": null, "context": "# Code from lines 29 to 31"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 50 to 50"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 55 to 55"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": "Dynamic limit not supported", "context": "# Code from lines 253 to 253"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": "Dynamic offset not supported", "context": "# Code from lines 256 to 256"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.UnsupportedOperationError", "message": "polars doesn't support contains with struct elements", "context": "# Code from lines 481 to 483"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 542 to 542"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.UnsupportedOperationError", "message": "`Table.sample` with a random seed is unsupported", "context": "# Code from lines 881 to 883"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.UnsupportedOperationError", "message": "Only literal interval values are supported", "context": "# Code from lines 940 to 942"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 1181 to 1181"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 1201 to 1201"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 1272 to 1272"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.UnsupportedOperationError", "message": "Dynamic integer step not supported by Polars", "context": "# Code from lines 1491 to 1493"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.UnsupportedOperationError", "message": "Dynamic interval step not supported by Polars", "context": "# Code from lines 1510 to 1512"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.UnsupportedArgumentError", "message": null, "context": "# Code from lines 40 to 42"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 144 to 144"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1453 to 1455"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.IbisError", "message": "Only a single scalar pattern is supported for Polars re_split", "context": "# Code from lines 1474 to 1476"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 148 to 148"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "com.TranslationError", "message": null, "context": "# Code from lines 200 to 203"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 347 to 347"}
+{"file": "ibis/backends/polars/compiler.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 153 to 153"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 555 to 558"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "TypeError", "message": "Input to ibis.polars.connect must be a mapping", "context": "# Code from lines 72 to 72"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "com.IbisError", "message": "Passing `database` to the Polars backend's `table()` method is not supported: Polars cannot set a database.", "context": "# Code from lines 94 to 97"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 101 to 101"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "com.IbisError", "message": "Passing `database` to the Polars backend's `create_table()` method is not supported: Polars cannot set a database.", "context": "# Code from lines 335 to 338"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "com.IbisError", "message": "Passing `temp=False` to the Polars backend's `create_table()` method is not supported: all tables are in memory and temporary.", "context": "# Code from lines 341 to 344"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "com.IntegrityError", "message": null, "context": "# Code from lines 347 to 350"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "ImportError", "message": "The deltalake extra is required to use the read_delta method. You can install it using pip:\n\npip install 'ibis-framework[polars,deltalake]'\n", "context": "# Code from lines 231 to 235"}
+{"file": "ibis/backends/polars/__init__.py", "error_type": "com.IbisError", "message": null, "context": "# Code from lines 378 to 378"}
+{"file": "ibis/backends/mssql/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 284 to 284"}
+{"file": "ibis/backends/mssql/__init__.py", "error_type": "ValueError", "message": "Either `obj` or `schema` must be specified", "context": "# Code from lines 647 to 647"}
+{"file": "ibis/backends/mssql/__init__.py", "error_type": "ValueError", "message": "MSSQL doesn't support overwriting temp tables, create a new temp table instead.", "context": "# Code from lines 652 to 654"}
+{"file": "ibis/backends/mssql/__init__.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 746 to 749"}
+{"file": "ibis/backends/mssql/__init__.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 362 to 362"}
+{"file": "ibis/backends/athena/__init__.py", "error_type": "NotImplementedError", "message": "athena does not provide a way to programmatically access its version", "context": "# Code from lines 326 to 328"}
+{"file": "ibis/backends/athena/__init__.py", "error_type": "NotImplementedError", "message": "Temporary tables are not supported in the Amazon Athena backend", "context": "# Code from lines 131 to 133"}
+{"file": "ibis/backends/athena/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Amazon Athena does not support REPLACE syntax, nor does it support syntax for alternative implementations that would use ALTER TABLE RENAME TO", "context": "# Code from lines 135 to 138"}
+{"file": "ibis/backends/athena/__init__.py", "error_type": "com.IbisError", "message": "One of the `schema` or `obj` parameter is required", "context": "# Code from lines 140 to 140"}
+{"file": "ibis/backends/athena/__init__.py", "error_type": "com.TableNotFound", "message": null, "context": "# Code from lines 276 to 276"}
+{"file": "ibis/backends/sql/rewrites.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 202 to 205"}
+{"file": "ibis/backends/sql/rewrites.py", "error_type": "com.UnsupportedOperationError", "message": "`Table.sample` with a random seed is unsupported for this backend", "context": "# Code from lines 651 to 653"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 574 to 576"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 656 to 658"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 661 to 663"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 666 to 668"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "ValueError", "message": "Only database hierarchies of two or fewer levels are supported.\nYou can specify ('catalog', 'database').", "context": "# Code from lines 603 to 606"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "ValueError", "message": "Invalid database hierarchy format.  Please use either dotted\n                strings ('catalog.database') or tuples ('catalog', 'database').", "context": "# Code from lines 645 to 648"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "exc.IbisInputError", "message": null, "context": "# Code from lines 638 to 640"}
+{"file": "ibis/backends/sql/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 613 to 618"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Array types aren't supported in MySQL", "context": "# Code from lines 650 to 650"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Array types aren't supported in Oracle", "context": "# Code from lines 799 to 799"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Array types aren't supported in SQLite", "context": "# Code from lines 897 to 897"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Map types aren't supported in SQLite", "context": "# Code from lines 901 to 901"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Struct types aren't supported in SQLite", "context": "# Code from lines 905 to 905"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Array types aren't supported in Impala", "context": "# Code from lines 916 to 916"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Map types aren't supported in Impala", "context": "# Code from lines 920 to 920"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Struct types aren't supported in Impala", "context": "# Code from lines 924 to 924"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Unsigned BIGINT isn't representable in BigQuery INT64", "context": "# Code from lines 983 to 985"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Maps are not supported in BigQuery", "context": "# Code from lines 993 to 993"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Maps are not supported in BigQuery", "context": "# Code from lines 997 to 997"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 1027 to 1029"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "int64 is not a supported input or output type in BigQuery UDFs; use float64 instead", "context": "# Code from lines 1069 to 1071"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Arrays not supported in Exasol", "context": "# Code from lines 1128 to 1128"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Maps not supported in Exasol", "context": "# Code from lines 1132 to 1132"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Structs not supported in Exasol", "context": "# Code from lines 1136 to 1136"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Arrays not supported in Exasol", "context": "# Code from lines 1150 to 1150"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Maps not supported in Exasol", "context": "# Code from lines 1154 to 1154"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Structs not supported in Exasol", "context": "# Code from lines 1158 to 1158"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "SQL Server does not support arrays", "context": "# Code from lines 1213 to 1213"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "SQL Server does not support ", "context": "# Code from lines 1217 to 1217"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "SQL Server does not support structs", "context": "# Code from lines 1221 to 1221"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "SQL Server does not support arrays", "context": "# Code from lines 1230 to 1230"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "SQL Server does not support map", "context": "# Code from lines 1234 to 1234"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "SQL Server does not support structs", "context": "# Code from lines 1238 to 1238"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.IbisTypeError", "message": "Postgres only supports string keys in maps", "context": "# Code from lines 547 to 547"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 1042 to 1045"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.IbisTypeError", "message": "Decimal scale cannot be specified without precision", "context": "# Code from lines 450 to 452"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 738 to 740"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "BigQuery does not support timestamps with timezones other than 'UTC'", "context": "# Code from lines 1006 to 1008"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 1019 to 1023"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.IbisTypeError", "message": "Interval precision is None", "context": "# Code from lines 329 to 329"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.IbisTypeError", "message": null, "context": "# Code from lines 331 to 331"}
+{"file": "ibis/backends/sql/datatypes.py", "error_type": "com.UnsupportedBackendType", "message": "Decimal precision is too large; Exasol supports precision up to 36.", "context": "# Code from lines 1121 to 1123"}
+{"file": "ibis/backends/sql/dialects.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 122 to 124"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "NotImplementedError", "message": "Flink does not support NaN", "context": "# Code from lines 120 to 120"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "NotImplementedError", "message": "Flink does not support Infinity", "context": "# Code from lines 124 to 124"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "com.UnsupportedOperationError", "message": "ordering of order-sensitive aggregations via `order_by` is not supported for this backend", "context": "# Code from lines 25 to 28"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the flink backend", "context": "# Code from lines 309 to 311"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the flink backend", "context": "# Code from lines 316 to 318"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "com.UnsupportedOperationError", "message": "String find doesn't support `end` argument", "context": "# Code from lines 524 to 526"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "com.UnsupportedOperationError", "message": "ordering of order-sensitive aggregations via `order_by` is not supported for this backend", "context": "# Code from lines 605 to 608"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 363 to 363"}
+{"file": "ibis/backends/sql/compilers/flink.py", "error_type": "com.UnsupportedOperationError", "message": "Flink does not support casting non-integer numbers to timestamp", "context": "# Code from lines 420 to 422"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "ordering of order-sensitive aggregations via `order_by` is not supported for this backend", "context": "# Code from lines 26 to 29"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "ClickHouse drops the fractional part of the number when casting floating types to datetime. https://github.com/ClickHouse/ClickHouse/issues/29386", "context": "# Code from lines 146 to 149"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "ValueError", "message": "ClickHouse only implements `sample` correlation coefficient", "context": "# Code from lines 213 to 215"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "String find doesn't support end argument", "context": "# Code from lines 220 to 222"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 274 to 274"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "Clickhouse doesn't support subsecond interval resolutions", "context": "# Code from lines 281 to 283"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 378 to 378"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "Timestamp bucket with offset is not supported", "context": "# Code from lines 416 to 418"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "ordering of order-sensitive aggregations via `order_by` is not supported for this backend", "context": "# Code from lines 462 to 465"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the clickhouse backend", "context": "# Code from lines 661 to 663"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the clickhouse backend", "context": "# Code from lines 669 to 671"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the clickhouse backend", "context": "# Code from lines 676 to 678"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "ClickHouse doesn't support non-literal step values", "context": "# Code from lines 707 to 709"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 293 to 295"}
+{"file": "ibis/backends/sql/compilers/clickhouse.py", "error_type": "com.UnsupportedOperationError", "message": "Clickhouse doesn't support subsecond interval resolutions", "context": "# Code from lines 312 to 314"}
+{"file": "ibis/backends/sql/compilers/trino.py", "error_type": "com.UnsupportedOperationError", "message": "Trino does not support `sample` correlation", "context": "# Code from lines 118 to 120"}
+{"file": "ibis/backends/sql/compilers/trino.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 308 to 310"}
+{"file": "ibis/backends/sql/compilers/trino.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 511 to 511"}
+{"file": "ibis/backends/sql/compilers/trino.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 525 to 527"}
+{"file": "ibis/backends/sql/compilers/trino.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 354 to 354"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 356 to 356"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 265 to 265"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "com.UnsupportedOperationError", "message": "Only literal interval values are supported with MS SQL timestamp bucketing", "context": "# Code from lines 296 to 298"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 301 to 303"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "com.UnsupportedOperationError", "message": "Timestamp bucket with offset is not supported", "context": "# Code from lines 305 to 307"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 458 to 458"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 468 to 468"}
+{"file": "ibis/backends/sql/compilers/mssql.py", "error_type": "com.UnsupportedBackendType", "message": "MS SQL does not support complex types", "context": "# Code from lines 401 to 401"}
+{"file": "ibis/backends/sql/compilers/risingwave.py", "error_type": "com.UnsupportedOperationError", "message": "RisingWave requires an `order_by` be specified in `first`", "context": "# Code from lines 96 to 98"}
+{"file": "ibis/backends/sql/compilers/risingwave.py", "error_type": "com.UnsupportedOperationError", "message": "RisingWave requires an `order_by` be specified in `last`", "context": "# Code from lines 106 to 108"}
+{"file": "ibis/backends/sql/compilers/risingwave.py", "error_type": "com.UnsupportedOperationError", "message": "RisingWave only implements `pop` correlation coefficient", "context": "# Code from lines 116 to 118"}
+{"file": "ibis/backends/sql/compilers/risingwave.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 149 to 149"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.OperationNotDefinedError", "message": "Interval window bounds not supported by SQLite", "context": "# Code from lines 134 to 136"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": "ASOF joins are not supported by SQLite", "context": "# Code from lines 141 to 143"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "NotImplementedError", "message": "`end` not yet implemented", "context": "# Code from lines 157 to 157"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 320 to 320"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 342 to 344"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": "Only literal `part` values are supported for date delta", "context": "# Code from lines 539 to 541"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 543 to 545"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": "SQLite does not support casting to timezones other than 'UTC'", "context": "# Code from lines 109 to 111"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 366 to 369"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 376 to 379"}
+{"file": "ibis/backends/sql/compilers/sqlite.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 534 to 534"}
+{"file": "ibis/backends/sql/compilers/druid.py", "error_type": "exc.UnsupportedArgumentError", "message": null, "context": "# Code from lines 185 to 185"}
+{"file": "ibis/backends/sql/compilers/druid.py", "error_type": "NotImplementedError", "message": "non-None escape not supported", "context": "# Code from lines 149 to 149"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the snowflake backend", "context": "# Code from lines 483 to 485"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `distinct=True` and `where` is not supported by snowflake", "context": "# Code from lines 487 to 489"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.UnsupportedOperationError", "message": "`offset` is not supported in the Snowflake backend for timestamp bucketing", "context": "# Code from lines 541 to 543"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 547 to 549"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.OperationNotDefinedError", "message": "Expressions in window bounds are not supported by Snowflake", "context": "# Code from lines 689 to 691"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 696 to 698"}
+{"file": "ibis/backends/sql/compilers/snowflake.py", "error_type": "com.UnsupportedOperationError", "message": "`step` argument must be a literal", "context": "# Code from lines 713 to 713"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 144 to 144"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 226 to 229"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 255 to 257"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": "right operand to timestamp add operation must be a literal", "context": "# Code from lines 279 to 281"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": "Only literal `part` values are supported for date delta", "context": "# Code from lines 316 to 318"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 320 to 322"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 174 to 176"}
+{"file": "ibis/backends/sql/compilers/impala.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 178 to 180"}
+{"file": "ibis/backends/sql/compilers/postgres.py", "error_type": "InvalidDecoratorError", "message": null, "context": "# Code from lines 37 to 37"}
+{"file": "ibis/backends/sql/compilers/postgres.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 806 to 809"}
+{"file": "ibis/backends/sql/compilers/postgres.py", "error_type": "InvalidDecoratorError", "message": null, "context": "# Code from lines 159 to 161"}
+{"file": "ibis/backends/sql/compilers/postgres.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 276 to 278"}
+{"file": "ibis/backends/sql/compilers/postgres.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the postgres backend", "context": "# Code from lines 429 to 431"}
+{"file": "ibis/backends/sql/compilers/postgres.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the postgres backend", "context": "# Code from lines 436 to 438"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedArgumentError", "message": "No support for limit offsets in the Oracle backend.", "context": "# Code from lines 205 to 207"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "NotImplementedError", "message": "`end` is not implemented", "context": "# Code from lines 256 to 256"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "ValueError", "message": "Oracle only implements population correlation coefficient", "context": "# Code from lines 297 to 299"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 382 to 382"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedOperationError", "message": "Only literal `part` values are supported for date delta", "context": "# Code from lines 498 to 500"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 502 to 504"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedArgumentError", "message": "No support for dynamic limit in the Oracle backend.", "context": "# Code from lines 191 to 193"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 456 to 458"}
+{"file": "ibis/backends/sql/compilers/oracle.py", "error_type": "com.UnsupportedArgumentError", "message": null, "context": "# Code from lines 160 to 162"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 178 to 180"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "ValueError", "message": "re_extract `index` expressions must be literals. Arbitrary expressions are not supported in the DataFusion backend", "context": "# Code from lines 189 to 192"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "NotImplementedError", "message": "`end` not yet implemented", "context": "# Code from lines 197 to 197"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 290 to 292"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.UnsupportedOperationError", "message": "`collect` with `distinct=True` is not supported", "context": "# Code from lines 356 to 358"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.UnsupportedOperationError", "message": "DataFusion does not support order-sensitive group_concat", "context": "# Code from lines 537 to 539"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.UnsupportedOperationError", "message": "Ibis has not implemented casting numeric to timestamp with nanosecond precision", "context": "# Code from lines 89 to 91"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 163 to 163"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 171 to 171"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 302 to 304"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 324 to 326"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 334 to 336"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 344 to 346"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 378 to 378"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 412 to 412"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 314 to 316"}
+{"file": "ibis/backends/sql/compilers/datafusion.py", "error_type": "com.UnsupportedOperationError", "message": "DataFusion doesn't support subsecond interval resolutions", "context": "# Code from lines 111 to 113"}
+{"file": "ibis/backends/sql/compilers/exasol.py", "error_type": "com.UnsupportedOperationError", "message": "Exasol only implements `pop` correlation coefficient", "context": "# Code from lines 128 to 130"}
+{"file": "ibis/backends/sql/compilers/exasol.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the exasol backend", "context": "# Code from lines 151 to 153"}
+{"file": "ibis/backends/sql/compilers/exasol.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the exasol backend", "context": "# Code from lines 158 to 160"}
+{"file": "ibis/backends/sql/compilers/exasol.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 238 to 240"}
+{"file": "ibis/backends/sql/compilers/exasol.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 285 to 287"}
+{"file": "ibis/backends/sql/compilers/exasol.py", "error_type": "com.UnsupportedBackendType", "message": null, "context": "# Code from lines 116 to 118"}
+{"file": "ibis/backends/sql/compilers/duckdb.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 368 to 370"}
+{"file": "ibis/backends/sql/compilers/duckdb.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 515 to 517"}
+{"file": "ibis/backends/sql/compilers/duckdb.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 579 to 579"}
+{"file": "ibis/backends/sql/compilers/duckdb.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 409 to 409"}
+{"file": "ibis/backends/sql/compilers/duckdb.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 441 to 443"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 541 to 543"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 546 to 548"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 551 to 553"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 851 to 851"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 1580 to 1582"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 1585 to 1587"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 135 to 138"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 749 to 751"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 969 to 971"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.IbisInputError", "message": null, "context": "# Code from lines 1017 to 1019"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.UnsupportedOperationError", "message": "String find doesn't support `end` argument", "context": "# Code from lines 1028 to 1030"}
+{"file": "ibis/backends/sql/compilers/base.py", "error_type": "com.OperationNotDefinedError", "message": null, "context": "# Code from lines 709 to 711"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "PySpark backend does not support dynamic limit.", "context": "# Code from lines 36 to 38"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "PySpark backend does not support dynamic offset.", "context": "# Code from lines 40 to 42"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "PySpark backend does not support extracting microseconds.", "context": "# Code from lines 194 to 196"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 215 to 217"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `include_null=True` and `where` is not supported by pyspark", "context": "# Code from lines 254 to 256"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `include_null=True` and `where` is not supported by pyspark", "context": "# Code from lines 264 to 266"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "ordering of order-sensitive aggregations via `order_by` is not supported for this backend", "context": "# Code from lines 283 to 286"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "`include_null=True` is not supported by the pyspark backend", "context": "# Code from lines 434 to 436"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "String find doesn't support `end` argument", "context": "# Code from lines 445 to 447"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "ASOF joins are not supported by Spark SQL yet and LATERAL joins raise an analysis error if the lateral subquery is limited which would be necessary to emulate ASOF joins. Once this is fixed upstream, we can add support for ASOF joins.", "context": "# Code from lines 485 to 490"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedOperationError", "message": "PySpark streaming does not support windowing with offset.", "context": "# Code from lines 590 to 592"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "com.UnsupportedArgumentError", "message": null, "context": "# Code from lines 208 to 211"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "TypeError", "message": null, "context": "# Code from lines 353 to 353"}
+{"file": "ibis/backends/sql/compilers/pyspark.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 501 to 501"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "NotImplementedError", "message": "MySQL does not support NaN", "context": "# Code from lines 59 to 59"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "NotImplementedError", "message": "MySQL does not support Infinity", "context": "# Code from lines 63 to 63"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "com.UnsupportedOperationError", "message": "Filtered table count distinct is not supported in MySQL", "context": "# Code from lines 150 to 152"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "com.UnsupportedOperationError", "message": "Only string literal separators are supported", "context": "# Code from lines 160 to 162"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "com.UnsupportedOperationError", "message": "MySQL does not support NaN or infinity", "context": "# Code from lines 185 to 187"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "NotImplementedError", "message": "`end` argument is not implemented for MySQL `StringValue.find`", "context": "# Code from lines 261 to 263"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 306 to 306"}
+{"file": "ibis/backends/sql/compilers/mysql.py", "error_type": "com.UnsupportedBackendType", "message": "MySQL does not support arrays, structs or maps", "context": "# Code from lines 199 to 201"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "timestamp difference with mixed timezone/timezoneless values is not implemented", "context": "# Code from lines 386 to 388"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "BigQuery simplify does not support preserving collapsed geometries, pass preserve_collapsed=False", "context": "# Code from lines 356 to 359"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "quantile must be a literal in BigQuery", "context": "# Code from lines 401 to 403"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 460 to 462"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "BigQuery does not support nanosecond intervals", "context": "# Code from lines 570 to 572"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 661 to 663"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 679 to 681"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.IbisTypeError", "message": "Timestamps without timezone values are not supported when generating timestamp ranges", "context": "# Code from lines 729 to 731"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.OperationNotDefinedError", "message": "BigQuery does not support non-literals on the right side of timestamp add/subtract", "context": "# Code from lines 864 to 866"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 868 to 871"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.OperationNotDefinedError", "message": "BigQuery does not support non-literals on the right side of date add/subtract", "context": "# Code from lines 881 to 883"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 885 to 888"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "ValueError", "message": null, "context": "# Code from lines 912 to 912"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 934 to 934"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.IbisError", "message": null, "context": "# Code from lines 953 to 956"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `include_null=True` and `where` is not supported by bigquery", "context": "# Code from lines 485 to 487"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `distinct=True` and `where` is not supported by bigquery", "context": "# Code from lines 489 to 491"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `include_null=True` and `where` is not supported by bigquery", "context": "# Code from lines 740 to 743"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "Combining `include_null=True` and `where` is not supported by bigquery", "context": "# Code from lines 758 to 761"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 605 to 605"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": null, "context": "# Code from lines 621 to 623"}
+{"file": "ibis/backends/sql/compilers/bigquery/__init__.py", "error_type": "com.UnsupportedOperationError", "message": "BigQuery does not support nanosecond intervals", "context": "# Code from lines 561 to 563"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "AssertionError", "message": "should never reach FloorDiv", "context": "# Code from lines 242 to 242"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "AssertionError", "message": "should never reach Pow", "context": "# Code from lines 245 to 245"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 273 to 275"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 146 to 146"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 173 to 176"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "NotImplementedError", "message": "Only single assignment supported for now", "context": "# Code from lines 170 to 170"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "TypeError", "message": "Functions cannot be properties, only methods can", "context": "# Code from lines 198 to 198"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "TypeError", "message": "generator methods cannot be properties", "context": "# Code from lines 202 to 202"}
+{"file": "ibis/backends/sql/compilers/bigquery/udf/core.py", "error_type": "NotImplementedError", "message": "Only single loop comprehensions are allowed", "context": "# Code from lines 486 to 486"}
+{"file": "ibis/backends/druid/tests/conftest.py", "error_type": "DruidDataLoadError", "message": null, "context": "# Code from lines 89 to 89"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 225 to 225"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 995 to 995"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1136 to 1136"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 1225 to 1225"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 3559 to 3559"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 3695 to 3695"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 4515 to 4515"}
+{"file": "ibis/backends/tests/tpc/ds/test_queries.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 4760 to 4760"}
+{"file": "ibis/backends/pyspark/tests/conftest.py", "error_type": "NotImplementedError", "message": null, "context": "# Code from lines 268 to 268"}
+{"file": "ibis/backends/clickhouse/tests/conftest.py", "error_type": "NotImplementedError", "message": "Clickhouse does not support more than 2 arguments to greatest", "context": "# Code from lines 109 to 111"}
+{"file": "ibis/backends/clickhouse/tests/conftest.py", "error_type": "NotImplementedError", "message": "Clickhouse does not support more than 2 arguments to least", "context": "# Code from lines 117 to 119"}

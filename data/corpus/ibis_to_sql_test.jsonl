@@ -1,0 +1,1 @@
+{"ibis_code": "t.select(t.column1, t.column2)", "sql_code": "SELECT column1, column2 FROM t", "description": "Basic column selection", "type": "synthetic"}

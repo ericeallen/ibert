@@ -1,0 +1,812 @@
+{"context": "Test: test_lazy_singledispatch_abc", "code": "# Code from lines 97 to 120", "source": "ibis/common/tests/test_dispatch.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Test: test_parse_sql_join_subquery", "code": "# Code from lines 135 to 147", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Test: test_self_join_with_intermediate_selection", "code": "# Code from lines 1305 to 1359", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_invert", "code": "# Code from lines 88 to 96", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_expr_in_join_projection", "code": "# Code from lines 1792 to 1854", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Test: test_schema_set_operations", "code": "# Code from lines 324 to 352", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_normalize_failing", "code": "# Code from lines 51 to 53", "source": "ibis/common/tests/test_numeric.py", "type": "test"}
+{"context": "Test: test_pattern_decorator", "code": "# Code from lines 1092 to 1094", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_select_windowing_local_reduction", "code": "# Code from lines 131 to 133", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Test: test_join_expressions_are_equal", "code": "# Code from lines 1447 to 1453", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Test: test_value_to_array_creates_subquery", "code": "# Code from lines 179 to 187", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Test: test_egraph_extract_simple", "code": "# Code from lines 389 to 394", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_annotated_function_with_list_overrides_and_return_override", "code": "# Code from lines 383 to 391", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Test: test_join_with_selector_predicate", "code": "# Code from lines 891 to 904", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Test: test_object_pattern_matching_dictionary_field", "code": "# Code from lines 636 to 653", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_custom_expr_with_not_implemented_type", "code": "# Code from lines 63 to 81", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_construction", "code": "# Code from lines 68 to 69", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Test: test_copy_with_variadic_argument", "code": "# Code from lines 625 to 644", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_shape_comparison", "code": "# Code from lines 48 to 62", "source": "ibis/expr/tests/test_datashape.py", "type": "test"}
+{"context": "Test: test_annotated_function_without_decoration", "code": "# Code from lines 435 to 444", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Test: test_sequence_of", "code": "# Code from lines 474 to 482", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_pattern_from_typehint", "code": "# Code from lines 1128 to 1129", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_chained_join_positional_cross", "code": "# Code from lines 765 to 784", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_default_type_vars", "code": "# Code from lines 119 to 130", "source": "ibis/common/tests/test_typing.py", "type": "test"}
+{"context": "Test: test_ibis_desc_asc", "code": "# Code from lines 94 to 100", "source": "ibis/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Test: test_as_scalar_creates_subquery", "code": "# Code from lines 190 to 215", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Test: test_select_turns_value_with_multiple_parents_into_subquery", "code": "# Code from lines 169 to 176", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_where_raies_for_empty_predicate_list", "code": "# Code from lines 417 to 420", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_map_clear", "code": "# Code from lines 472 to 494", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Test: test_lazy_singledispatch_lazy", "code": "# Code from lines 58 to 68", "source": "ibis/common/tests/test_dispatch.py", "type": "test"}
+{"context": "Test: test_subquery_integrity_check", "code": "# Code from lines 141 to 149", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Test: test_signature_from_callable_with_positional_only_arguments", "code": "# Code from lines 215 to 231", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_parse_sql_limited_join", "code": "# Code from lines 47 to 58", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Test: test_annotated_function_with_type_annotations", "code": "# Code from lines 329 to 346", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_get_type_params", "code": "# Code from lines 96 to 100", "source": "ibis/common/tests/test_typing.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Test: test_normalized_datetime_tzname", "code": "# Code from lines 243 to 245", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Test: test_pattern_coercible_checks_type", "code": "# Code from lines 1201 to 1208", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Test: test_check", "code": "# Code from lines 185 to 193", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_node_find_below", "code": "# Code from lines 430 to 437", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_callable_with", "code": "# Code from lines 675 to 719", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_generic_instance_of_with_covariant_typevar", "code": "# Code from lines 261 to 269", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Test: test_parse_sql_basic_aggregation_with_join", "code": "# Code from lines 86 to 97", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Test: test_custom_deferred_repr", "code": "# Code from lines 608 to 610", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_analytic_dereference", "code": "# Code from lines 1857 to 1863", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_parse_sql_basic_aggregation", "code": "# Code from lines 74 to 83", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Test: test_multiple_backends", "code": "# Code from lines 38 to 48", "source": "ibis/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Test: test_schema_from_to_pandas_dtypes", "code": "# Code from lines 404 to 435", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_builder_just_unhashable", "code": "# Code from lines 56 to 59", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Test: test_chained_join", "code": "# Code from lines 692 to 731", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_error_message", "code": "# Code from lines 1113 to 1131", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_comparable_cache_reuse", "code": "# Code from lines 212 to 238", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_attribute_default_value", "code": "# Code from lines 113 to 128", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_where_after_select", "code": "# Code from lines 423 to 432", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Test: test_table_type_output", "code": "# Code from lines 44 to 58", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Test: test_parse_sql_simple_select_count", "code": "# Code from lines 150 to 154", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Test: test_joining_same_table_twice", "code": "# Code from lines 1187 to 1217", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_normalized_datetime_tzname_pandas_non_utc", "code": "# Code from lines 255 to 268", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Test: test_dont_copy_default_argument", "code": "# Code from lines 675 to 682", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_to_sqlglot_column_defs_empty_schema", "code": "# Code from lines 459 to 462", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_ibis_na_deprecation_warning", "code": "# Code from lines 62 to 66", "source": "ibis/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_where_with_reduction", "code": "# Code from lines 435 to 442", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Test: test_object_pattern_from_coerced_to", "code": "# Code from lines 594 to 609", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_schema_from_names_types", "code": "# Code from lines 18 to 20", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Test: test_disjoint_set", "code": "# Code from lines 17 to 91", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Test: test_select_full_reprojection", "code": "# Code from lines 243 to 253", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_egraph_match_nested", "code": "# Code from lines 353 to 371", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_normalize_datetime_with_time", "code": "# Code from lines 204 to 223", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Test: test_annotated_function_with_return_type_annotation", "code": "# Code from lines 349 to 360", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Test: test_field", "code": "# Code from lines 43 to 50", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Test: test_subsequent_filter", "code": "# Code from lines 496 to 500", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_deferred_is_not_truthy", "code": "# Code from lines 511 to 515", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_simplify_subsequent_value_selections", "code": "# Code from lines 50 to 80", "source": "ibis/expr/tests/test_rewrites.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Test: test_parse_sql_scalar_subquery", "code": "# Code from lines 122 to 132", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Test: test_examples", "code": "# Code from lines 63 to 72", "source": "ibis/examples/tests/test_examples.py", "type": "test"}
+{"context": "Test: test_annotated_function_with_complex_type_annotations", "code": "# Code from lines 410 to 423", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_node", "code": "# Code from lines 1334 to 1340", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_node_find_topmost_using_type", "code": "# Code from lines 440 to 451", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_lazy_singledispatch_lazy_walks_mro", "code": "# Code from lines 71 to 94", "source": "ibis/common/tests/test_dispatch.py", "type": "test"}
+{"context": "Test: test_egraph_rewrite_commutative", "code": "# Code from lines 463 to 476", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Test: test_traverse", "code": "# Code from lines 497 to 502", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_object_pattern_requires_its_arguments_to_match", "code": "# Code from lines 656 to 672", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_maintain_definition_order", "code": "# Code from lines 423 to 430", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_mapping_of", "code": "# Code from lines 524 to 532", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_projections_with_different_field_order_are_unequal", "code": "# Code from lines 1756 to 1762", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_tables_have_format_value_rules", "code": "# Code from lines 18 to 19", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Test: test_dynamic_condition", "code": "# Code from lines 539 to 540", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Test: test_optional_graphviz_repr", "code": "# Code from lines 101 to 116", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Test: test_toposort_cycle_detection", "code": "# Code from lines 105 to 114", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_composition_of_concrete_and_singleton", "code": "# Code from lines 1046 to 1064", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_slotted_inheritance", "code": "# Code from lines 328 to 347", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Test: test_order_by_supports_varargs", "code": "# Code from lines 480 to 493", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_join", "code": "# Code from lines 85 to 91", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Test: test_join_with_compound_predicate", "code": "# Code from lines 1547 to 1586", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_builder_attr", "code": "# Code from lines 98 to 117", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Test: test_version", "code": "# Code from lines 9 to 10", "source": "ibis/tests/test_version.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Test: test_deferred_variable_getattr", "code": "# Code from lines 220 to 228", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_view", "code": "# Code from lines 81 to 83", "source": "ibis/expr/tests/test_decompile.py", "type": "test"}
+{"context": "Test: test_join_predicate_dereferencing_using_tuple_syntax", "code": "# Code from lines 851 to 888", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_pickling_support", "code": "# Code from lines 781 to 782", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_abstract", "code": "# Code from lines 29 to 58", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Test: test_enode_roundtrip", "code": "# Code from lines 164 to 172", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Test: test_all_dtypes", "code": "# Code from lines 136 to 137", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_order_does_not_matter", "code": "# Code from lines 1353 to 1354", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Test: test_api_accepts_schema_objects", "code": "# Code from lines 164 to 167", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_evaluate_annotations_with_self", "code": "# Code from lines 47 to 51", "source": "ibis/common/tests/test_typing.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Test: test_multiple_inheritance", "code": "# Code from lines 737 to 771", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_type_of", "code": "# Code from lines 210 to 215", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_select_scalar_foreign_scalar_reduction_into_subquery", "code": "# Code from lines 161 to 166", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Test: test_generic_coerced_to", "code": "# Code from lines 306 to 360", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Test: test_min", "code": "# Code from lines 123 to 126", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Test: test_deferred_builds", "code": "# Code from lines 194 to 195", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Test: test_object_pattern_from_instance_of", "code": "# Code from lines 579 to 591", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Test: test_pattern_coercible_sequence_type", "code": "# Code from lines 1217 to 1234", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Test: test_valid_optional", "code": "# Code from lines 109 to 110", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_join_with_subsequent_projection", "code": "# Code from lines 624 to 662", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_node_find_using_type", "code": "# Code from lines 390 to 416", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_primitive_dtype", "code": "# Code from lines 82 to 84", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_reduction_methods", "code": "# Code from lines 88 to 107", "source": "ibis/expr/tests/test_reductions.py", "type": "test"}
+{"context": "Test: test_enode_roundtrip_with_nested_arg", "code": "# Code from lines 200 to 208", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Test: test_join_integrity_checks", "code": "# Code from lines 584 to 601", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_mutate_overwrites_existing_column", "code": "# Code from lines 233 to 240", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_replace_doesnt_recreate_unchanged_nodes", "code": "# Code from lines 174 to 200", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Test: test_argument_factory", "code": "# Code from lines 33 to 41", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_capture", "code": "# Code from lines 157 to 165", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb9-1"}
+{"context": "Test: test_sentinel", "code": "# Code from lines 133 to 149", "source": "ibis/common/tests/test_typing.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Test: test_pattern", "code": "# Code from lines 270 to 281", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Test: test_exprs", "code": "# Code from lines 39 to 43", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Test: test_format_table_column", "code": "# Code from lines 22 to 26", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb9-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Test: test_init_subclass_keyword_arguments", "code": "# Code from lines 1067 to 1076", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_frozen_slotted_inheritance", "code": "# Code from lines 383 to 387", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_schema_equality", "code": "# Code from lines 194 to 203", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Test: test_pattern_flatten", "code": "# Code from lines 284 to 309", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_null_dtype", "code": "# Code from lines 14 to 17", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_collect_distinct", "code": "# Code from lines 161 to 177", "source": "ibis/expr/tests/test_reductions.py", "type": "test"}
+{"context": "Test: test_join_with_subsequent_projection_colliding_names", "code": "# Code from lines 665 to 689", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_to_sqlglot_column_defs_create_table_integration", "code": "# Code from lines 465 to 477", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_pattern_from_coercible_protocol", "code": "# Code from lines 1186 to 1189", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_callable_with_default_arguments", "code": "# Code from lines 722 to 734", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_self_join", "code": "# Code from lines 1127 to 1152", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Test: test_aggregate_having", "code": "# Code from lines 949 to 965", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_traversal_with_filtering_out_root", "code": "# Code from lines 148 to 150", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Test: test_deferred_is_immutable", "code": "# Code from lines 584 to 586", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Test: test_builder_variable", "code": "# Code from lines 62 to 65", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_simplify_project_filter_project", "code": "# Code from lines 90 to 104", "source": "ibis/expr/tests/test_rewrites.py", "type": "test"}
+{"context": "Test: test_simplify_subsequent_filters", "code": "# Code from lines 83 to 87", "source": "ibis/expr/tests/test_rewrites.py", "type": "test"}
+{"context": "Test: test_implicit_coercion_of_null_literal", "code": "# Code from lines 163 to 173", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_node_find_using_pattern", "code": "# Code from lines 419 to 427", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Test: test_pattern_from_typehint_disable_coercion", "code": "# Code from lines 1140 to 1150", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Test: test_columnar_shape", "code": "# Code from lines 23 to 28", "source": "ibis/expr/tests/test_datashape.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_parameter", "code": "# Code from lines 131 to 149", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_enode", "code": "# Code from lines 143 to 155", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Test: test_classes_are_based_on_abstract", "code": "# Code from lines 22 to 26", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Test: test_aggregate_field_dereferencing", "code": "# Code from lines 1030 to 1094", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Test: test_replace_in_nested_object_pattern", "code": "# Code from lines 825 to 862", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_list_of", "code": "# Code from lines 501 to 508", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb9-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Test: test_signature", "code": "# Code from lines 152 to 171", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Test: test_annotable_with_self_typehint", "code": "# Code from lines 331 to 339", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Test: test_schema_from_to_numpy_dtypes", "code": "# Code from lines 385 to 401", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_concrete_with_traversable_children", "code": "# Code from lines 245 to 281", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_mutate", "code": "# Code from lines 218 to 230", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Test: test_singleton_lifetime", "code": "# Code from lines 263 to 268", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Test: test_option", "code": "# Code from lines 168 to 182", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_egraph_apply_nested", "code": "# Code from lines 374 to 386", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Test: test_primitive_dtypes_to_pandas", "code": "# Code from lines 156 to 158", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_memoize_filtered_table", "code": "# Code from lines 108 to 119", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Test: test_normalize_timedelta_invalid", "code": "# Code from lines 110 to 112", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Test: test_reversible", "code": "# Code from lines 40 to 59", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_toposort", "code": "# Code from lines 99 to 102", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Test: test_matching", "code": "# Code from lines 791 to 810", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Test: test_concrete", "code": "# Code from lines 1002 to 1043", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_schema_mapping_api", "code": "# Code from lines 170 to 191", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb9-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Test: test_annotable_attribute_init", "code": "# Code from lines 875 to 889", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Test: test_null_deferrable", "code": "# Code from lines 613 to 616", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_signature_from_callable_with_keyword_only_arguments", "code": "# Code from lines 234 to 262", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_iterator", "code": "# Code from lines 62 to 79", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_subsequent_selections_value_dereferencing", "code": "# Code from lines 350 to 387", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Test: test_schema_from_to_polars_schema", "code": "# Code from lines 368 to 382", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_deferred_unary_operations", "code": "# Code from lines 490 to 495", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_any", "code": "# Code from lines 134 to 138", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Test: test_parse_sql_simple_reduction", "code": "# Code from lines 115 to 119", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Test: test_traversals_with_filter", "code": "# Code from lines 139 to 144", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_parse_sql_basic_join", "code": "# Code from lines 30 to 44", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Test: test_join_unambiguous_select", "code": "# Code from lines 604 to 621", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Test: test_self_join_view", "code": "# Code from lines 1155 to 1168", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_schema_from_names_and_typesield_names", "code": "# Code from lines 35 to 38", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Test: test_annotable_with_type_annotations", "code": "# Code from lines 310 to 324", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Test: test_where", "code": "# Code from lines 390 to 414", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Test: test_projections_with_similar_expressions_have_different_names", "code": "# Code from lines 1776 to 1789", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_argminmax_deferred", "code": "# Code from lines 111 to 114", "source": "ibis/expr/tests/test_reductions.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Test: test_interval_unit_compatibility", "code": "# Code from lines 115 to 120", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Test: test_normalize_decimal", "code": "# Code from lines 31 to 32", "source": "ibis/common/tests/test_numeric.py", "type": "test"}
+{"context": "Test: test_deferred_namespace", "code": "# Code from lines 589 to 605", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Test: test_order_by", "code": "# Code from lines 94 to 98", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Test: test_flatten", "code": "# Code from lines 29 to 30", "source": "ibis/tests/test_util.py", "type": "test"}
+{"context": "Test: test_replace_mapping", "code": "# Code from lines 63 to 66", "source": "ibis/common/tests/test_graph_benchmarks.py", "type": "test"}
+{"context": "Test: test_annotable_with_dict_slot", "code": "# Code from lines 849 to 857", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Test: test_select_with_reduction_turns_into_window_function", "code": "# Code from lines 991 to 1006", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_memtable_column_names_match_schema", "code": "# Code from lines 146 to 152", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Test: test_collection", "code": "# Code from lines 115 to 143", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Test: test_schema_from_dataclass", "code": "# Code from lines 286 to 287", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_math_associate_adds", "code": "# Code from lines 507 to 518", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Test: test_timestamp_dtype", "code": "# Code from lines 63 to 66", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_filters_are_allowed_to_have_the_same_name", "code": "# Code from lines 1765 to 1773", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_normalize_decimal_dont_truncate_precision", "code": "# Code from lines 56 to 78", "source": "ibis/common/tests/test_numeric.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Test: test_no_import", "code": "# Code from lines 52 to 59", "source": "ibis/tests/test_api.py", "type": "test"}
+{"context": "Test: test_join_with_filtered_join_of_left", "code": "# Code from lines 1497 to 1515", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Test: test_lazy_singledispatch_extra_args", "code": "# Code from lines 40 to 55", "source": "ibis/common/tests/test_dispatch.py", "type": "test"}
+{"context": "Test: test_rewindable_iterator", "code": "# Code from lines 468 to 496", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_matching_sequence_pattern_keeps_original_type", "code": "# Code from lines 910 to 912", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Test: test_cov_corr_deferred", "code": "# Code from lines 118 to 121", "source": "ibis/expr/tests/test_reductions.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_non_example", "code": "# Code from lines 75 to 78", "source": "ibis/examples/tests/test_examples.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Test: test_filter", "code": "# Code from lines 142 to 147", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Test: test_matching_sequence_with_captures", "code": "# Code from lines 915 to 936", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Test: test_multiple_validation_failures", "code": "# Code from lines 471 to 478", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Test: test_builder_call", "code": "# Code from lines 81 to 95", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_distinct", "code": "# Code from lines 86 to 88", "source": "ibis/expr/tests/test_decompile.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Test: test_ordered_aggregations_no_order", "code": "# Code from lines 150 to 158", "source": "ibis/expr/tests/test_reductions.py", "type": "test"}
+{"context": "Test: test_parse_sql_join_with_filter", "code": "# Code from lines 164 to 172", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_annotable_is_mutable_by_default", "code": "# Code from lines 290 to 307", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_various_patterns", "code": "# Code from lines 1057 to 1058", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_interval_unit_aliases", "code": "# Code from lines 67 to 69", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Test: test_format_projection", "code": "# Code from lines 29 to 34", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Test: test_missing_backend", "code": "# Code from lines 32 to 35", "source": "ibis/tests/test_api.py", "type": "test"}
+{"context": "Test: test_schema_array_dtype", "code": "# Code from lines 149 to 152", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Test: test_builder_item", "code": "# Code from lines 120 to 131", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_deferred_const", "code": "# Code from lines 212 to 217", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_dereference_mapping_self_reference", "code": "# Code from lines 40 to 44", "source": "ibis/expr/tests/test_dereference.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Test: test_example", "code": "# Code from lines 203 to 242", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_filter_condition_referencing_agg_without_groupby_turns_it_into_a_subquery", "code": "# Code from lines 1109 to 1124", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Test: test_sized", "code": "# Code from lines 82 to 95", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_schema_from_annotated_class", "code": "# Code from lines 238 to 239", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Test: test_egraph_rewrite_dynamic", "code": "# Code from lines 445 to 460", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Test: test_coerce_finder", "code": "# Code from lines 355 to 372", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Test: test_aggregate", "code": "# Code from lines 935 to 946", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_floating_dtype", "code": "# Code from lines 39 to 41", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_array_dtype", "code": "# Code from lines 94 to 97", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_variadic_keyword_argument_reordering", "code": "# Code from lines 571 to 600", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Test: test_pattern_from_typehint_uniontype", "code": "# Code from lines 1133 to 1137", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_timestamp_pandas", "code": "# Code from lines 113 to 119", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Test: test_subsequent_selections_field_dereferencing", "code": "# Code from lines 283 to 347", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_pattern_list_unpack", "code": "# Code from lines 773 to 788", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_annotated_function_with_list_overrides", "code": "# Code from lines 374 to 380", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_pattern_factory_wraps_variable_with_capture", "code": "# Code from lines 141 to 148", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_geospatial_dtype", "code": "# Code from lines 88 to 90", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_builder_mapping", "code": "# Code from lines 134 to 142", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_node_find_topmost_using_pattern", "code": "# Code from lines 454 to 460", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_pattern_list", "code": "# Code from lines 737 to 750", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Test: test_to_sqlglot_column_defs", "code": "# Code from lines 444 to 456", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_html_escape", "code": "# Code from lines 150 to 161", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Test: test_initialized_attribute_mixed_with_classvar", "code": "# Code from lines 949 to 977", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_attribute_factory", "code": "# Code from lines 44 to 55", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Test: test_parse_sql_multiple_joins", "code": "# Code from lines 61 to 71", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Test: test_signature_unbind_with_empty_variadic", "code": "# Code from lines 297 to 306", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Test: test_select_fields", "code": "# Code from lines 82 to 100", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_get_bound_typevars", "code": "# Code from lines 103 to 116", "source": "ibis/common/tests/test_typing.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Test: test_numeric_dtype", "code": "# Code from lines 45 to 47", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Test: test_frozenordereddict", "code": "# Code from lines 433 to 465", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Test: test_comparable_basic", "code": "# Code from lines 119 to 127", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Test: test_preferences", "code": "# Code from lines 305 to 309", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Test: test_annotated_function", "code": "# Code from lines 309 to 326", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_array_array_dtype", "code": "# Code from lines 101 to 104", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Test: test_backward_compat_aliases", "code": "# Code from lines 75 to 78", "source": "ibis/expr/tests/test_datashape.py", "type": "test"}
+{"context": "Test: test_contains", "code": "# Code from lines 450 to 463", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb9-1"}
+{"context": "Test: test_select_windowizing_analytic_function", "code": "# Code from lines 136 to 138", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Test: test_schema_from_namedtuple", "code": "# Code from lines 259 to 260", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Test: test_annotable_with_optional_coercible_typehint", "code": "# Code from lines 1103 to 1110", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Test: test_ok", "code": "# Code from lines 351 to 352", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-8"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Test: test_deferrable_repr", "code": "# Code from lines 542 to 547", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_schema_from_names_and_types_length_must_match", "code": "# Code from lines 23 to 32", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Test: test_deferrable_nested_args", "code": "# Code from lines 564 to 574", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_temporal_dtype", "code": "# Code from lines 76 to 78", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_struct_dtype", "code": "# Code from lines 116 to 119", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_graph_repr", "code": "# Code from lines 77 to 79", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_self_join_extensive", "code": "# Code from lines 1245 to 1302", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_matching_sequence_pattern", "code": "# Code from lines 891 to 907", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_matching_sequence_complicated", "code": "# Code from lines 955 to 977", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_coerce_replacer", "code": "# Code from lines 375 to 387", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_scalar_shape", "code": "# Code from lines 15 to 20", "source": "ibis/expr/tests/test_datashape.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Test: test_egraph_rewrite_to_constant_raises", "code": "# Code from lines 424 to 432", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Test: test_normalize_datetime_pandas", "code": "# Code from lines 198 to 201", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Test: test_impure_operation_dereferencing", "code": "# Code from lines 1720 to 1741", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_table_name_arg", "code": "# Code from lines 93 to 97", "source": "ibis/examples/tests/test_examples.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Test: test_replace_with_filtering_out_root", "code": "# Code from lines 153 to 156", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_custom_expr", "code": "# Code from lines 46 to 60", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Test: test_annotated_function_without_annotations", "code": "# Code from lines 426 to 432", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_nested_name_property", "code": "# Code from lines 176 to 182", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Test: test_annotable_with_recursive_generic_type_annotations", "code": "# Code from lines 342 to 373", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_variadic_keyword_argument", "code": "# Code from lines 614 to 622", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_generic_sequence_of", "code": "# Code from lines 485 to 498", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_import_object", "code": "# Code from lines 41 to 51", "source": "ibis/tests/test_util.py", "type": "test"}
+{"context": "Test: test_deferred_is_not_iterable", "code": "# Code from lines 499 to 507", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Test: test_relation_coercion", "code": "# Code from lines 53 to 57", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_pseudo_hashable", "code": "# Code from lines 57 to 140", "source": "ibis/tests/test_util.py", "type": "test"}
+{"context": "Test: test_simplify_subsequent_field_selections", "code": "# Code from lines 24 to 47", "source": "ibis/expr/tests/test_rewrites.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Test: test_generic_instance_of_disallow_nested_coercion", "code": "# Code from lines 272 to 284", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Test: test_egraph_rewrite_to_variable", "code": "# Code from lines 414 to 421", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Test: test_sql_config", "code": "# Code from lines 9 to 16", "source": "ibis/tests/test_config.py", "type": "test"}
+{"context": "Test: test_name_collisions_raise", "code": "# Code from lines 1386 to 1403", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_asof_join", "code": "# Code from lines 131 to 139", "source": "ibis/expr/tests/test_visualize.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Test: test_deferred_method_with_kwargs", "code": "# Code from lines 402 to 411", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_annotated_function_with_varargs", "code": "# Code from lines 447 to 456", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_timestamp", "code": "# Code from lines 82 to 87", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Test: test_mapset_mapping_api", "code": "# Code from lines 265 to 288", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_mapset_set_api", "code": "# Code from lines 291 to 404", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_bfs", "code": "# Code from lines 47 to 49", "source": "ibis/common/tests/test_graph_benchmarks.py", "type": "test"}
+{"context": "Test: test_join_between_joins", "code": "# Code from lines 1456 to 1494", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Test: test_copy_mutable_with_default_attribute", "code": "# Code from lines 685 to 713", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_schema_infer_polars_dataframe", "code": "# Code from lines 356 to 365", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Test: test_default_argument", "code": "# Code from lines 83 to 85", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb2-2"}
+{"context": "Test: test_pattern_matching", "code": "# Code from lines 36 to 49", "source": "ibis/common/tests/test_grounds_py310.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Test: test_tabular_shape", "code": "# Code from lines 31 to 36", "source": "ibis/expr/tests/test_datashape.py", "type": "test"}
+{"context": "Test: test_immutable", "code": "# Code from lines 61 to 78", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_duplicate_columns_in_memtable_not_allowed", "code": "# Code from lines 137 to 143", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Test: test_signed_integer_dtype", "code": "# Code from lines 27 to 29", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Test: test_container", "code": "# Code from lines 98 to 112", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Test: test_backend_arg", "code": "# Code from lines 84 to 87", "source": "ibis/examples/tests/test_examples.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/"}
+{"context": "Test: test_ibis_desc_asc_default", "code": "# Code from lines 76 to 82", "source": "ibis/tests/test_api.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Test: test_deferred_binary_operations", "code": "# Code from lines 444 to 455", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-13"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Test: test_enode_roundtrip_with_variadic_arg", "code": "# Code from lines 180 to 188", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Test: test_format_multiple_join_with_projection", "code": "# Code from lines 76 to 105", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Test: test_signature_unbind", "code": "# Code from lines 265 to 280", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-3"}
+{"context": "Test: test_variadic_argument", "code": "# Code from lines 603 to 611", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-4"}
+{"context": "Test: test_comparable_caching", "code": "# Code from lines 130 to 178", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Test: test_frozen_slotted", "code": "# Code from lines 358 to 380", "source": "ibis/common/tests/test_bases.py", "type": "test"}
+{"context": "Test: test_deferred_call", "code": "# Code from lines 366 to 380", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_repr_deferred_with_exprs", "code": "# Code from lines 130 to 134", "source": "ibis/expr/tests/test_api.py", "type": "test"}
+{"context": "Test: test_parse_sql_table_alias", "code": "# Code from lines 157 to 161", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Test: test_equal_to", "code": "# Code from lines 196 to 207", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_unsigned_integer_dtype", "code": "# Code from lines 33 to 35", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_positional_argument_reordering", "code": "# Code from lines 490 to 514", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Test: test_shapes_are_singletons", "code": "# Code from lines 39 to 45", "source": "ibis/expr/tests/test_datashape.py", "type": "test"}
+{"context": "Test: test_deferred_getitem", "code": "# Code from lines 354 to 357", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Test: test_subclass_of", "code": "# Code from lines 218 to 223", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_join_predicate_dereferencing", "code": "# Code from lines 787 to 848", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-1"}
+{"context": "Test: test_join_rhs_dereferencing", "code": "# Code from lines 907 to 932", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Test: test_pattern_sequence", "code": "# Code from lines 511 to 521", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_parse_sql_aggregation_with_multiple_joins", "code": "# Code from lines 100 to 112", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Test: test_length", "code": "# Code from lines 420 to 447", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Test: test_aggregate_arg_names", "code": "# Code from lines 61 to 73", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Test: test_builder_objects_are_hashable", "code": "# Code from lines 166 to 179", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-14"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_where_flattens_predicates", "code": "# Code from lines 445 to 455", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_initialized_attribute_with_validation", "code": "# Code from lines 928 to 946", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_any_of", "code": "# Code from lines 374 to 386", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Test: test_dereference_project", "code": "# Code from lines 22 to 36", "source": "ibis/expr/tests/test_dereference.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Test: test_deferred_supports_string_arguments", "code": "# Code from lines 198 to 203", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_select_values", "code": "# Code from lines 103 to 128", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Test: test_lazy_singledispatch", "code": "# Code from lines 9 to 37", "source": "ibis/common/tests/test_dispatch.py", "type": "test"}
+{"context": "Test: test_format_table_with_empty_schema", "code": "# Code from lines 37 to 41", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Test: test_disjoint_set_with_enode", "code": "# Code from lines 229 to 267", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Test: test_select_turns_scalar_reduction_into_subquery", "code": "# Code from lines 152 to 158", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_nested_children", "code": "# Code from lines 117 to 135", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Test: test_immutability", "code": "# Code from lines 821 to 827", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Test: test_multiple_inheritance_argument_order", "code": "# Code from lines 785 to 798", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Test: test_cloudpickle", "code": "# Code from lines 486 to 489", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Test: test_concrete_isinstance", "code": "# Code from lines 35 to 43", "source": "ibis/common/tests/test_grounds_benchmarks.py", "type": "test"}
+{"context": "Test: test_dfs", "code": "# Code from lines 82 to 85", "source": "ibis/common/tests/test_graph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-2"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_named_value_expr_show_name", "code": "# Code from lines 122 to 134", "source": "ibis/expr/tests/test_format.py", "type": "test"}
+{"context": "Test: test_not", "code": "# Code from lines 363 to 371", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_wrong", "code": "# Code from lines 355 to 356", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_argument_order_using_optional_annotations", "code": "# Code from lines 1079 to 1100", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/"}
+{"context": "Test: test_basic", "code": "# Code from lines 68 to 78", "source": "ibis/expr/tests/test_decompile.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Test: test_dfs", "code": "# Code from lines 52 to 54", "source": "ibis/common/tests/test_graph_benchmarks.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb5-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb9-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb4-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Test: test_annotations_are_immutable", "code": "# Code from lines 58 to 69", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb11-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb8-1"}
+{"context": "Test: test_matching_sequence_remaining", "code": "# Code from lines 939 to 952", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb7-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_null_fields", "code": "# Code from lines 438 to 441", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Test: test_replace_decorator", "code": "# Code from lines 865 to 871", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_normalize_timezone", "code": "# Code from lines 135 to 136", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb13-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-11"}
+{"context": "Test: test_instance_of", "code": "# Code from lines 226 to 241", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Test: test_parse_sql_basic_projection", "code": "# Code from lines 22 to 26", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb13-7"}
+{"context": "Test: test_numeric_dtypes_non_nullable", "code": "# Code from lines 57 to 59", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Test: test_replace_passes_matched_value_as_underscore", "code": "# Code from lines 813 to 822", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_schema_is_coercible", "code": "# Code from lines 316 to 321", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Test: test_self_join_with_view_projection", "code": "# Code from lines 1171 to 1184", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-10"}
+{"context": "Test: test_get_type_hints", "code": "# Code from lines 54 to 72", "source": "ibis/common/tests/test_typing.py", "type": "test"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb2-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Test: test_simplify_full_reprojection", "code": "# Code from lines 18 to 21", "source": "ibis/expr/tests/test_rewrites.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Test: test_interval_units", "code": "# Code from lines 39 to 43", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Test: test_pickle", "code": "# Code from lines 481 to 483", "source": "ibis/common/tests/test_annotations.py", "type": "test"}
+{"context": "Test: test_various_not_matching_patterns", "code": "# Code from lines 1081 to 1082", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_nothing", "code": "# Code from lines 117 to 120", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-6"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-4-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb13-9"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb10-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Test: test_nullable_output", "code": "# Code from lines 147 to 161", "source": "ibis/expr/tests/test_schema.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb13-12"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#annotated-cell-4-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_normalized_datetime_tzname_pandas", "code": "# Code from lines 248 to 252", "source": "ibis/common/tests/test_temporal.py", "type": "test"}
+{"context": "Test: test_chained_join_referencing_intermediate_table", "code": "# Code from lines 734 to 761", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Test: test_decompile_invalid_type", "code": "# Code from lines 43 to 46", "source": "ibis/expr/tests/test_decompile.py", "type": "test"}
+{"context": "Test: test_deferred_apply", "code": "# Code from lines 414 to 424", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_pattern_function", "code": "# Code from lines 1237 to 1276", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_mapping", "code": "# Code from lines 181 to 227", "source": "ibis/common/tests/test_collections.py", "type": "test"}
+{"context": "Test: test_composition_of_annotable_and_comparable", "code": "# Code from lines 397 to 420", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_egraph_match_simple", "code": "# Code from lines 312 to 322", "source": "ibis/common/tests/test_egraph.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-4"}
+{"context": "Ibis", "code": "1ibis.to_sql(grouped)", "source": "https://ibis-project.org/docs/#annotated-cell-1-3"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Test: test_subsequent_order_by_calls", "code": "# Code from lines 1712 to 1716", "source": "ibis/expr/tests/test_newrels.py", "type": "test"}
+{"context": "Test: test_variadic_dtype", "code": "# Code from lines 130 to 132", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_concrete_pickling_variadic_arguments", "code": "# Code from lines 660 to 672", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-1-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#cb5-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"pyspark://\")", "source": "https://ibis-project.org/docs/#cb13-5"}
+{"context": "Ibis", "code": "con=ibis.connect(\"polars://\")", "source": "https://ibis-project.org/docs/#cb8-2"}
+{"context": "Ibis", "code": "con=ibis.connect(\"duckdb://\")", "source": "https://ibis-project.org/docs/#annotated-cell-3-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb6-1"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#annotated-cell-2-2"}
+{"context": "Ibis", "code": "1importibis2ibis.options.interactive=True3t=ibis.read_parquet(\"penguins.parquet\", table_name=\"penguins\")4t.head(3)", "source": "https://ibis-project.org/docs/#cb12-1"}
+{"context": "Test: test_none_of", "code": "# Code from lines 409 to 417", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_interval_dtype", "code": "# Code from lines 70 to 72", "source": "ibis/tests/test_strategies.py", "type": "test"}
+{"context": "Test: test_deferred_set_raises", "code": "# Code from lines 550 to 552", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
+{"context": "Test: test_lazy_instance_of", "code": "# Code from lines 244 to 247", "source": "ibis/common/tests/test_patterns.py", "type": "test"}
+{"context": "Test: test_composition_of_annotable_and_singleton", "code": "# Code from lines 980 to 999", "source": "ibis/common/tests/test_grounds.py", "type": "test"}
+{"context": "Ibis", "code": "con=ibis.connect(\"datafusion://\")", "source": "https://ibis-project.org/docs/#cb11-2"}
+{"context": "Test: test_parse_sql_in_clause", "code": "# Code from lines 175 to 182", "source": "ibis/expr/tests/test_sql.py", "type": "test"}
+{"context": "Test: test_builder", "code": "# Code from lines 145 to 163", "source": "ibis/common/tests/test_deferred.py", "type": "test"}
