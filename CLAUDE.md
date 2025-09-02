@@ -42,3 +42,6 @@ The project uses **Serena MCP** and **Semgrep** for semantic code understanding:
 - NEVER proactively create documentation files unless explicitly requested
 - Use venv Python (venv/bin/python), never system python3
 - Track experiments in W&B for reproducibility
+- **NEVER use conditional fallbacks or substitute different models/tools than what was specified**
+- **NEVER pretend to do the actual task by using something else (e.g., using GPT2 when Devstral is required)**
+- **If something cannot be done (missing API keys, models, etc.), STOP and explain the issue clearly**

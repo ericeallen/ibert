@@ -1,0 +1,240 @@
+rules:
+  # Group by and aggregation patterns
+  - id: ibis-group-by-aggregate
+    pattern: |
+      $TABLE.group_by(...).aggregate(...)
+    message: "Ibis group_by with aggregate pattern"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: group_aggregate
+      
+  - id: ibis-group-by-mutate
+    pattern: |
+      $TABLE.group_by(...).mutate(...)
+    message: "Ibis group_by with mutate (window function) pattern"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: window_function
+
+  # Join patterns
+  - id: ibis-inner-join
+    patterns:
+      - pattern: $TABLE1.join($TABLE2, ...)
+      - pattern-not: $TABLE1.join($TABLE2, ..., how=...)
+    message: "Ibis inner join (default) pattern"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: inner_join
+
+  - id: ibis-left-join
+    pattern: |
+      $TABLE1.join($TABLE2, ..., how="left")
+    message: "Ibis left join pattern"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: left_join
+
+  - id: ibis-outer-join
+    pattern: |
+      $TABLE1.join($TABLE2, ..., how="outer")
+    message: "Ibis outer join pattern"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: outer_join
+
+  # Window function patterns
+  - id: ibis-window-rank
+    patterns:
+      - pattern: ibis.rank().over(...)
+      - pattern: ibis.dense_rank().over(...)
+      - pattern: ibis.row_number().over(...)
+    message: "Ibis window ranking function"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: window_rank
+
+  - id: ibis-window-aggregate
+    patterns:
+      - pattern: $FUNC.over(...)
+      - metavariable-pattern:
+          metavariable: $FUNC
+          patterns:
+            - pattern-either:
+              - pattern: ibis.sum(...)
+              - pattern: ibis.mean(...)
+              - pattern: ibis.count(...)
+              - pattern: ibis.max(...)
+              - pattern: ibis.min(...)
+    message: "Ibis window aggregate function"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: window_aggregate
+
+  # Filter and selection patterns
+  - id: ibis-filter
+    pattern: |
+      $TABLE.filter(...)
+    message: "Ibis filter/where clause"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: filter
+
+  - id: ibis-select
+    pattern: |
+      $TABLE.select(...)
+    message: "Ibis column selection"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: select
+
+  - id: ibis-mutate
+    pattern: |
+      $TABLE.mutate(...)
+    message: "Ibis mutate (add/modify columns)"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: mutate
+
+  # Common anti-patterns
+  - id: pandas-str-accessor-misuse
+    pattern: |
+      $COLUMN.str.$METHOD(...)
+    message: "Potential pandas-style string accessor misuse in Ibis"
+    languages: [python]
+    severity: WARNING
+    metadata:
+      category: anti-pattern
+      issue: pandas_api_misuse
+      fix: "Use Ibis string methods directly"
+
+  - id: filter-pushdown-smell
+    patterns:
+      - pattern: |
+          $TABLE.select(...).filter(...)
+      - pattern-not: |
+          $TABLE.filter(...).select(...)
+    message: "Consider pushing filter before select for optimization"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: optimization
+      issue: filter_pushdown
+
+  - id: chained-joins-performance
+    pattern: |
+      $TABLE.join(...).join(...).join(...)
+    message: "Multiple chained joins - consider optimization"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: performance
+      issue: multiple_joins
+
+  # Backend-specific patterns
+  - id: duckdb-specific-function
+    patterns:
+      - pattern: $TABLE.sql("... REGEXP ...")
+      - pattern: $TABLE.sql("... LIST_AGG ...")
+    message: "DuckDB-specific SQL function usage"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: backend-specific
+      backend: duckdb
+
+  # Type casting patterns
+  - id: ibis-cast
+    pattern: |
+      $EXPR.cast(...)
+    message: "Ibis type casting"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: type_cast
+
+  # Order and limit patterns
+  - id: ibis-order-limit
+    pattern: |
+      $TABLE.order_by(...).limit(...)
+    message: "Ibis order by with limit"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: order_limit
+
+  # Union and set operations
+  - id: ibis-union
+    patterns:
+      - pattern: $TABLE1.union($TABLE2, ...)
+      - pattern: ibis.union([$TABLE1, $TABLE2, ...])
+    message: "Ibis union operation"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: union
+
+  # Null handling
+  - id: ibis-null-handling
+    patterns:
+      - pattern: $EXPR.fillna(...)
+      - pattern: $EXPR.isnull()
+      - pattern: $EXPR.notnull()
+    message: "Ibis null handling operation"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: null_handling
+
+  # Error patterns
+  - id: missing-connection
+    pattern: |
+      $TABLE.execute()
+    pattern-not-inside: |
+      con = ibis.connect(...)
+      ...
+      $TABLE.execute()
+    message: "Potential missing connection context"
+    languages: [python]
+    severity: ERROR
+    metadata:
+      category: error-pattern
+      issue: missing_connection
+
+  # Aggregation patterns
+  - id: ibis-common-aggregations
+    patterns:
+      - pattern: $TABLE.count()
+      - pattern: $TABLE.sum()
+      - pattern: $TABLE.mean()
+      - pattern: $TABLE.std()
+      - pattern: $TABLE.var()
+    message: "Ibis common aggregation"
+    languages: [python]
+    severity: INFO
+    metadata:
+      category: ibis-pattern
+      operation: aggregation
