@@ -80,6 +80,12 @@ target/
 profile_default/
 ipython_config.py
 
+# Security - NEVER commit these
+hf_login.py
+*_token.py
+*_secret.py
+*_key.py
+
 # pyenv
 .python-version
 

@@ -66,11 +66,24 @@ class IBertModel:
         """Initialize base model and apply LoRA"""
         print(f"Loading base model: {self.config.base_model}")
         
-        # Load tokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            self.config.base_model,
-            trust_remote_code=True
-        )
+        # Load tokenizer - handle Tekken tokenizer for Devstral
+        try:
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.config.base_model,
+                trust_remote_code=True,
+                use_fast=False  # Try slow tokenizer for compatibility
+            )
+        except Exception as e:
+            print(f"Warning: Standard tokenizer loading failed: {e}")
+            print("Attempting fallback tokenizer loading...")
+            # Fallback: try loading with legacy mode
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.config.base_model,
+                trust_remote_code=True,
+                legacy=True,
+                use_fast=False
+            )
+        
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
         
