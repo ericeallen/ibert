@@ -1,12 +1,12 @@
-# iBERT: Tool-Assisted Code Generation for Lazy-Evaluated DSLs
+# ibert: Multi Task PEFT Model for Lazy-Evaluated DSLs
 
 ## Overview
 
-iBERT is a sophisticated code generation system designed for lazy-evaluated Domain-Specific Languages (DSLs), with **Ibis** as the primary target. The project leverages **Mistral's Devstral** as the base model, enhanced with **LoRA (Low-Rank Adaptation)** for parameter-efficient fine-tuning and integrated compiler/type-checker feedback loops for validation.
+ibert is a sophisticated code generation system designed for lazy-evaluated Domain-Specific Languages (DSLs), with **Ibis** as the primary target. The project leverages **Mistral's Devstral** as the base model, enhanced with **LoRA (Low-Rank Adaptation)** for parameter-efficient fine-tuning and integrated compiler/type-checker feedback loops for validation.
 
 ## Key Innovation: Semantic Intelligence + PEFT
 
-Unlike traditional code generation approaches that rely on simple text patterns, iBERT employs a semantic-aware architecture that understands code structure at the AST level. This is combined with LoRA adapters for efficient fine-tuning on a single H100 GPU, making it both powerful and resource-efficient.
+Unlike traditional code generation approaches that rely on simple text patterns, ibert employs a semantic-aware architecture that understands code structure at the AST level. This is combined with LoRA adapters for efficient fine-tuning on a single H100 GPU, making it both powerful and resource-efficient.
 
 ## Architecture Components
 
@@ -212,7 +212,7 @@ We welcome contributions in:
 
 ```bibtex
 @software{ibert2025,
-  title={iBERT: Tool-Assisted Code Generation for Lazy-Evaluated DSLs},
+  title={ibert: Multi Task PEFT for Lazy-Evaluated DSLs},
   author={Your Team},
   year={2025},
   url={https://github.com/yourusername/ibert}
