@@ -1,8 +1,13 @@
 # Core ML/NLP libraries
 torch>=2.0.0
 transformers>=4.35.0
+peft>=0.7.0  # Parameter-Efficient Fine-Tuning (LoRA)
+accelerate>=0.25.0  # Training acceleration
+bitsandbytes>=0.41.0  # 8-bit optimizers
 sentence-transformers>=2.2.0
 datasets>=2.14.0
+tokenizers>=0.15.0  # Fast tokenizers
+huggingface-hub>=0.19.0  # Model hub access
 
 # Vector search and embeddings
 faiss-cpu>=1.7.4  # Use faiss-gpu if you have CUDA
@@ -38,6 +43,8 @@ pyyaml>=6.0.1
 python-dotenv>=1.0.0
 click>=8.1.7  # CLI interface
 rich>=13.7.0  # Beautiful terminal output
+jsonlines>=4.0.0  # JSONL file handling
+networkx>=3.0  # Graph operations for symbol relationships
 
 # Development tools
 pytest>=7.4.0
@@ -55,6 +62,11 @@ ipywidgets>=8.1.0
 # Logging and monitoring
 loguru>=0.7.2
 wandb>=0.15.0  # Optional: for experiment tracking
+
+# Semantic Intelligence (Code Understanding)
+semgrep>=1.45.0  # AST-based pattern matching
+tree-sitter>=0.20.0  # Code parsing
+pygments>=2.16.0  # Syntax highlighting
 
 # Documentation
 mkdocs>=1.5.0
