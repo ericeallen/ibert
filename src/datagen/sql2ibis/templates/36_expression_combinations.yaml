@@ -1,0 +1,86 @@
+# Combined expression patterns
+name: expression_combinations
+description: Combining multiple expression types in SELECT
+difficulty: medium
+features:
+  - mutate
+  - expression
+  - computed_columns
+
+sql_template: |
+  SELECT {columns}, {expressions}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_expressions})[{ibis_select_cols}]
+
+variations:
+  - name: math_and_string
+    params:
+      table: events
+      columns: user_id, amount
+      expressions: amount * 1.1 AS amount_taxed, CAST(user_id AS VARCHAR) AS user_id_str
+      ibis_select_cols: '["user_id", "amount", "amount_taxed", "user_id_str"]'
+      ibis_expressions: |
+        amount_taxed=events.amount * 1.1,
+            user_id_str=events.user_id.cast('string')
+
+  - name: temporal_and_numeric
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      expressions: EXTRACT(YEAR FROM event_ts) AS year, ROUND(amount, 1) AS amount_rounded
+      ibis_select_cols: '["user_id", "event_ts", "amount", "year", "amount_rounded"]'
+      ibis_expressions: |
+        year=events.event_ts.year(),
+            amount_rounded=events.amount.round(1)
+
+  - name: conditional_and_math
+    params:
+      table: events
+      columns: user_id, amount
+      expressions: amount * 2 AS doubled, CASE WHEN amount > 15 THEN 'high' ELSE 'low' END AS category
+      ibis_select_cols: '["user_id", "amount", "doubled", "category"]'
+      ibis_expressions: |
+        doubled=events.amount * 2,
+            category=ibis.where(events.amount > 15, 'high', 'low')
+
+  - name: multiple_temporal_extracts
+    params:
+      table: events
+      columns: user_id, event_ts
+      expressions: EXTRACT(YEAR FROM event_ts) AS year, EXTRACT(MONTH FROM event_ts) AS month, EXTRACT(DAY FROM event_ts) AS day
+      ibis_select_cols: '["user_id", "event_ts", "year", "month", "day"]'
+      ibis_expressions: |
+        year=events.event_ts.year(),
+            month=events.event_ts.month(),
+            day=events.event_ts.day()
+
+  - name: chained_math
+    params:
+      table: events
+      columns: user_id, amount
+      expressions: amount * 2 AS doubled, (amount * 2) + 5 AS doubled_plus_five, ((amount * 2) + 5) / 10 AS final
+      ibis_select_cols: '["user_id", "amount", "doubled", "doubled_plus_five", "final"]'
+      ibis_expressions: |
+        doubled=events.amount * 2,
+            doubled_plus_five=(events.amount * 2) + 5,
+            final=((events.amount * 2) + 5) / 10
+
+  - name: boolean_and_cast
+    params:
+      table: events
+      columns: user_id, amount
+      expressions: amount > 15 AS is_high, CAST(amount > 15 AS INTEGER) AS is_high_int
+      ibis_select_cols: '["user_id", "amount", "is_high", "is_high_int"]'
+      ibis_expressions: |
+        is_high=(events.amount > 15),
+            is_high_int=(events.amount > 15).cast('int64')
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

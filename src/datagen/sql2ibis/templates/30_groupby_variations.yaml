@@ -1,0 +1,99 @@
+# GROUP BY variations and edge cases
+name: groupby_variations
+description: Different GROUP BY patterns and combinations
+difficulty: medium
+features:
+  - groupby
+  - aggregate
+  - multi_column
+
+sql_template: |
+  SELECT {select_keys}, {aggregates}
+  FROM {table}
+  GROUP BY {group_keys}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: group_by_single_key
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COUNT(*) AS n
+      ibis_expression: events.group_by("user_id").aggregate(n=events.count())
+
+  - name: group_by_two_keys
+    params:
+      table: events
+      select_keys: user_id, CAST(event_ts AS DATE) AS event_date
+      group_keys: user_id, CAST(event_ts AS DATE)
+      aggregates: SUM(amount) AS daily_total
+      ibis_expression: |
+        events.group_by(
+            ["user_id", "event_date"]
+        ).aggregate(
+            event_date=events.event_ts.date(),
+            daily_total=events.amount.sum()
+        )
+
+  - name: group_by_expression
+    params:
+      table: events
+      select_keys: CAST(amount AS INTEGER) AS amount_bucket
+      group_keys: CAST(amount AS INTEGER)
+      aggregates: COUNT(*) AS n
+      ibis_expression: |
+        events.group_by(
+            amount_bucket=events.amount.cast('int64')
+        ).aggregate(
+            n=ibis._.count()
+        )
+
+  - name: group_by_with_multiple_aggs
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COUNT(*) AS n, SUM(amount) AS total, AVG(amount) AS avg_amt, MIN(amount) AS min_amt, MAX(amount) AS max_amt
+      ibis_expression: |
+        events.group_by("user_id").aggregate(
+            n=events.count(),
+            total=events.amount.sum(),
+            avg_amt=events.amount.mean(),
+            min_amt=events.amount.min(),
+            max_amt=events.amount.max()
+        )
+
+  - name: group_by_with_distinct_count
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COUNT(DISTINCT CAST(event_ts AS DATE)) AS distinct_days
+      ibis_expression: |
+        events.group_by("user_id").aggregate(
+            distinct_days=events.event_ts.date().nunique()
+        )
+
+  - name: group_by_temporal_truncate
+    params:
+      table: events
+      select_keys: DATE_TRUNC('day', event_ts) AS day
+      group_keys: DATE_TRUNC('day', event_ts)
+      aggregates: COUNT(*) AS events_per_day
+      ibis_expression: |
+        events.group_by(
+            day=events.event_ts.truncate('D')
+        ).aggregate(
+            events_per_day=ibis._.count()
+        )
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

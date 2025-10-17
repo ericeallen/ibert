@@ -1,47 +1,96 @@
-# iBERT Project: Tool-Assisted Code Generation for Ibis DSL
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-You are building **iBERT** (name inspired by BERT but not actually a BERT architecture), a sophisticated code generation system for lazy-evaluated DSLs, with Ibis as the primary target. This project leverages **Devstral** from Mistral.ai as the base model, enhanced with LoRA fine-tuning and compiler/type-checker integration.
+**iBERT** (name inspired by BERT but not a BERT architecture) is a code generation system for lazy-evaluated DSLs, targeting Ibis (Python→SQL framework). The project uses Mistral's Devstral as the base model, enhanced with LoRA fine-tuning and compiler/type-checker validation.
 
-## Core Architecture
-- **Base Model**: Devstral (Mistral.ai's open-weight code-focused model)
-- **Fine-tuning**: LoRA (Low-Rank Adaptation) for efficient training on single H100 GPU
-- **Tool Integration**: Compiler and type-checker feedback loops for validation
-- **Target DSL**: Ibis (lazy-evaluated Python→SQL framework)
+## Key Technologies
+- **Base Model**: Devstral (`mistralai/Devstral-Small-2505`) - Mistral's code-focused model
+- **Fine-tuning**: LoRA (Low-Rank Adaptation) for parameter-efficient training
+- **Target DSL**: Ibis - lazy-evaluated Python framework that compiles to SQL
+- **Validation**: DuckDB backend for executing and comparing SQL/Ibis equivalence
+- **Semantic Intelligence**: Serena MCP (symbol navigation) + Semgrep (AST pattern matching)
 
-## Semantic Intelligence Layer
-The project uses **Serena MCP** and **Semgrep** for semantic code understanding:
-- **Semgrep**: AST-based pattern matching for DSL idioms and anti-patterns
-- **Serena**: Symbol-level code navigation, cross-file references, and semantic indexing
-- **Semantic Chunking**: Code units based on symbols/operations, not lines
-- **Hybrid Embeddings**: Content vectors + structural graph features
+## Development Commands
 
-## Key Components
-1. **Data Pipeline**: Ibis examples, SQL→Ibis conversions, synthetic task generation
-2. **Training**: LoRA adapters on key transformer layers, W&B experiment tracking
-3. **Inference**: Beam search with compiler validation, iterative refinement
-4. **Validation**: Compile/type-check success, functional correctness, execution testing
+### Python Environment
+**CRITICAL**: Always use `.venv/bin/python`, never system `python3`
+
+### Data Generation
+```bash
+# Generate SQL→Ibis training dataset from templates
+just generate-data
+
+# Show dataset statistics
+just dataset-stats
+
+# List available templates
+just list-templates
+```
+
+### Running Tests
+```bash
+# Test Ibis native SQL translation capabilities
+.venv/bin/python src/datagen/sql2ibis/test_ibis_sql.py
+```
+
+## Architecture
+
+### Data Generation Pipeline (`src/datagen/sql2ibis/`)
+The training data pipeline generates SQL→Ibis pairs from YAML templates:
+
+1. **Templates** (`templates/*.yaml`): Define SQL/Ibis patterns with variations
+   - Each template has `sql_template`, `ibis_template`, and `variations`
+   - Templates include schema context for validation
+   - 15 templates covering: SELECT/WHERE, GROUP BY, JOINs, window functions, UDFs, etc.
+
+2. **Template Loader** (`template_loader/`): Parses YAML and generates examples
+   - `loader.py`: Loads templates and applies parameter substitution
+
+3. **Validation** (`eval/`):
+   - `validator.py`: Executes both SQL and Ibis code, compares results using pandas
+   - `fixtures.py`: Provides test tables (events, users, etc.)
+   - Uses DuckDB backend for execution
+   - Only examples that pass validation are saved to training data
+
+4. **SQL Parsing** (`translator/`):
+   - `parser.py`: Uses `sqlglot` for SQL→AST parsing
+   - Supports multiple dialects (DuckDB, Postgres, MySQL, BigQuery, etc.)
+
+### Data Generation Flow
+```
+YAML Templates → Template Loader → SQL+Ibis Pairs → Validator → train.jsonl
+                                                          ↓
+                                                    DuckDB Execution
+                                                    Result Comparison
+```
+
+### Validation Strategy
+- SQL and Ibis code both execute against test tables in DuckDB
+- Results compared with numeric tolerance (1e-12) and sorting
+- Supports multi-line Ibis code with imports and UDF decorators
+- Only validated examples saved to `data/sql2ibis/train.jsonl`
+
+## Multi-Task Training Framework
+The model supports six tasks with weighted sampling:
+1. Code Completion
+2. Ibis→SQL Translation
+3. Error Resolution
+4. Q&A
+5. Function Documentation
+6. SQL→Ibis
 
 ## Development Principles
-- Tool-verified training data only (passes compile/type-check)
-- Semantic units over regex chunks
-- Symbol graph for context expansion
-- Iterative refinement with compiler feedback
-- Experiment tracking with Weights & Biases
+- **Tool-verified data only**: All training examples must pass compile/type-check
+- **Use venv Python**: `.venv/bin/python`, never system `python3`
+- **Semantic units over regex**: Use symbol-level chunking, not line-based
+- **No substitutions**: If a specified model/tool is unavailable, STOP and explain - never use fallbacks
+- **Iterative refinement**: Use compiler feedback for validation
+- **Track experiments**: Use Weights & Biases for reproducibility
 
 ## Working with Serena MCP
-- Serena provides symbolic code intelligence via MCP/LSP
-- Use for extracting symbols, definitions, references, call graphs
+- Provides symbolic code intelligence via MCP/LSP
+- Extract symbols, definitions, references, call graphs
 - Build semantic index before chunking/embedding
 - Powers neighborhood expansion in retrieval
-
-## Important Instructions
-- Do what has been asked; nothing more, nothing less
-- NEVER create files unless absolutely necessary
-- ALWAYS prefer editing existing files
-- NEVER proactively create documentation files unless explicitly requested
-- Use venv Python (venv/bin/python), never system python3
-- Track experiments in W&B for reproducibility
-- **NEVER use conditional fallbacks or substitute different models/tools than what was specified**
-- **NEVER pretend to do the actual task by using something else (e.g., using GPT2 when Devstral is required)**
-- **If something cannot be done (missing API keys, models, etc.), STOP and explain the issue clearly**

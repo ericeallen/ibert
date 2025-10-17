@@ -1,0 +1,84 @@
+# Sorting and limiting operations
+name: sorting_limiting
+description: ORDER BY, LIMIT, OFFSET patterns
+difficulty: easy
+features:
+  - order_by
+  - limit
+  - offset
+  - sort
+
+sql_template: |
+  {query}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: order_by_asc
+    params:
+      query: |
+        SELECT user_id, amount
+        FROM events
+        ORDER BY amount ASC
+      ibis_expression: events[["user_id", "amount"]].order_by("amount")
+
+  - name: order_by_desc
+    params:
+      query: |
+        SELECT user_id, amount
+        FROM events
+        ORDER BY amount DESC
+      ibis_expression: events[["user_id", "amount"]].order_by(ibis.desc("amount"))
+
+  - name: order_by_multiple
+    params:
+      query: |
+        SELECT user_id, event_ts, amount
+        FROM events
+        ORDER BY user_id ASC, event_ts DESC
+      ibis_expression: events[["user_id", "event_ts", "amount"]].order_by(["user_id", ibis.desc("event_ts")])
+
+  - name: limit_only
+    params:
+      query: |
+        SELECT user_id, amount
+        FROM events
+        LIMIT 5
+      ibis_expression: events[["user_id", "amount"]].limit(5)
+
+  - name: limit_with_order
+    params:
+      query: |
+        SELECT user_id, amount
+        FROM events
+        ORDER BY amount DESC
+        LIMIT 10
+      ibis_expression: events[["user_id", "amount"]].order_by(ibis.desc("amount")).limit(10)
+
+  - name: offset_with_limit
+    params:
+      query: |
+        SELECT user_id, amount
+        FROM events
+        ORDER BY amount
+        LIMIT 5 OFFSET 10
+      ibis_expression: events[["user_id", "amount"]].order_by("amount").limit(5, offset=10)
+
+  - name: top_n_by_group
+    params:
+      query: |
+        SELECT user_id, amount
+        FROM events
+        WHERE user_id = 1
+        ORDER BY amount DESC
+        LIMIT 3
+      ibis_expression: events.filter(events.user_id == 1)[["user_id", "amount"]].order_by(ibis.desc("amount")).limit(3)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

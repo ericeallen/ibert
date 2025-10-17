@@ -1,0 +1,82 @@
+# Advanced aggregations and statistical functions
+name: advanced_aggregations
+description: Statistical and mathematical aggregations
+difficulty: medium
+features:
+  - aggregate
+  - statistics
+  - stddev
+  - variance
+  - median
+  - percentile
+
+sql_template: |
+  SELECT {select_keys}, {aggregates}
+  FROM {table}
+  GROUP BY {group_keys}
+
+ibis_template: |
+  {table}.group_by({ibis_group_keys}).aggregate(
+      {ibis_aggregates}
+  )
+
+variations:
+  - name: stddev_by_user
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: STDDEV(amount) AS amount_stddev
+      ibis_aggregates: 'amount_stddev=events.amount.std()'
+
+  - name: variance_by_user
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: VARIANCE(amount) AS amount_var
+      ibis_aggregates: 'amount_var=events.amount.var()'
+
+  - name: min_max_by_user
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: MIN(amount) AS min_amt, MAX(amount) AS max_amt
+      ibis_aggregates: |
+        min_amt=events.amount.min(),
+            max_amt=events.amount.max()
+
+  - name: full_stats
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) AS n, AVG(amount) AS mean_amt, STDDEV(amount) AS std_amt, MIN(amount) AS min_amt, MAX(amount) AS max_amt
+      ibis_aggregates: |
+        n=events.count(),
+            mean_amt=events.amount.mean(),
+            std_amt=events.amount.std(),
+            min_amt=events.amount.min(),
+            max_amt=events.amount.max()
+
+  - name: count_distinct
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(DISTINCT event_ts) AS distinct_days
+      ibis_aggregates: 'distinct_days=events.event_ts.nunique()'
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

@@ -1,0 +1,115 @@
+# Numeric operations and math functions
+name: numeric_operations
+description: Mathematical operations and numeric functions
+difficulty: easy
+features:
+  - math
+  - arithmetic
+  - abs
+  - round
+  - ceil
+  - floor
+
+sql_template: |
+  SELECT {columns}, {math_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_math})[{ibis_select_cols}]
+
+variations:
+  - name: addition
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: amount + 10 AS amount_plus_ten
+      ibis_select_cols: '["user_id", "amount", "amount_plus_ten"]'
+      ibis_math: amount_plus_ten=(events.amount + 10)
+
+  - name: subtraction
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: amount - 5 AS amount_minus_five
+      ibis_select_cols: '["user_id", "amount", "amount_minus_five"]'
+      ibis_math: amount_minus_five=(events.amount - 5)
+
+  - name: multiplication
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: amount * 2 AS amount_doubled
+      ibis_select_cols: '["user_id", "amount", "amount_doubled"]'
+      ibis_math: amount_doubled=(events.amount * 2)
+
+  - name: division
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: amount / 2 AS amount_halved
+      ibis_select_cols: '["user_id", "amount", "amount_halved"]'
+      ibis_math: amount_halved=(events.amount / 2)
+
+  - name: modulo
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: CAST(amount AS INTEGER) % 3 AS amount_mod
+      ibis_select_cols: '["user_id", "amount", "amount_mod"]'
+      ibis_math: amount_mod=(events.amount.cast('int64') % 3)
+
+  - name: absolute_value
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: ABS(amount - 15) AS amount_diff
+      ibis_select_cols: '["user_id", "amount", "amount_diff"]'
+      ibis_math: amount_diff=(events.amount - 15).abs()
+
+  - name: round_value
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: ROUND(amount, 0) AS amount_rounded
+      ibis_select_cols: '["user_id", "amount", "amount_rounded"]'
+      ibis_math: amount_rounded=events.amount.round(0)
+
+  - name: ceiling
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: CEIL(amount) AS amount_ceil
+      ibis_select_cols: '["user_id", "amount", "amount_ceil"]'
+      ibis_math: amount_ceil=events.amount.ceil()
+
+  - name: floor
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: FLOOR(amount) AS amount_floor
+      ibis_select_cols: '["user_id", "amount", "amount_floor"]'
+      ibis_math: amount_floor=events.amount.floor()
+
+  - name: power
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: POWER(amount, 2) AS amount_squared
+      ibis_select_cols: '["user_id", "amount", "amount_squared"]'
+      ibis_math: amount_squared=events.amount.pow(2)
+
+  - name: square_root
+    params:
+      table: events
+      columns: user_id, amount
+      math_expr: SQRT(amount) AS amount_sqrt
+      ibis_select_cols: '["user_id", "amount", "amount_sqrt"]'
+      ibis_math: amount_sqrt=events.amount.sqrt()
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

@@ -1,0 +1,83 @@
+# String operations and functions
+name: string_operations
+description: String manipulation functions
+difficulty: medium
+features:
+  - string
+  - concat
+  - upper
+  - lower
+  - substring
+  - replace
+  - length
+
+sql_template: |
+  SELECT {columns}, {string_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_string})[{ibis_select_cols}]
+
+variations:
+  - name: upper_case
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: UPPER(name) AS name_upper
+      ibis_select_cols: '["user_id", "name", "name_upper"]'
+      ibis_string: name_upper=users.name.upper()
+
+  - name: lower_case
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: LOWER(name) AS name_lower
+      ibis_select_cols: '["user_id", "name", "name_lower"]'
+      ibis_string: name_lower=users.name.lower()
+
+  - name: concat_strings
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: "CONCAT('User: ', name) AS display_name"
+      ibis_select_cols: '["user_id", "name", "display_name"]'
+      ibis_string: "display_name=('User: ' + users.name)"
+
+  - name: string_length
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: LENGTH(name) AS name_len
+      ibis_select_cols: '["user_id", "name", "name_len"]'
+      ibis_string: name_len=users.name.length()
+
+  - name: substring_extraction
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: SUBSTRING(name, 1, 3) AS name_prefix
+      ibis_select_cols: '["user_id", "name", "name_prefix"]'
+      ibis_string: name_prefix=users.name.substr(0, 3)
+
+  - name: string_replace
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: REPLACE(name, 'a', 'A') AS name_replaced
+      ibis_select_cols: '["user_id", "name", "name_replaced"]'
+      ibis_string: name_replaced=users.name.replace('a', 'A')
+
+  - name: trim_string
+    params:
+      table: users
+      columns: user_id, name
+      string_expr: TRIM(name) AS name_trimmed
+      ibis_select_cols: '["user_id", "name", "name_trimmed"]'
+      ibis_string: name_trimmed=users.name.strip()
+
+context:
+  tables:
+    users:
+      schema:
+        user_id: int64
+        name: string

@@ -1,0 +1,89 @@
+# Temporal filtering operations
+name: temporal_filters
+description: Filtering with date and time conditions
+difficulty: medium
+features:
+  - temporal
+  - filter
+  - date_comparison
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  WHERE {condition}
+
+ibis_template: |
+  {table}.filter({ibis_condition})[{ibis_columns}]
+
+variations:
+  - name: date_equals
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: CAST(event_ts AS DATE) = '2024-01-01'
+      ibis_condition: events.event_ts.date() == '2024-01-01'
+
+  - name: date_greater_than
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: event_ts >= '2024-01-02'
+      ibis_condition: events.event_ts >= '2024-01-02'
+
+  - name: date_less_than
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: event_ts < '2024-01-03'
+      ibis_condition: events.event_ts < '2024-01-03'
+
+  - name: date_between
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: event_ts BETWEEN '2024-01-01' AND '2024-01-03'
+      ibis_condition: events.event_ts.between('2024-01-01', '2024-01-03')
+
+  - name: year_filter
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: EXTRACT(YEAR FROM event_ts) = 2024
+      ibis_condition: events.event_ts.year() == 2024
+
+  - name: month_filter
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: EXTRACT(MONTH FROM event_ts) = 1
+      ibis_condition: events.event_ts.month() == 1
+
+  - name: day_filter
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: EXTRACT(DAY FROM event_ts) IN (1, 2)
+      ibis_condition: events.event_ts.day().isin([1, 2])
+
+  - name: dow_filter
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: EXTRACT(DOW FROM event_ts) IN (0, 6)
+      ibis_condition: events.event_ts.day_of_week.index().isin([0, 6])
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

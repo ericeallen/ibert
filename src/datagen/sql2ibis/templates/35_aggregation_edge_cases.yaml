@@ -1,0 +1,83 @@
+# Aggregation edge cases and special patterns
+name: aggregation_edge_cases
+description: Special aggregation patterns and edge cases
+difficulty: medium
+features:
+  - aggregate
+  - groupby
+  - edge_cases
+
+sql_template: |
+  SELECT {select_keys}, {aggregates}
+  FROM {table}
+  GROUP BY {group_keys}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: count_star
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COUNT(*) AS total_count
+      ibis_expression: events.group_by("user_id").aggregate(total_count=events.count())
+
+  - name: count_column
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COUNT(amount) AS amount_count
+      ibis_expression: events.group_by("user_id").aggregate(amount_count=events.amount.count())
+
+  - name: sum_null_handling
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COALESCE(SUM(amount), 0) AS total
+      ibis_expression: events.group_by("user_id").aggregate(total=ibis.coalesce(events.amount.sum(), 0))
+
+  - name: avg_null_handling
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: COALESCE(AVG(amount), 0.0) AS avg_amt
+      ibis_expression: events.group_by("user_id").aggregate(avg_amt=ibis.coalesce(events.amount.mean(), 0.0))
+
+  - name: min_max_together
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: MIN(amount) AS min_val, MAX(amount) AS max_val, MAX(amount) - MIN(amount) AS range_val
+      ibis_expression: |
+        events.group_by("user_id").aggregate(
+            min_val=events.amount.min(),
+            max_val=events.amount.max()
+        ).mutate(
+            range_val=ibis._.max_val - ibis._.min_val
+        )
+
+  - name: first_last_values
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      aggregates: MIN(event_ts) AS first_event, MAX(event_ts) AS last_event
+      ibis_expression: |
+        events.group_by("user_id").aggregate(
+            first_event=events.event_ts.min(),
+            last_event=events.event_ts.max()
+        )
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

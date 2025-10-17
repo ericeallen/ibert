@@ -1,0 +1,64 @@
+# Subqueries and derived tables
+name: subqueries
+description: Subqueries in SELECT, FROM, and WHERE clauses
+difficulty: hard
+features:
+  - subquery
+  - derived_table
+  - scalar_subquery
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  WHERE {condition}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: scalar_subquery_in_where
+    params:
+      table: events
+      columns: user_id, amount
+      condition: amount > (SELECT AVG(amount) FROM events)
+      ibis_expression: |
+        events.filter(
+            events.amount > events.amount.mean()
+        )[["user_id", "amount"]]
+
+  - name: in_subquery
+    params:
+      table: events
+      columns: user_id, amount
+      condition: user_id IN (SELECT user_id FROM events WHERE amount > 20)
+      ibis_expression: |
+        high_users = events.filter(events.amount > 20).user_id.distinct()
+        events.filter(events.user_id.isin(high_users))[["user_id", "amount"]]
+
+  - name: exists_subquery
+    params:
+      table: events e
+      columns: e.user_id, e.amount
+      condition: EXISTS (SELECT 1 FROM labels l WHERE l.user_id = e.user_id)
+      ibis_expression: |
+        events.semi_join(labels, events.user_id == labels.user_id)[["user_id", "amount"]]
+
+  - name: not_exists_subquery
+    params:
+      table: events e
+      columns: e.user_id, e.amount
+      condition: NOT EXISTS (SELECT 1 FROM labels l WHERE l.user_id = e.user_id)
+      ibis_expression: |
+        events.anti_join(labels, events.user_id == labels.user_id)[["user_id", "amount"]]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    labels:
+      schema:
+        user_id: int64
+        label: int8

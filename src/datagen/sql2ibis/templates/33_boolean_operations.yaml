@@ -1,0 +1,86 @@
+# Boolean operations and logic
+name: boolean_operations
+description: Boolean expressions and conditional logic
+difficulty: medium
+features:
+  - boolean
+  - case_when
+  - if_else
+  - logical
+
+sql_template: |
+  SELECT {columns}, {boolean_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_boolean})[{ibis_select_cols}]
+
+variations:
+  - name: simple_case_when
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: CASE WHEN amount > 20 THEN 'high' ELSE 'low' END AS category
+      ibis_select_cols: '["user_id", "amount", "category"]'
+      ibis_boolean: category=ibis.where(events.amount > 20, 'high', 'low')
+
+  - name: multi_case_when
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: CASE WHEN amount > 25 THEN 'high' WHEN amount > 15 THEN 'medium' ELSE 'low' END AS tier
+      ibis_select_cols: '["user_id", "amount", "tier"]'
+      ibis_boolean: |
+        tier=ibis.case()
+            .when(events.amount > 25, 'high')
+            .when(events.amount > 15, 'medium')
+            .else_('low')
+            .end()
+
+  - name: boolean_flag_gt
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: amount > 15 AS is_high
+      ibis_select_cols: '["user_id", "amount", "is_high"]'
+      ibis_boolean: is_high=(events.amount > 15)
+
+  - name: boolean_flag_between
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: amount BETWEEN 10 AND 20 AS is_medium
+      ibis_select_cols: '["user_id", "amount", "is_medium"]'
+      ibis_boolean: is_medium=events.amount.between(10, 20)
+
+  - name: boolean_and_condition
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: (amount > 10 AND user_id = 1) AS is_user1_high
+      ibis_select_cols: '["user_id", "amount", "is_user1_high"]'
+      ibis_boolean: is_user1_high=((events.amount > 10) & (events.user_id == 1))
+
+  - name: boolean_or_condition
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: (amount < 5 OR amount > 25) AS is_extreme
+      ibis_select_cols: '["user_id", "amount", "is_extreme"]'
+      ibis_boolean: is_extreme=((events.amount < 5) | (events.amount > 25))
+
+  - name: case_with_null
+    params:
+      table: events
+      columns: user_id, amount
+      boolean_expr: CASE WHEN amount IS NULL THEN 0.0 ELSE amount END AS amount_filled
+      ibis_select_cols: '["user_id", "amount", "amount_filled"]'
+      ibis_boolean: amount_filled=ibis.where(events.amount.isnull(), 0.0, events.amount)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

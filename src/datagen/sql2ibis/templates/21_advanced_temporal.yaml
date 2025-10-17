@@ -1,0 +1,82 @@
+# Advanced date/time operations
+name: advanced_temporal
+description: Complex date/time manipulation and calculations
+difficulty: medium
+features:
+  - temporal
+  - date_diff
+  - date_add
+  - date_trunc
+  - interval
+
+sql_template: |
+  SELECT {columns}, {temporal_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_temporal})[{ibis_select_cols}]
+
+variations:
+  - name: extract_dow
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(DOW FROM event_ts) AS day_of_week
+      ibis_select_cols: '["user_id", "event_ts", "day_of_week"]'
+      ibis_temporal: day_of_week=events.event_ts.day_of_week.index()
+
+  - name: extract_week
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(WEEK FROM event_ts) AS week_num
+      ibis_select_cols: '["user_id", "event_ts", "week_num"]'
+      ibis_temporal: week_num=events.event_ts.week_of_year()
+
+  - name: truncate_to_day
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: DATE_TRUNC('day', event_ts) AS day
+      ibis_select_cols: '["user_id", "event_ts", "day"]'
+      ibis_temporal: day=events.event_ts.truncate('D')
+
+  - name: truncate_to_month
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: DATE_TRUNC('month', event_ts) AS month
+      ibis_select_cols: '["user_id", "event_ts", "month"]'
+      ibis_temporal: month=events.event_ts.truncate('M')
+
+  - name: truncate_to_year
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: DATE_TRUNC('year', event_ts) AS year
+      ibis_select_cols: '["user_id", "event_ts", "year"]'
+      ibis_temporal: year=events.event_ts.truncate('Y')
+
+  - name: extract_minute
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(MINUTE FROM event_ts) AS minute
+      ibis_select_cols: '["user_id", "event_ts", "minute"]'
+      ibis_temporal: minute=events.event_ts.minute()
+
+  - name: extract_second
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(SECOND FROM event_ts) AS second
+      ibis_select_cols: '["user_id", "event_ts", "second"]'
+      ibis_temporal: second=events.event_ts.second()
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

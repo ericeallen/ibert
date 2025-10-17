@@ -1,0 +1,65 @@
+# Type casting and conversions
+name: type_casting
+description: Data type casting and conversions
+difficulty: easy
+features:
+  - cast
+  - type_conversion
+  - coalesce
+  - nullif
+
+sql_template: |
+  SELECT {columns}, {cast_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_cast})[{ibis_select_cols}]
+
+variations:
+  - name: cast_to_int
+    params:
+      table: events
+      columns: user_id, amount
+      cast_expr: CAST(amount AS INTEGER) AS amount_int
+      ibis_select_cols: '["user_id", "amount", "amount_int"]'
+      ibis_cast: amount_int=events.amount.cast('int64')
+
+  - name: cast_to_string
+    params:
+      table: events
+      columns: user_id, amount
+      cast_expr: CAST(user_id AS VARCHAR) AS user_id_str
+      ibis_select_cols: '["user_id", "amount", "user_id_str"]'
+      ibis_cast: user_id_str=events.user_id.cast('string')
+
+  - name: cast_to_float
+    params:
+      table: events
+      columns: user_id, amount
+      cast_expr: CAST(user_id AS DOUBLE) AS user_id_float
+      ibis_select_cols: '["user_id", "amount", "user_id_float"]'
+      ibis_cast: user_id_float=events.user_id.cast('float64')
+
+  - name: cast_timestamp_to_date
+    params:
+      table: events
+      columns: user_id, event_ts
+      cast_expr: CAST(event_ts AS DATE) AS event_date
+      ibis_select_cols: '["user_id", "event_ts", "event_date"]'
+      ibis_cast: event_date=events.event_ts.cast('date')
+
+  - name: coalesce_values
+    params:
+      table: events
+      columns: user_id, amount
+      cast_expr: COALESCE(amount, 0.0) AS amount_filled
+      ibis_select_cols: '["user_id", "amount", "amount_filled"]'
+      ibis_cast: amount_filled=ibis.coalesce(events.amount, 0.0)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

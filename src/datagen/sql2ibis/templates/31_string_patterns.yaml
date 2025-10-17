@@ -1,0 +1,75 @@
+# Advanced string pattern matching
+name: string_patterns
+description: String pattern matching and search operations
+difficulty: medium
+features:
+  - string
+  - like
+  - regex
+  - contains
+  - startswith
+  - endswith
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  WHERE {condition}
+
+ibis_template: |
+  {table}.filter({ibis_condition})[{ibis_columns}]
+
+variations:
+  - name: starts_with
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name LIKE 'A%'
+      ibis_condition: users.name.startswith('A')
+
+  - name: ends_with
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name LIKE '%e'
+      ibis_condition: users.name.endswith('e')
+
+  - name: contains_pattern
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name LIKE '%li%'
+      ibis_condition: users.name.contains('li')
+
+  - name: case_insensitive_like
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: LOWER(name) LIKE 'a%'
+      ibis_condition: users.name.lower().startswith('a')
+
+  - name: multiple_like_or
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name LIKE 'A%' OR name LIKE 'B%'
+      ibis_condition: users.name.startswith('A') | users.name.startswith('B')
+
+  - name: not_contains
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name NOT LIKE '%test%'
+      ibis_condition: ~users.name.contains('test')
+
+context:
+  tables:
+    users:
+      schema:
+        user_id: int64
+        name: string

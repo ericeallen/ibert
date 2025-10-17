@@ -1,0 +1,72 @@
+# Set operations
+name: set_operations
+description: UNION, INTERSECT, EXCEPT operations
+difficulty: medium
+features:
+  - union
+  - union_all
+  - intersect
+  - except
+
+sql_template: |
+  {query}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: union_all
+    params:
+      query: |
+        SELECT user_id, amount FROM events WHERE amount > 20
+        UNION ALL
+        SELECT user_id, amount FROM events WHERE amount < 5
+      ibis_expression: |
+        high = events.filter(events.amount > 20)[["user_id", "amount"]]
+        low = events.filter(events.amount < 5)[["user_id", "amount"]]
+        ibis.union(high, low)
+
+  - name: union_distinct
+    params:
+      query: |
+        SELECT user_id FROM events WHERE amount > 20
+        UNION
+        SELECT user_id FROM events WHERE amount < 5
+      ibis_expression: |
+        high = events.filter(events.amount > 20)[["user_id"]]
+        low = events.filter(events.amount < 5)[["user_id"]]
+        ibis.union(high, low, distinct=True)
+
+  - name: intersect
+    params:
+      query: |
+        SELECT user_id FROM events WHERE amount > 10
+        INTERSECT
+        SELECT user_id FROM events WHERE event_ts >= '2024-01-02'
+      ibis_expression: |
+        high_amt = events.filter(events.amount > 10)[["user_id"]]
+        recent = events.filter(events.event_ts >= "2024-01-02")[["user_id"]]
+        ibis.intersect(high_amt, recent)
+
+  - name: except_query
+    params:
+      query: |
+        SELECT user_id FROM events
+        EXCEPT
+        SELECT user_id FROM labels
+      ibis_expression: |
+        all_users = events[["user_id"]]
+        labeled_users = labels[["user_id"]]
+        ibis.difference(all_users, labeled_users)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    labels:
+      schema:
+        user_id: int64
+        label: int8

@@ -1,0 +1,67 @@
+# Projection and column operations
+name: projection_operations
+description: Column selection, renaming, and projection patterns
+difficulty: easy
+features:
+  - select
+  - projection
+  - rename
+  - alias
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: select_all
+    params:
+      table: events
+      columns: '*'
+      ibis_expression: events
+
+  - name: select_subset
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_expression: events[["user_id", "amount"]]
+
+  - name: select_with_alias
+    params:
+      table: events
+      columns: user_id, amount AS amt
+      ibis_expression: events.select(user_id=events.user_id, amt=events.amount)
+
+  - name: select_multiple_aliases
+    params:
+      table: events
+      columns: user_id AS uid, amount AS amt, event_ts AS ts
+      ibis_expression: events.select(uid=events.user_id, amt=events.amount, ts=events.event_ts)
+
+  - name: select_with_expression
+    params:
+      table: events
+      columns: user_id, amount * 2 AS double_amt
+      ibis_expression: events.select(user_id=events.user_id, double_amt=events.amount * 2)
+
+  - name: select_exclude
+    params:
+      table: events
+      columns: user_id, event_ts
+      ibis_expression: events.drop("amount")
+
+  - name: select_computed
+    params:
+      table: events
+      columns: user_id, amount, amount + 10 AS amount_plus_ten
+      ibis_expression: events.mutate(amount_plus_ten=events.amount + 10)[["user_id", "amount", "amount_plus_ten"]]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

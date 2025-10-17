@@ -1,0 +1,105 @@
+# Advanced window functions
+name: advanced_window_functions
+description: Complex window functions with frames and partitions
+difficulty: hard
+features:
+  - window
+  - lead
+  - lag
+  - first_value
+  - last_value
+  - ntile
+  - dense_rank
+
+sql_template: |
+  SELECT {columns}, {window_func}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_window})[{ibis_select_cols}]
+
+variations:
+  - name: lag_function
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "prev_amount"]'
+      window_func: LAG(amount, 1) OVER (PARTITION BY user_id ORDER BY event_ts) AS prev_amount
+      ibis_window: |
+        prev_amount=events.amount.lag(1).over(
+            ibis.window(group_by="user_id", order_by="event_ts")
+        )
+
+  - name: lead_function
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "next_amount"]'
+      window_func: LEAD(amount, 1) OVER (PARTITION BY user_id ORDER BY event_ts) AS next_amount
+      ibis_window: |
+        next_amount=events.amount.lead(1).over(
+            ibis.window(group_by="user_id", order_by="event_ts")
+        )
+
+  - name: first_value
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "first_amount"]'
+      window_func: FIRST_VALUE(amount) OVER (PARTITION BY user_id ORDER BY event_ts) AS first_amount
+      ibis_window: |
+        first_amount=events.amount.first().over(
+            ibis.window(group_by="user_id", order_by="event_ts")
+        )
+
+  - name: last_value
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "last_amount"]'
+      window_func: LAST_VALUE(amount) OVER (PARTITION BY user_id ORDER BY event_ts ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_amount
+      ibis_window: |
+        last_amount=events.amount.last().over(
+            ibis.window(group_by="user_id", order_by="event_ts", following=0)
+        )
+
+  - name: dense_rank
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_select_cols: '["user_id", "amount", "dense_rnk"]'
+      window_func: DENSE_RANK() OVER (ORDER BY amount DESC) AS dense_rnk
+      ibis_window: |
+        dense_rnk=(ibis.dense_rank().over(
+            ibis.window(order_by=ibis.desc("amount"))
+        ) + 1)
+
+  - name: cumulative_sum
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "running_total"]'
+      window_func: SUM(amount) OVER (PARTITION BY user_id ORDER BY event_ts) AS running_total
+      ibis_window: |
+        running_total=events.amount.sum().over(
+            ibis.window(group_by="user_id", order_by="event_ts")
+        )
+
+  - name: cumulative_average
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "running_avg"]'
+      window_func: AVG(amount) OVER (PARTITION BY user_id ORDER BY event_ts) AS running_avg
+      ibis_window: |
+        running_avg=events.amount.mean().over(
+            ibis.window(group_by="user_id", order_by="event_ts")
+        )
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

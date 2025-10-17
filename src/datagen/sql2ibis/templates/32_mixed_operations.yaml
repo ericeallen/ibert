@@ -1,0 +1,112 @@
+# Mixed complex operations
+name: mixed_operations
+description: Combining multiple operation types
+difficulty: hard
+features:
+  - filter
+  - aggregate
+  - window
+  - mutate
+  - join
+
+sql_template: |
+  {query}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: filter_mutate_select
+    params:
+      query: |
+        SELECT user_id, amount, amount * 2 AS doubled
+        FROM events
+        WHERE amount > 10
+      ibis_expression: |
+        events.filter(events.amount > 10).mutate(
+            doubled=events.amount * 2
+        )[["user_id", "amount", "doubled"]]
+
+  - name: join_filter_mutate
+    params:
+      query: |
+        SELECT e.user_id, e.amount, u.name, e.amount * 1.1 AS amount_with_tax
+        FROM events e
+        INNER JOIN users u ON e.user_id = u.user_id
+        WHERE e.amount > 15
+      ibis_expression: |
+        events.join(
+            users, events.user_id == users.user_id, how="inner"
+        ).filter(
+            events.amount > 15
+        ).mutate(
+            amount_with_tax=events.amount * 1.1
+        )[["user_id", "amount", "name", "amount_with_tax"]]
+
+  - name: filter_window_select
+    params:
+      query: |
+        SELECT user_id, amount, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY amount) AS row_num
+        FROM events
+        WHERE amount > 5
+      ibis_expression: |
+        events.filter(events.amount > 5).mutate(
+            row_num=(ibis.row_number().over(
+                ibis.window(group_by="user_id", order_by="amount")
+            ) + 1)
+        )[["user_id", "amount", "row_num"]]
+
+  - name: aggregate_with_having
+    params:
+      query: |
+        SELECT user_id, COUNT(*) AS n, SUM(amount) AS total
+        FROM events
+        GROUP BY user_id
+        HAVING COUNT(*) > 1
+      ibis_expression: |
+        events.group_by("user_id").aggregate(
+            n=events.count(),
+            total=events.amount.sum()
+        ).filter(ibis._.n > 1)
+
+  - name: where_groupby_having_order
+    params:
+      query: |
+        SELECT user_id, AVG(amount) AS avg_amt
+        FROM events
+        WHERE amount > 5
+        GROUP BY user_id
+        HAVING AVG(amount) > 15
+        ORDER BY avg_amt DESC
+      ibis_expression: |
+        events.filter(
+            events.amount > 5
+        ).group_by("user_id").aggregate(
+            avg_amt=events.amount.mean()
+        ).filter(
+            ibis._.avg_amt > 15
+        ).order_by(ibis.desc("avg_amt"))
+
+  - name: multiple_mutate_chain
+    params:
+      query: |
+        SELECT user_id, amount, amount * 2 AS doubled, amount * 2 + 10 AS doubled_plus_ten
+        FROM events
+      ibis_expression: |
+        events.mutate(
+            doubled=events.amount * 2
+        ).mutate(
+            doubled_plus_ten=ibis._.doubled + 10
+        )[["user_id", "amount", "doubled", "doubled_plus_ten"]]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    users:
+      schema:
+        user_id: int64
+        name: string

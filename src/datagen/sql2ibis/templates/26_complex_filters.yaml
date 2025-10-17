@@ -1,0 +1,128 @@
+# Complex filter conditions
+name: complex_filters
+description: Advanced filtering with multiple conditions
+difficulty: medium
+features:
+  - filter
+  - where
+  - between
+  - in
+  - like
+  - is_null
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  WHERE {condition}
+
+ibis_template: |
+  {table}.filter({ibis_condition})[{ibis_columns}]
+
+variations:
+  - name: between_clause
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount BETWEEN 10 AND 30
+      ibis_condition: events.amount.between(10, 30)
+
+  - name: in_list
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: user_id IN (1, 2, 3)
+      ibis_condition: events.user_id.isin([1, 2, 3])
+
+  - name: not_in_list
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: user_id NOT IN (1, 2)
+      ibis_condition: ~events.user_id.isin([1, 2])
+
+  - name: is_null
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount IS NULL
+      ibis_condition: events.amount.isnull()
+
+  - name: is_not_null
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount IS NOT NULL
+      ibis_condition: events.amount.notnull()
+
+  - name: like_pattern
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name LIKE 'A%'
+      ibis_condition: users.name.like('A%')
+
+  - name: not_like_pattern
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name NOT LIKE 'A%'
+      ibis_condition: ~users.name.like('A%')
+
+  - name: or_condition
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount < 5 OR amount > 25
+      ibis_condition: (events.amount < 5) | (events.amount > 25)
+
+  - name: complex_and_or
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: (amount > 10 AND user_id = 1) OR (amount < 5 AND user_id = 2)
+      ibis_condition: ((events.amount > 10) & (events.user_id == 1)) | ((events.amount < 5) & (events.user_id == 2))
+
+  - name: not_equal
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: user_id != 1
+      ibis_condition: events.user_id != 1
+
+  - name: greater_than_equal
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount >= 15
+      ibis_condition: events.amount >= 15
+
+  - name: less_than_equal
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount <= 20
+      ibis_condition: events.amount <= 20
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    users:
+      schema:
+        user_id: int64
+        name: string

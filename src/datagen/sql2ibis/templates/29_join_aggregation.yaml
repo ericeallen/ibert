@@ -1,0 +1,91 @@
+# Join with aggregation
+name: join_aggregation
+description: Combining joins with aggregations
+difficulty: hard
+features:
+  - join
+  - aggregate
+  - groupby
+
+sql_template: |
+  {query}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: join_then_aggregate
+    params:
+      query: |
+        SELECT e.user_id, l.label, COUNT(*) AS n, SUM(e.amount) AS total
+        FROM events e
+        INNER JOIN labels l ON e.user_id = l.user_id
+        GROUP BY e.user_id, l.label
+      ibis_expression: |
+        events.join(labels, events.user_id == labels.user_id, how="inner").group_by(
+            ["user_id", "label"]
+        ).aggregate(
+            n=ibis._.count(),
+            total=events.amount.sum()
+        )
+
+  - name: aggregate_then_join
+    params:
+      query: |
+        SELECT agg.user_id, agg.total, u.name
+        FROM (
+            SELECT user_id, SUM(amount) AS total
+            FROM events
+            GROUP BY user_id
+        ) agg
+        INNER JOIN users u ON agg.user_id = u.user_id
+      ibis_expression: |
+        agg = events.group_by("user_id").aggregate(total=events.amount.sum())
+        agg.join(users, agg.user_id == users.user_id, how="inner")[["user_id", "total", "name"]]
+
+  - name: left_join_with_count
+    params:
+      query: |
+        SELECT u.user_id, u.name, COUNT(e.user_id) AS event_count
+        FROM users u
+        LEFT JOIN events e ON u.user_id = e.user_id
+        GROUP BY u.user_id, u.name
+      ibis_expression: |
+        users.left_join(events, users.user_id == events.user_id).group_by(
+            [users.user_id, users.name]
+        ).aggregate(
+            event_count=events.user_id.count()
+        )
+
+  - name: join_filter_aggregate
+    params:
+      query: |
+        SELECT e.user_id, COUNT(*) AS high_amount_events
+        FROM events e
+        INNER JOIN labels l ON e.user_id = l.user_id
+        WHERE e.amount > 10 AND l.label = 1
+        GROUP BY e.user_id
+      ibis_expression: |
+        events.join(
+            labels, events.user_id == labels.user_id, how="inner"
+        ).filter(
+            (events.amount > 10) & (labels.label == 1)
+        ).group_by("user_id").aggregate(
+            high_amount_events=ibis._.count()
+        )
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    users:
+      schema:
+        user_id: int64
+        name: string
+    labels:
+      schema:
+        user_id: int64
+        label: int8

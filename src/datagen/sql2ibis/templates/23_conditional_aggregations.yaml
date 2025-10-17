@@ -1,0 +1,75 @@
+# Conditional aggregations
+name: conditional_aggregations
+description: Aggregations with FILTER and conditional expressions
+difficulty: medium
+features:
+  - aggregate
+  - filter
+  - conditional
+  - case_when
+
+sql_template: |
+  SELECT {select_keys}, {aggregates}
+  FROM {table}
+  GROUP BY {group_keys}
+
+ibis_template: |
+  {table}.group_by({ibis_group_keys}).aggregate(
+      {ibis_aggregates}
+  )
+
+variations:
+  - name: count_with_filter
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) FILTER (WHERE amount > 10) AS high_amount_count
+      ibis_aggregates: 'high_amount_count=(events.amount > 10).sum()'
+
+  - name: sum_with_filter
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: SUM(amount) FILTER (WHERE amount > 10) AS high_amount_total
+      ibis_aggregates: 'high_amount_total=events.amount.where(events.amount > 10).sum()'
+
+  - name: avg_with_filter
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: AVG(amount) FILTER (WHERE amount > 10) AS high_amount_avg
+      ibis_aggregates: 'high_amount_avg=events.amount.where(events.amount > 10).mean()'
+
+  - name: multiple_conditional_counts
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) FILTER (WHERE amount > 20) AS high_count, COUNT(*) FILTER (WHERE amount <= 10) AS low_count
+      ibis_aggregates: |
+        high_count=(events.amount > 20).sum(),
+            low_count=(events.amount <= 10).sum()
+
+  - name: sum_case_when
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: SUM(CASE WHEN amount > 10 THEN amount ELSE 0 END) AS conditional_sum
+      ibis_aggregates: 'conditional_sum=ibis.where(events.amount > 10, events.amount, 0).sum()'
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

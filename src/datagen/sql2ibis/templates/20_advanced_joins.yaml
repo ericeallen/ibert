@@ -1,0 +1,94 @@
+# Advanced join operations
+name: advanced_joins
+description: Self joins, cross joins, and multiple joins
+difficulty: hard
+features:
+  - self_join
+  - cross_join
+  - multi_join
+  - outer_join
+
+sql_template: |
+  {query}
+
+ibis_template: |
+  {ibis_expression}
+
+variations:
+  - name: self_join
+    params:
+      query: |
+        SELECT e1.user_id, e1.amount AS amt1, e2.amount AS amt2
+        FROM events e1
+        INNER JOIN events e2 ON e1.user_id = e2.user_id AND e1.event_ts < e2.event_ts
+      ibis_expression: |
+        e1 = events
+        e2 = events.view()
+        e1.join(
+            e2,
+            (e1.user_id == e2.user_id) & (e1.event_ts < e2.event_ts),
+            how="inner"
+        ).select(
+            user_id=e1.user_id,
+            amt1=e1.amount,
+            amt2=e2.amount
+        )
+
+  - name: cross_join
+    params:
+      query: |
+        SELECT u.user_id, u.name, e.amount
+        FROM users u
+        CROSS JOIN events e
+      ibis_expression: |
+        users.cross_join(events)[["user_id", "name", "amount"]]
+
+  - name: right_join
+    params:
+      query: |
+        SELECT e.user_id, e.amount, l.label
+        FROM events e
+        RIGHT JOIN labels l ON e.user_id = l.user_id
+      ibis_expression: |
+        events.join(labels, events.user_id == labels.user_id, how="right")[["user_id", "amount", "label"]]
+
+  - name: full_outer_join
+    params:
+      query: |
+        SELECT COALESCE(e.user_id, l.user_id) AS user_id, e.amount, l.label
+        FROM events e
+        FULL OUTER JOIN labels l ON e.user_id = l.user_id
+      ibis_expression: |
+        events.join(labels, events.user_id == labels.user_id, how="outer").select(
+            user_id=ibis.coalesce(events.user_id, labels.user_id),
+            amount=events.amount,
+            label=labels.label
+        )
+
+  - name: multi_join
+    params:
+      query: |
+        SELECT e.user_id, e.amount, u.name, l.label
+        FROM events e
+        INNER JOIN users u ON e.user_id = u.user_id
+        LEFT JOIN labels l ON e.user_id = l.user_id
+      ibis_expression: |
+        events.join(users, events.user_id == users.user_id, how="inner").join(
+            labels, events.user_id == labels.user_id, how="left"
+        )[["user_id", "amount", "name", "label"]]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    users:
+      schema:
+        user_id: int64
+        name: string
+    labels:
+      schema:
+        user_id: int64
+        label: int8
