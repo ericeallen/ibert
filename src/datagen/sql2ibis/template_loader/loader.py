@@ -6,6 +6,11 @@ from typing import Any, Dict, List
 
 import yaml
 
+from src.datagen.sql2ibis.template_loader.expander import (
+    expand_template_variations,
+    ParameterSpaceConfig,
+)
+
 
 class Template:
     """SQL+Ibis template with variations."""
@@ -19,6 +24,47 @@ class Template:
         self.ibis_template = data["ibis_template"]
         self.variations = data.get("variations", [])
         self.context = data.get("context", {})
+        self.parameter_space = data.get("parameter_space", None)
+
+        # Expand variations with parameter space if present
+        # Check for template-level OR variation-level parameter spaces
+        needs_expansion = self.parameter_space or any(
+            "parameter_space" in v for v in self.variations
+        )
+        if needs_expansion:
+            self.variations = self._expand_variations()
+
+    def _expand_variations(self) -> List[Dict[str, Any]]:
+        """Expand variations using parameter space."""
+        expanded = []
+
+        # If template-level parameter_space, expand all variations
+        if self.parameter_space:
+            for base_variation in self.variations:
+                expanded_vars = expand_template_variations(
+                    base_variation,
+                    self.parameter_space,
+                    name_pattern="{base_name}_{idx}"
+                )
+                expanded.extend(expanded_vars)
+        else:
+            # Check each variation for parameter_space
+            for base_variation in self.variations:
+                var_param_space = base_variation.get("parameter_space")
+
+                if var_param_space:
+                    # Expand this variation
+                    expanded_vars = expand_template_variations(
+                        base_variation,
+                        var_param_space,
+                        name_pattern="{base_name}_{idx}"
+                    )
+                    expanded.extend(expanded_vars)
+                else:
+                    # No expansion, use as-is
+                    expanded.append(base_variation)
+
+        return expanded
 
     def render(self, variation: Dict[str, Any]) -> Dict[str, Any]:
         """Render a specific variation of this template.

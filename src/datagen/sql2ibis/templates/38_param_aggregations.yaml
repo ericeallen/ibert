@@ -1,0 +1,42 @@
+# Parameterized aggregation template
+name: param_aggregations
+description: Aggregations with expanded functions
+difficulty: easy
+features:
+  - aggregate
+  - groupby
+  - parameterized
+
+sql_template: |
+  SELECT user_id, {agg_func}(amount) AS agg_result
+  FROM events
+  GROUP BY user_id
+
+ibis_template: |
+  events.group_by("user_id").aggregate(agg_result=events.amount.{ibis_func}())
+
+variations:
+  - name: sum_agg
+    params:
+      agg_func: "SUM"
+      ibis_func: "sum"
+  - name: avg_agg
+    params:
+      agg_func: "AVG"
+      ibis_func: "mean"
+  - name: min_agg
+    params:
+      agg_func: "MIN"
+      ibis_func: "min"
+  - name: max_agg
+    params:
+      agg_func: "MAX"
+      ibis_func: "max"
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

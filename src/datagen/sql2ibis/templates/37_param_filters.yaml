@@ -1,0 +1,37 @@
+# Parameterized filter template with operator/threshold combinations
+name: param_filters
+description: Filter operations with expanded parameter space
+difficulty: easy
+features:
+  - filter
+  - where
+  - parameterized
+
+sql_template: |
+  SELECT user_id, amount
+  FROM events
+  WHERE amount {op} {threshold}
+
+ibis_template: |
+  events.filter(events.amount {ibis_op} {threshold})[["user_id", "amount"]]
+
+# Base variation to expand
+variations:
+  - name: numeric_filter
+    params:
+      # These will be overridden by parameter_space expansion
+      op: ">"
+      ibis_op: ">"
+      threshold: 10
+    parameter_space:
+      op: [">", "<", ">=", "<="]
+      ibis_op: [">", "<", ">=", "<="]
+      threshold: [5, 10, 15, 20, 25]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

@@ -1,0 +1,45 @@
+# Parameterized temporal extraction template
+name: param_temporal
+description: Temporal extractions with expanded date parts
+difficulty: easy
+features:
+  - temporal
+  - extract
+  - parameterized
+
+sql_template: |
+  SELECT user_id, event_ts, EXTRACT({date_part} FROM event_ts) AS extracted
+  FROM events
+
+ibis_template: |
+  events.mutate(extracted=events.event_ts.{ibis_func}())[["user_id", "event_ts", "extracted"]]
+
+variations:
+  - name: extract_year
+    params:
+      date_part: "YEAR"
+      ibis_func: "year"
+  - name: extract_month
+    params:
+      date_part: "MONTH"
+      ibis_func: "month"
+  - name: extract_day
+    params:
+      date_part: "DAY"
+      ibis_func: "day"
+  - name: extract_quarter
+    params:
+      date_part: "QUARTER"
+      ibis_func: "quarter"
+  - name: extract_hour
+    params:
+      date_part: "HOUR"
+      ibis_func: "hour"
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

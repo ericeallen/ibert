@@ -1,0 +1,66 @@
+# Parameterized GROUP BY with all aggregation combinations
+name: param_groupby_combos
+description: GROUP BY with various aggregation functions and thresholds
+difficulty: medium
+features:
+  - groupby
+  - aggregate
+  - parameterized
+
+sql_template: |
+  SELECT user_id, {agg_func}(amount) AS result
+  FROM events
+  WHERE amount {op} {threshold}
+  GROUP BY user_id
+
+ibis_template: |
+  events.filter(events.amount {ibis_op} {threshold}).group_by("user_id").aggregate(result=events.amount.{ibis_func}())
+
+variations:
+  - name: sum_with_filter
+    params:
+      agg_func: "SUM"
+      ibis_func: "sum"
+      op: ">"
+      ibis_op: ">"
+      threshold: 10
+    parameter_space:
+      threshold: [5, 10, 15, 20, 25]
+
+  - name: avg_with_filter
+    params:
+      agg_func: "AVG"
+      ibis_func: "mean"
+      op: ">"
+      ibis_op: ">"
+      threshold: 10
+    parameter_space:
+      threshold: [5, 10, 15, 20, 25]
+
+  - name: max_with_filter
+    params:
+      agg_func: "MAX"
+      ibis_func: "max"
+      op: ">"
+      ibis_op: ">"
+      threshold: 10
+    parameter_space:
+      threshold: [5, 10, 15, 20, 25]
+
+  - name: min_with_filter
+    params:
+      agg_func: "MIN"
+      ibis_func: "min"
+      op: ">"
+      ibis_op: ">"
+      threshold: 10
+    parameter_space:
+      threshold: [5, 10, 15, 20, 25]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

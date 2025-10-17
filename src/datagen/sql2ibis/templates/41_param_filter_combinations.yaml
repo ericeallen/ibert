@@ -1,0 +1,73 @@
+# Large parameterized filter template
+name: param_filter_combinations
+description: Systematic exploration of filter operator/threshold space
+difficulty: easy
+features:
+  - filter
+  - where
+  - parameterized
+
+sql_template: |
+  SELECT user_id, amount, event_ts
+  FROM events
+  WHERE amount {op} {threshold}
+
+ibis_template: |
+  events.filter(events.amount {ibis_op} {threshold})[["user_id", "amount", "event_ts"]]
+
+variations:
+  - name: gt_filter
+    params:
+      op: ">"
+      ibis_op: ">"
+      threshold: 5
+    parameter_space:
+      threshold: [5, 8, 10, 12, 15, 18, 20, 22, 25, 28, 30]
+
+  - name: lt_filter
+    params:
+      op: "<"
+      ibis_op: "<"
+      threshold: 5
+    parameter_space:
+      threshold: [5, 8, 10, 12, 15, 18, 20, 22, 25, 28, 30]
+
+  - name: gte_filter
+    params:
+      op: ">="
+      ibis_op: ">="
+      threshold: 5
+    parameter_space:
+      threshold: [5, 8, 10, 12, 15, 18, 20, 22, 25, 28, 30]
+
+  - name: lte_filter
+    params:
+      op: "<="
+      ibis_op: "<="
+      threshold: 5
+    parameter_space:
+      threshold: [5, 8, 10, 12, 15, 18, 20, 22, 25, 28, 30]
+
+  - name: eq_filter
+    params:
+      op: "="
+      ibis_op: "=="
+      threshold: 5
+    parameter_space:
+      threshold: [10, 15, 20, 25, 30]
+
+  - name: neq_filter
+    params:
+      op: "!="
+      ibis_op: "!="
+      threshold: 5
+    parameter_space:
+      threshold: [10, 15, 20, 25, 30]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

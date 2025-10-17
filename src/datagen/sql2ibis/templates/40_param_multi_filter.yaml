@@ -1,0 +1,42 @@
+# Parameterized multi-condition filters
+name: param_multi_filter
+description: Multiple filter conditions with parameter expansion
+difficulty: medium
+features:
+  - filter
+  - where
+  - compound
+  - parameterized
+
+sql_template: |
+  SELECT user_id, amount
+  FROM events
+  WHERE amount {op1} {threshold1} AND user_id {op2} {user_threshold}
+
+ibis_template: |
+  events.filter((events.amount {ibis_op1} {threshold1}) & (events.user_id {ibis_op2} {user_threshold}))[["user_id", "amount"]]
+
+variations:
+  - name: compound_filter
+    params:
+      op1: ">"
+      ibis_op1: ">"
+      threshold1: 10
+      op2: "=="
+      ibis_op2: "=="
+      user_threshold: 1
+    parameter_space:
+      op1: [">", "<", ">="]
+      ibis_op1: [">", "<", ">="]
+      threshold1: [10, 15, 20]
+      op2: ["==", "!="]
+      ibis_op2: ["==", "!="]
+      user_threshold: [1, 2, 3]
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
