@@ -1,0 +1,72 @@
+# Per-dialect function mappings and semantics
+
+duckdb:
+  functions:
+    # Aggregates
+    COUNT: "ibis.count"
+    SUM: "ibis.sum"
+    AVG: "ibis.mean"
+    MIN: "ibis.min"
+    MAX: "ibis.max"
+    STDDEV: "ibis.std"
+    VARIANCE: "ibis.var"
+
+    # Date/time
+    DATE_TRUNC: "ibis.timestamp_truncate"
+    EXTRACT: "ibis.extract"
+    NOW: "ibis.now"
+    CURRENT_TIMESTAMP: "ibis.now"
+
+    # String
+    UPPER: ".upper()"
+    LOWER: ".lower()"
+    LENGTH: ".length()"
+    SUBSTRING: ".substr"
+    CONCAT: "ibis.concat"
+
+    # Math
+    ROUND: ".round"
+    FLOOR: ".floor"
+    CEIL: ".ceil"
+    ABS: ".abs"
+    LOG: ".log"
+    EXP: ".exp"
+    SQRT: ".sqrt"
+
+    # Conditional
+    COALESCE: "ibis.coalesce"
+    NULLIF: "ibis.nullif"
+
+    # Window
+    ROW_NUMBER: "ibis.row_number"
+    RANK: "ibis.rank"
+    DENSE_RANK: "ibis.dense_rank"
+    LAG: "ibis.lag"
+    LEAD: "ibis.lead"
+    FIRST_VALUE: "ibis.first"
+    LAST_VALUE: "ibis.last"
+
+  window_frames:
+    ROWS: "rows"
+    RANGE: "range"
+    UNBOUNDED_PRECEDING: null
+    UNBOUNDED_FOLLOWING: null
+
+  null_ordering:
+    NULLS_FIRST: "first"
+    NULLS_LAST: "last"
+
+# bigquery:
+#   functions:
+#     ARRAY_AGG: "ibis.array_agg"
+#     STRUCT: "ibis.struct"
+#     DATE_DIFF: "custom_date_diff"
+#
+#   dialects_specific:
+#     - STRUCT
+#     - ARRAY
+
+# snowflake:
+#   functions:
+#     ARRAY_AGG: "ibis.array_agg"
+#     LISTAGG: "ibis.group_concat"

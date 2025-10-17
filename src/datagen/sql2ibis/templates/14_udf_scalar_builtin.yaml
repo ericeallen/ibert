@@ -1,0 +1,79 @@
+# Scalar built-in UDFs
+name: udf_scalar_builtin
+description: Scalar UDFs mapping to backend built-in functions
+difficulty: medium
+features:
+  - udf
+  - scalar
+  - builtin
+  - functions
+
+sql_template: |
+  SELECT {columns}, {udf_expr}
+  FROM {table}
+
+ibis_template: |
+  import ibis
+  {udf_definition}
+  {table}.mutate({ibis_udf})[{ibis_select_cols}]
+
+variations:
+  - name: abs_builtin
+    params:
+      table: events
+      columns: user_id, amount
+      udf_expr: ABS(amount) AS abs_amount
+      ibis_select_cols: '["user_id", "amount", "abs_amount"]'
+      udf_definition: |
+        @ibis.udf.scalar.builtin(name="abs")
+        def abs_val(x: float) -> float:
+            """Absolute value."""
+      ibis_udf: abs_amount=abs_val(events.amount)
+
+  - name: round_builtin
+    params:
+      table: events
+      columns: user_id, amount
+      udf_expr: ROUND(amount, 1) AS rounded_amount
+      ibis_select_cols: '["user_id", "amount", "rounded_amount"]'
+      udf_definition: |
+        @ibis.udf.scalar.builtin(name="round")
+        def round_val(x: float, decimals: int) -> float:
+            """Round to N decimals."""
+      ibis_udf: rounded_amount=round_val(events.amount, 1)
+
+  - name: upper_builtin
+    params:
+      table: users
+      columns: user_id, name
+      udf_expr: UPPER(name) AS upper_name
+      ibis_select_cols: '["user_id", "name", "upper_name"]'
+      udf_definition: |
+        @ibis.udf.scalar.builtin(name="upper")
+        def to_upper(s: str) -> str:
+            """Convert to uppercase."""
+      ibis_udf: upper_name=to_upper(users.name)
+
+  - name: lower_builtin
+    params:
+      table: users
+      columns: user_id, name
+      udf_expr: LOWER(name) AS lower_name
+      ibis_select_cols: '["user_id", "name", "lower_name"]'
+      udf_definition: |
+        @ibis.udf.scalar.builtin(name="lower")
+        def to_lower(s: str) -> str:
+            """Convert to lowercase."""
+      ibis_udf: lower_name=to_lower(users.name)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    users:
+      schema:
+        user_id: int64
+        name: string

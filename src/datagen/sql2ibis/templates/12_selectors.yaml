@@ -1,0 +1,37 @@
+# Column selectors
+name: selectors
+description: Dynamic column selection using selectors
+difficulty: medium
+features:
+  - selectors
+  - select
+  - column_selection
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+
+ibis_template: |
+  import ibis.selectors as s
+  {table}.select({selector})
+
+variations:
+  - name: select_numeric
+    params:
+      table: events
+      columns: user_id, amount
+      selector: s.numeric()
+
+  - name: select_all
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      selector: s.all()
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

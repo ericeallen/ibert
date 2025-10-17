@@ -1,0 +1,48 @@
+# Window functions
+name: window_functions
+description: Analytical window functions
+difficulty: hard
+features:
+  - window
+  - partition
+  - order_by
+  - rank
+  - row_number
+
+sql_template: |
+  SELECT {columns}, {window_func}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_window})[{ibis_select_cols}]
+
+variations:
+  - name: row_number_by_user
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_select_cols: '["user_id", "event_ts", "amount", "row_num"]'
+      window_func: ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY event_ts) AS row_num
+      ibis_window: |
+        row_num=(ibis.row_number().over(
+            ibis.window(group_by="user_id", order_by="event_ts")
+        ) + 1)
+
+  - name: rank_by_amount
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_select_cols: '["user_id", "amount", "amount_rank"]'
+      window_func: RANK() OVER (ORDER BY amount DESC) AS amount_rank
+      ibis_window: |
+        amount_rank=(ibis.rank().over(
+            ibis.window(order_by=ibis.desc("amount"))
+        ) + 1)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

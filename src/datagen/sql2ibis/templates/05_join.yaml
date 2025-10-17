@@ -1,0 +1,61 @@
+# JOIN operations
+name: join
+description: Joining multiple tables
+difficulty: medium
+features:
+  - join
+  - inner_join
+  - left_join
+
+sql_template: |
+  SELECT {columns}
+  FROM {left_table_name} {left_alias}
+  {join_type} JOIN {right_table_name} {right_alias} ON {join_condition}
+
+ibis_template: |
+  {left_table}.join({right_table}, {ibis_join_condition}, how="{how}")[{ibis_columns}]
+
+variations:
+  - name: inner_join_simple
+    params:
+      columns: e.user_id, e.amount, l.label
+      left_table_name: events
+      left_alias: e
+      left_table: events
+      right_table_name: labels
+      right_alias: l
+      right_table: labels
+      join_type: INNER
+      how: inner
+      join_condition: e.user_id = l.user_id
+      ibis_join_condition: events.user_id == labels.user_id
+      ibis_columns: '["user_id", "amount", "label"]'
+
+  - name: left_join_simple
+    params:
+      columns: e.user_id, e.amount, l.label
+      left_table_name: events
+      left_alias: e
+      left_table: events
+      right_table_name: labels
+      right_alias: l
+      right_table: labels
+      join_type: LEFT
+      how: left
+      join_condition: e.user_id = l.user_id
+      ibis_join_condition: events.user_id == labels.user_id
+      ibis_columns: '["user_id", "amount", "label"]'
+
+  # Note: join_with_projection removed - needs separate template with GROUP BY
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    labels:
+      schema:
+        user_id: int64
+        label: int8

@@ -1,0 +1,1 @@
+"""SQL→Ibis deterministic translator."""

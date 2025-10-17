@@ -1,0 +1,62 @@
+# GROUP BY with HAVING clause
+name: having_clause
+description: Filtering aggregated results
+difficulty: medium
+features:
+  - groupby
+  - aggregate
+  - having
+  - filter
+
+sql_template: |
+  SELECT {group_keys}, {aggregates}
+  FROM {table}
+  GROUP BY {group_keys}
+  HAVING {having_condition}
+
+ibis_template: |
+  (
+      {table}
+      .group_by({ibis_group_keys})
+      .aggregate({ibis_aggregates})
+      .filter({ibis_having})
+  )
+
+variations:
+  - name: having_count
+    params:
+      table: events
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) AS n
+      ibis_aggregates: 'n=ibis._.count()'
+      having_condition: COUNT(*) > 2
+      ibis_having: ibis._.n > 2
+
+  - name: having_sum
+    params:
+      table: events
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: SUM(amount) AS total
+      ibis_aggregates: 'total=ibis._.amount.sum()'
+      having_condition: SUM(amount) > 50
+      ibis_having: ibis._.total > 50
+
+  - name: having_avg
+    params:
+      table: events
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: AVG(amount) AS avg_amt
+      ibis_aggregates: 'avg_amt=ibis._.amount.mean()'
+      having_condition: AVG(amount) >= 20
+      ibis_having: ibis._.avg_amt >= 20
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

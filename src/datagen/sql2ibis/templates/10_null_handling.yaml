@@ -1,0 +1,40 @@
+# NULL handling functions
+name: null_handling
+description: COALESCE and NULL filtering
+difficulty: easy
+features:
+  - coalesce
+  - null
+  - is_null
+  - fillna
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  {where_clause}
+
+ibis_template: |
+  {ibis_expr}
+
+variations:
+  - name: filter_nulls
+    params:
+      table: events
+      columns: user_id, amount
+      where_clause: WHERE amount IS NOT NULL
+      ibis_expr: events.filter(events.amount.notnull())[["user_id", "amount"]]
+
+  - name: coalesce_simple
+    params:
+      table: events
+      columns: user_id, COALESCE(amount, 0) as amount_filled
+      where_clause: ""
+      ibis_expr: events.select(user_id=events.user_id, amount_filled=events.amount.fillna(0))
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

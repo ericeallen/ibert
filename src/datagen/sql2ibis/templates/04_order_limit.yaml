@@ -1,0 +1,67 @@
+# ORDER BY and LIMIT
+name: order_limit
+description: Sorting and limiting results
+difficulty: easy
+features:
+  - order_by
+  - limit
+  - sort
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  {where_clause}
+  ORDER BY {order_expr}
+  LIMIT {limit}
+
+ibis_template: |
+  {ibis_expr}.order_by({ibis_order}).limit({limit})
+
+variations:
+  - name: top_amounts
+    params:
+      table: events
+      columns: user_id, amount
+      where_clause: ""
+      ibis_expr: events[["user_id", "amount"]]
+      order_expr: amount DESC
+      ibis_order: ibis.desc("amount")
+      limit: 10
+
+  - name: recent_events
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      where_clause: ""
+      ibis_expr: events[["user_id", "event_ts", "amount"]]
+      order_expr: event_ts DESC
+      ibis_order: ibis.desc("event_ts")
+      limit: 5
+
+  - name: filtered_sorted
+    params:
+      table: events
+      columns: user_id, amount
+      where_clause: "WHERE amount > 20"
+      ibis_expr: events.filter(events.amount > 20)[["user_id", "amount"]]
+      order_expr: amount ASC
+      ibis_order: '"amount"'
+      limit: 3
+
+  - name: multi_column_sort
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      where_clause: ""
+      ibis_expr: events[["user_id", "event_ts", "amount"]]
+      order_expr: user_id ASC, event_ts DESC
+      ibis_order: '"user_id", ibis.desc("event_ts")'
+      limit: 20
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

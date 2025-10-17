@@ -1,0 +1,38 @@
+# sql2ibis runtime configuration (read-only)
+
+backends:
+  - duckdb  # Always available for local validation
+  # - bigquery
+  # - snowflake
+  # - postgres
+  # - spark
+
+dialects:
+  - duckdb
+  # - bigquery
+  # - snowflake
+  # - postgres
+  # - mysql
+
+limits:
+  max_fixture_rows: 1000
+  max_generated_per_op: 500
+  max_concurrent_eval: 10
+
+type_system:
+  strict_types: true  # Force explicit casts on ambiguous expressions
+  null_handling: "explicit"  # Require COALESCE/NULLIF to be explicit
+
+validation:
+  require_compilation: true
+  require_equivalence: true
+  sql_tolerance: 1.0e-12  # Numeric comparison tolerance
+
+generation:
+  deterministic_seed: true
+  default_seed: 42
+
+output:
+  format: "jsonl"
+  pretty_print: false
+  include_metadata: true

@@ -1,0 +1,61 @@
+# Simple SELECT with WHERE clause
+name: select_where
+description: Basic projection with filtering
+difficulty: easy
+features:
+  - select
+  - where
+  - filter
+
+sql_template: |
+  SELECT {columns}
+  FROM {table}
+  WHERE {condition}
+
+ibis_template: |
+  {table}.filter({ibis_condition})[{ibis_columns}]
+
+variations:
+  - name: simple_numeric
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount > 10
+      ibis_condition: events.amount > 10
+
+  - name: timestamp_filter
+    params:
+      table: events
+      columns: user_id, event_ts, amount
+      ibis_columns: '["user_id", "event_ts", "amount"]'
+      condition: event_ts >= '2024-01-01'
+      ibis_condition: events.event_ts >= "2024-01-01"
+
+  - name: compound_filter
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_columns: '["user_id", "amount"]'
+      condition: amount > 10 AND user_id = 1
+      ibis_condition: (events.amount > 10) & (events.user_id == 1)
+
+  - name: string_filter
+    params:
+      table: users
+      columns: user_id, name
+      ibis_columns: '["user_id", "name"]'
+      condition: name = 'Alice'
+      ibis_condition: users.name == "Alice"
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
+    users:
+      schema:
+        user_id: int64
+        name: string

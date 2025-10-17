@@ -1,0 +1,43 @@
+# CASE WHEN expressions
+name: case_when
+description: Conditional logic in SELECT
+difficulty: medium
+features:
+  - case
+  - when
+  - conditional
+  - mutate
+
+sql_template: |
+  SELECT {columns}, {case_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_case})[{ibis_select_cols}]
+
+variations:
+  - name: simple_case
+    params:
+      table: events
+      columns: user_id, amount
+      ibis_select_cols: '["user_id", "amount", "category"]'
+      case_expr: |
+        CASE
+            WHEN amount > 30 THEN 'high'
+            WHEN amount > 15 THEN 'medium'
+            ELSE 'low'
+        END AS category
+      ibis_case: |
+        category=ibis.cases(
+            (events.amount > 30, "high"),
+            (events.amount > 15, "medium"),
+            else_="low",
+        )
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

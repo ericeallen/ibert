@@ -1,0 +1,68 @@
+# GROUP BY with aggregations
+name: groupby_aggregate
+description: Grouping with aggregate functions
+difficulty: easy
+features:
+  - groupby
+  - aggregate
+  - count
+  - sum
+  - avg
+
+sql_template: |
+  SELECT {select_keys}, {aggregates}
+  FROM {table}
+  GROUP BY {group_keys}
+
+ibis_template: |
+  {table}.group_by({ibis_group_keys}).aggregate(
+      {ibis_aggregates}
+  )
+
+variations:
+  - name: count_by_user
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) AS n
+      ibis_aggregates: 'n=events.count()'
+
+  - name: sum_by_user
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: SUM(amount) AS total
+      ibis_aggregates: 'total=events.amount.sum()'
+
+  - name: multi_agg
+    params:
+      table: events
+      select_keys: user_id
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) AS n, SUM(amount) AS total, AVG(amount) AS avg_amt
+      ibis_aggregates: |
+        n=events.count(),
+            total=events.amount.sum(),
+            avg_amt=events.amount.mean()
+
+  - name: multi_key_group
+    params:
+      table: events
+      select_keys: user_id, CAST(event_ts AS DATE) AS event_date
+      group_keys: user_id, CAST(event_ts AS DATE)
+      ibis_group_keys: '"user_id", event_date=events.event_ts.date()'
+      aggregates: COUNT(*) AS n
+      ibis_aggregates: 'n=ibis._.count()'
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

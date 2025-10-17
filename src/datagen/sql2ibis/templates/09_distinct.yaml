@@ -1,0 +1,45 @@
+# SELECT DISTINCT
+name: distinct
+description: Remove duplicate rows
+difficulty: easy
+features:
+  - distinct
+  - unique
+
+sql_template: |
+  SELECT DISTINCT {columns}
+  FROM {table}
+  {where_clause}
+
+ibis_template: |
+  {ibis_expr}.distinct()
+
+variations:
+  - name: distinct_users
+    params:
+      table: events
+      columns: user_id
+      where_clause: ""
+      ibis_expr: events[["user_id"]]
+
+  - name: distinct_filtered
+    params:
+      table: events
+      columns: user_id
+      where_clause: WHERE amount > 20
+      ibis_expr: events.filter(events.amount > 20)[["user_id"]]
+
+  - name: distinct_multi_col
+    params:
+      table: events
+      columns: user_id, CAST(event_ts AS DATE) as event_date
+      where_clause: ""
+      ibis_expr: events.select(user_id=events.user_id, event_date=events.event_ts.date())
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

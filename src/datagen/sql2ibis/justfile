@@ -1,0 +1,42 @@
+# sql2ibis build automation
+
+# Bootstrap virtual environment and install dependencies
+setup:
+    python3 -m venv .venv
+    .venv/bin/pip install --upgrade pip
+    .venv/bin/pip install -e .[dev]
+
+# Generate small demo dataset (100 examples)
+seed:
+    .venv/bin/python -m sql2ibis.cli synth --count 100 --dialect duckdb --out data/processed/train.jsonl
+
+# Convert a source bundle from data/raw/
+convert NAME:
+    .venv/bin/python -m sql2ibis.cli source --name {{NAME}} --out data/interim/{{NAME}}.jsonl
+
+# Validate and score a dataset
+eval INPUT:
+    .venv/bin/python -m sql2ibis.cli eval --in {{INPUT}} --backend duckdb
+
+# Full pipeline: synthetic + source + split
+build_all:
+    .venv/bin/python -m sql2ibis.cli synth --count 5000 --dialect duckdb --out data/interim/synth.jsonl
+    .venv/bin/python -m sql2ibis.cli merge --inputs data/interim/synth.jsonl --train 0.8 --valid 0.1 --test 0.1 --out-dir data/processed
+
+# Run all tests
+test:
+    .venv/bin/pytest tests/ -v --cov=sql2ibis --cov-report=term-missing
+
+# Lint code
+lint:
+    .venv/bin/ruff check src/
+
+# Format code
+fmt:
+    .venv/bin/ruff format src/
+
+# Clean build artifacts
+clean:
+    rm -rf .venv build dist *.egg-info
+    rm -rf data/interim/* data/processed/*
+    find . -type d -name __pycache__ -exec rm -rf {} +

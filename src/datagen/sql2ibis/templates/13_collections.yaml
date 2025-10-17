@@ -1,0 +1,32 @@
+# Array/collection operations
+name: collections
+description: Array and collection manipulation
+difficulty: hard
+features:
+  - array
+  - collections
+  - unnest
+
+sql_template: |
+  SELECT {columns}, {array_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_array})[{ibis_select_cols}]
+
+variations:
+  - name: array_length
+    params:
+      table: events
+      columns: user_id, amount
+      array_expr: ARRAY_LENGTH(ARRAY[user_id, CAST(amount AS BIGINT)], 1) AS arr_len
+      ibis_select_cols: '["user_id", "amount", "arr_len"]'
+      ibis_array: arr_len=ibis.array([events.user_id, events.amount.cast("int64")]).length()
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

@@ -1,0 +1,88 @@
+# Aggregate built-in UDFs
+name: udf_agg_builtin
+description: Aggregate UDFs mapping to backend built-in functions
+difficulty: medium
+features:
+  - udf
+  - aggregate
+  - builtin
+  - groupby
+
+sql_template: |
+  SELECT {group_cols}, {agg_expr}
+  FROM {table}
+  GROUP BY {group_cols}
+
+ibis_template: |
+  import ibis
+  {udf_definition}
+  {table}.group_by({ibis_group_cols}).aggregate({ibis_agg})
+
+variations:
+  - name: avg_builtin
+    params:
+      table: events
+      group_cols: user_id
+      agg_expr: AVG(amount) AS avg_amount
+      ibis_group_cols: '"user_id"'
+      udf_definition: |
+        @ibis.udf.agg.builtin(name="avg")
+        def custom_avg(x: float) -> float:
+            """Average aggregation."""
+      ibis_agg: avg_amount=custom_avg(events.amount)
+
+  - name: sum_builtin
+    params:
+      table: events
+      group_cols: user_id
+      agg_expr: SUM(amount) AS total_amount
+      ibis_group_cols: '"user_id"'
+      udf_definition: |
+        @ibis.udf.agg.builtin(name="sum")
+        def custom_sum(x: float) -> float:
+            """Sum aggregation."""
+      ibis_agg: total_amount=custom_sum(events.amount)
+
+  - name: count_builtin
+    params:
+      table: events
+      group_cols: user_id
+      agg_expr: COUNT(*) AS event_count
+      ibis_group_cols: '"user_id"'
+      udf_definition: |
+        @ibis.udf.agg.builtin(name="count")
+        def custom_count(x: int) -> int:
+            """Count aggregation."""
+      ibis_agg: event_count=custom_count(events.user_id)
+
+  - name: max_builtin
+    params:
+      table: events
+      group_cols: user_id
+      agg_expr: MAX(amount) AS max_amount
+      ibis_group_cols: '"user_id"'
+      udf_definition: |
+        @ibis.udf.agg.builtin(name="max")
+        def custom_max(x: float) -> float:
+            """Max aggregation."""
+      ibis_agg: max_amount=custom_max(events.amount)
+
+  - name: min_builtin
+    params:
+      table: events
+      group_cols: user_id
+      agg_expr: MIN(amount) AS min_amount
+      ibis_group_cols: '"user_id"'
+      udf_definition: |
+        @ibis.udf.agg.builtin(name="min")
+        def custom_min(x: float) -> float:
+            """Min aggregation."""
+      ibis_agg: min_amount=custom_min(events.amount)
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

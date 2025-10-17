@@ -1,0 +1,74 @@
+# Temporal operations
+name: temporal
+description: Date and timestamp extraction and manipulation
+difficulty: medium
+features:
+  - temporal
+  - date
+  - timestamp
+  - extract
+  - truncate
+
+sql_template: |
+  SELECT {columns}, {temporal_expr}
+  FROM {table}
+
+ibis_template: |
+  {table}.mutate({ibis_temporal})[{ibis_select_cols}]
+
+variations:
+  - name: extract_year
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(YEAR FROM event_ts) AS event_year
+      ibis_select_cols: '["user_id", "event_ts", "event_year"]'
+      ibis_temporal: event_year=events.event_ts.year()
+
+  - name: extract_month
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(MONTH FROM event_ts) AS event_month
+      ibis_select_cols: '["user_id", "event_ts", "event_month"]'
+      ibis_temporal: event_month=events.event_ts.month()
+
+  - name: extract_day
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(DAY FROM event_ts) AS event_day
+      ibis_select_cols: '["user_id", "event_ts", "event_day"]'
+      ibis_temporal: event_day=events.event_ts.day()
+
+  - name: extract_hour
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(HOUR FROM event_ts) AS event_hour
+      ibis_select_cols: '["user_id", "event_ts", "event_hour"]'
+      ibis_temporal: event_hour=events.event_ts.hour()
+
+  - name: cast_to_date
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: CAST(event_ts AS DATE) AS event_date
+      ibis_select_cols: '["user_id", "event_ts", "event_date"]'
+      ibis_temporal: event_date=events.event_ts.date()
+
+  - name: extract_quarter
+    params:
+      table: events
+      columns: user_id, event_ts
+      temporal_expr: EXTRACT(QUARTER FROM event_ts) AS event_quarter
+      ibis_select_cols: '["user_id", "event_ts", "event_quarter"]'
+      ibis_temporal: event_quarter=events.event_ts.quarter()
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64

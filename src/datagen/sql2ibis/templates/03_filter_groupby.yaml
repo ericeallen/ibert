@@ -1,0 +1,62 @@
+# Combined WHERE + GROUP BY
+name: filter_groupby
+description: Filter then aggregate
+difficulty: medium
+features:
+  - where
+  - filter
+  - groupby
+  - aggregate
+
+sql_template: |
+  SELECT {group_keys}, {aggregates}
+  FROM {table}
+  WHERE {condition}
+  GROUP BY {group_keys}
+
+ibis_template: |
+  (
+      {table}
+      .filter({ibis_condition})
+      .group_by({ibis_group_keys})
+      .aggregate({ibis_aggregates})
+  )
+
+variations:
+  - name: recent_user_totals
+    params:
+      table: events
+      condition: event_ts >= '2024-01-01'
+      ibis_condition: events.event_ts >= "2024-01-01"
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) AS n, SUM(amount) AS total
+      ibis_aggregates: 'n=ibis._.count(), total=ibis._.amount.sum()'
+
+  - name: high_value_counts
+    params:
+      table: events
+      condition: amount > 50
+      ibis_condition: events.amount > 50
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: COUNT(*) AS high_value_count
+      ibis_aggregates: 'high_value_count=ibis._.count()'
+
+  - name: compound_filter_agg
+    params:
+      table: events
+      condition: event_ts >= '2024-01-01' AND amount > 10
+      ibis_condition: (events.event_ts >= "2024-01-01") & (events.amount > 10)
+      group_keys: user_id
+      ibis_group_keys: '"user_id"'
+      aggregates: AVG(amount) AS avg_amount
+      ibis_aggregates: 'avg_amount=ibis._.amount.mean()'
+
+context:
+  tables:
+    events:
+      schema:
+        user_id: int64
+        event_ts: timestamp
+        amount: float64
