@@ -32,8 +32,8 @@ variations:
       columns: user_id, amount
       condition: user_id IN (SELECT user_id FROM events WHERE amount > 20)
       ibis_expression: |
-        high_users = events.filter(events.amount > 20).user_id.distinct()
-        events.filter(events.user_id.isin(high_users))[["user_id", "amount"]]
+        high_users = events.filter(events.amount > 20)[["user_id"]].distinct()
+        events.filter(events.user_id.isin(high_users.user_id))[["user_id", "amount"]]
 
   - name: exists_subquery
     params:

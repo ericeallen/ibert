@@ -35,7 +35,7 @@ variations:
       ibis_expression: |
         high = events.filter(events.amount > 20)[["user_id"]]
         low = events.filter(events.amount < 5)[["user_id"]]
-        ibis.union(high, low, distinct=True)
+        ibis.union(high, low).distinct()
 
   - name: intersect
     params:
@@ -44,8 +44,8 @@ variations:
         INTERSECT
         SELECT user_id FROM events WHERE event_ts >= '2024-01-02'
       ibis_expression: |
-        high_amt = events.filter(events.amount > 10)[["user_id"]]
-        recent = events.filter(events.event_ts >= "2024-01-02")[["user_id"]]
+        high_amt = events.filter(events.amount > 10)[["user_id"]].distinct()
+        recent = events.filter(events.event_ts >= "2024-01-02")[["user_id"]].distinct()
         ibis.intersect(high_amt, recent)
 
   - name: except_query
@@ -55,8 +55,8 @@ variations:
         EXCEPT
         SELECT user_id FROM labels
       ibis_expression: |
-        all_users = events[["user_id"]]
-        labeled_users = labels[["user_id"]]
+        all_users = events[["user_id"]].distinct()
+        labeled_users = labels[["user_id"]].distinct()
         ibis.difference(all_users, labeled_users)
 
 context:

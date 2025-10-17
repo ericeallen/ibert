@@ -12,7 +12,7 @@ def extract_from_markdown(md_file: Path) -> List[Dict[str, Any]]:
     Parameters
     ----------
     md_file : Path
-        Markdown file to parse
+        Markdown file to parse (.md or .qmd)
 
     Returns
     -------
@@ -26,15 +26,27 @@ def extract_from_markdown(md_file: Path) -> List[Dict[str, Any]]:
 
     examples = []
 
-    # Pattern: SQL code block followed by Ibis code block
-    # ```sql
-    # SELECT ...
+    # Pattern 1: Quarto-style Python code blocks with .sql() calls
+    # ```{python}
+    # expr = t.sql("SELECT x FROM t WHERE x > 0")
     # ```
-    # ```python
-    # table.select(...)
-    # ```
+    quarto_pattern = r'```\{python\}(.+?)```'
+    for match in re.finditer(quarto_pattern, content, re.DOTALL):
+        code_block = match.group(1).strip()
 
-    # Find all code blocks
+        # Look for .sql() calls in this block
+        sql_call_pattern = r'\.sql\(\s*["\'](.+?)["\']\s*\)'
+        for sql_match in re.finditer(sql_call_pattern, code_block, re.DOTALL):
+            sql = sql_match.group(1).strip()
+            if "SELECT" in sql.upper():
+                examples.append({
+                    "source": "quarto_doc",
+                    "file": str(md_file),
+                    "sql": sql,
+                    "context": code_block,
+                })
+
+    # Pattern 2: Regular markdown SQL code blocks followed by Python blocks
     code_block_pattern = r'```(\w+)\n(.+?)```'
     code_blocks = list(re.finditer(code_block_pattern, content, re.DOTALL))
 
@@ -54,6 +66,23 @@ def extract_from_markdown(md_file: Path) -> List[Dict[str, Any]]:
                     "file": str(md_file),
                     "sql": code,
                     "ibis": next_code,
+                })
+
+    # Pattern 3: SQL strings in Python code blocks
+    for match in re.finditer(code_block_pattern, content, re.DOTALL):
+        lang = match.group(1).lower()
+        code = match.group(2).strip()
+
+        if lang in ["python", "py"]:
+            # Look for SQL strings
+            sql_string_pattern = r'["\']SELECT\s+.+?["\']'
+            for sql_match in re.finditer(sql_string_pattern, code, re.DOTALL | re.IGNORECASE):
+                sql = sql_match.group(0).strip('"\'')
+                examples.append({
+                    "source": "python_code_block",
+                    "file": str(md_file),
+                    "sql": sql,
+                    "context": code,
                 })
 
     return examples
@@ -122,14 +151,17 @@ def mine_ibis_documentation(ibis_repo_path: Path) -> List[Dict[str, Any]]:
     """
     examples = []
 
-    # Scan markdown documentation
+    # Scan markdown and Quarto documentation
     docs_dir = ibis_repo_path / "docs"
     if docs_dir.exists():
-        md_files = list(docs_dir.rglob("*.md"))
-        print(f"Scanning {len(md_files)} markdown files...")
+        md_files = list(docs_dir.rglob("*.md")) + list(docs_dir.rglob("*.qmd"))
+        print(f"Scanning {len(md_files)} markdown/quarto files...")
 
         for md_file in md_files:
-            examples.extend(extract_from_markdown(md_file))
+            file_examples = extract_from_markdown(md_file)
+            examples.extend(file_examples)
+            if file_examples:
+                print(f"  Found {len(file_examples)} examples in {md_file.name}")
 
     # Scan Jupyter notebooks
     notebooks = list(ibis_repo_path.rglob("*.ipynb"))

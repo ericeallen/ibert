@@ -22,17 +22,13 @@ variations:
         FROM events e1
         INNER JOIN events e2 ON e1.user_id = e2.user_id AND e1.event_ts < e2.event_ts
       ibis_expression: |
-        e1 = events
-        e2 = events.view()
+        e1 = events.select(user_id=events.user_id, event_ts=events.event_ts, amt1=events.amount)
+        e2 = events.select(user_id=events.user_id, event_ts=events.event_ts, amt2=events.amount)
         e1.join(
             e2,
             (e1.user_id == e2.user_id) & (e1.event_ts < e2.event_ts),
             how="inner"
-        ).select(
-            user_id=e1.user_id,
-            amt1=e1.amount,
-            amt2=e2.amount
-        )
+        )[["user_id", "amt1", "amt2"]]
 
   - name: cross_join
     params:
