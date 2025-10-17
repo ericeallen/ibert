@@ -10,7 +10,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Fine-tuning**: LoRA (Low-Rank Adaptation) for parameter-efficient training
 - **Target DSL**: Ibis - lazy-evaluated Python framework that compiles to SQL
 - **Validation**: DuckDB backend for executing and comparing SQL/Ibis equivalence
-- **Semantic Intelligence**: Serena MCP (symbol navigation) + Semgrep (AST pattern matching)
 
 ## Development Commands
 
@@ -88,9 +87,3 @@ The model supports six tasks with weighted sampling:
 - **No substitutions**: If a specified model/tool is unavailable, STOP and explain - never use fallbacks
 - **Iterative refinement**: Use compiler feedback for validation
 - **Track experiments**: Use Weights & Biases for reproducibility
-
-## Working with Serena MCP
-- Provides symbolic code intelligence via MCP/LSP
-- Extract symbols, definitions, references, call graphs
-- Build semantic index before chunking/embedding
-- Powers neighborhood expansion in retrieval
