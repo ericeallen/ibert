@@ -29,12 +29,10 @@ Supports six core tasks with weighted sampling:
 ### Requirements
 ```bash
 pip install -r requirements.txt
-# Core: transformers, peft, torch, ibis-framework
-# Semantic: semgrep, serena-mcp
-# Training: wandb, datasets, accelerate
 ```
 
 ### Quick Start
+You can run basic scripts like data generation by installing ```just``` and calling the functions in ```justfile```.
 ```python
 from src.models.devstral_lora import IBertModel, IBertConfig
 
