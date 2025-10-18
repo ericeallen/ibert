@@ -1,6 +1,6 @@
 # iBERT Test Suite
 
-A comprehensive, beautiful test suite for the iBERT training data generation system.
+A comprehensive test suite for the iBERT training data generation system.
 
 ## Overview
 
