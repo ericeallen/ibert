@@ -1,0 +1,97 @@
+# GitHub repositories to mine for SQL→Ibis examples
+# Format: repo_url|repo_name|directories_to_scan (comma-separated, optional)
+
+# ============================================================================
+# Official Ibis Project Repositories
+# ============================================================================
+
+# Core Ibis repository with extensive tests and documentation
+https://github.com/ibis-project/ibis.git|ibis|ibis/tests,docs/examples,docs/tutorials,docs/how-to
+
+# Official tutorials and examples
+https://github.com/ibis-project/ibis-tutorial.git|ibis-tutorial|
+https://github.com/ibis-project/ibis-examples.git|ibis-examples|
+
+# Machine learning integration with Ibis
+https://github.com/ibis-project/ibis-ml.git|ibis-ml|
+
+# Substrait compiler for Ibis
+https://github.com/ibis-project/ibis-substrait.git|ibis-substrait|
+
+# Analytics and statistics examples
+https://github.com/ibis-project/ibis-analytics.git|ibis-analytics|
+
+# PyPI statistics with Ibis and ClickHouse
+https://github.com/ibis-project/better-pypi-stats.git|better-pypi-stats|
+
+# Real-time fraud detection example
+https://github.com/ibis-project/realtime-fraud-detection.git|realtime-fraud-detection|
+
+# Kedro pipeline integration with Ibis
+https://github.com/ibis-project/kedro-ibis-tutorial.git|kedro-ibis-tutorial|
+
+# Apache Flink integration tutorial
+https://github.com/ibis-project/ibis-flink-tutorial.git|ibis-flink-tutorial|
+
+# TPC benchmark queries in Ibis
+https://github.com/ibis-project/tpc-queries.git|tpc-queries|
+
+# BigQuery backend examples
+https://github.com/ibis-project/ibis-bigquery.git|ibis-bigquery|
+
+# Conference talks and presentations with code
+https://github.com/ibis-project/talks.git|talks|
+
+# Ibis book/documentation examples
+https://github.com/ibis-project/book.git|book|
+
+# ML-powered data bot (experimental)
+https://github.com/ibis-project/ibis-birdbrain.git|ibis-birdbrain|
+
+# SQLFlite integration
+https://github.com/ibis-project/ibis-sqlflite.git|ibis-sqlflite|
+
+# ============================================================================
+# Community Projects Using Ibis
+# ============================================================================
+
+# SQL to Ibis converter - great source of SQL→Ibis pairs
+https://github.com/zbrookle/sql_to_ibis.git|sql_to_ibis|
+
+# dbt integration with Ibis
+https://github.com/binste/dbt-ibis.git|dbt-ibis|
+
+# Ibis basics tutorial by Mark Bauer
+https://github.com/mebauer/ibis-basics.git|ibis-basics|
+
+# Record linkage with Ibis
+https://github.com/NickCrews/mismo.git|mismo|
+
+# Jaffle shop example project
+https://github.com/deepyaman/jaffle-shop.git|jaffle-shop|
+
+# Ibis with Datasette integration
+https://github.com/jcrist/ibis-datasette.git|ibis-datasette|
+
+# Graph algorithms with Ibis
+https://github.com/SemyonSinchenko/ibisgraph.git|ibisgraph|
+
+# GizmoSQL - SQL dialect using Ibis
+https://github.com/gizmodata/gizmosql.git|gizmosql|
+https://github.com/gizmodata/ibis-gizmosql.git|ibis-gizmosql|
+
+# Spark Connect Proxy with Ibis support
+https://github.com/gizmodata/spark-connect-proxy.git|spark-connect-proxy|
+
+# VisiData SQL interface
+https://github.com/saulpw/vdsql.git|vdsql|
+
+# Narwhals - DataFrame interchange with Ibis support
+https://github.com/narwhals-dev/narwhals.git|narwhals|
+
+# ============================================================================
+# Forks and Enterprise Versions
+# ============================================================================
+
+# Cigna's Ibis fork
+https://github.com/Cigna/ibis.git|ibis-cigna|

@@ -148,6 +148,9 @@ cython_debug/
 .vscode/
 
 # Data files
+data/mining/*
+data/sql2ibis/*
+data/*.jsonl
 data/raw/*
 data/processed/*
 data/embeddings/*

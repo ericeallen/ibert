@@ -1,17 +1,100 @@
-"""Mine SQL→Ibis examples from GitHub repositories."""
+"""Mine SQL→Ibis training examples from GitHub repositories.
+
+This module clones repositories and extracts SQL code patterns that demonstrate
+SQL→Ibis translations. It searches for:
+- .sql() method calls on tables and backends
+- Direct SQL strings in code
+- Multi-line SQL assignments
+- Jupyter notebooks with SQL examples
+
+Examples are extracted with provenance metadata for training data generation.
+"""
 
 import re
 import subprocess
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple, NamedTuple
 import json
 
 
-class GitHubMiner:
-    """Mine code examples from GitHub repositories."""
+# Constants for pattern matching
+SQL_KEYWORD = "SELECT"  # Primary SQL keyword to identify queries
+GIT_CLONE_DEPTH = 1  # Shallow clone for faster downloads
+
+# Regex patterns for SQL extraction
+PATTERN_SQL_METHOD = r'(\w+)\s*=\s*(?:\w+)\.sql\(\s*["\'](.+?)["\']\s*\)'
+PATTERN_DIRECT_SQL = r'\.sql\(\s*["\'](.+?)["\']\s*\)'
+PATTERN_MULTILINE_SQL = r'sql\s*=\s*"""(.+?)"""'
+
+# Output configuration
+HEADER_WIDTH = 60
+
+
+class RepositoryConfig(NamedTuple):
+    """Configuration for a repository to mine.
+
+    Attributes
+    ----------
+    url : str
+        Git repository URL
+    name : str
+        Local directory name for the repository
+    scan_dirs : list of str or None
+        Specific subdirectories to scan, or None to scan entire repo
+    """
+    url: str
+    name: str
+    scan_dirs: Optional[List[str]]
+
+
+class SQLExample(NamedTuple):
+    """A discovered SQL example with metadata.
+
+    Attributes
+    ----------
+    source_type : str
+        Type of extraction pattern used
+    file_path : str
+        Source file path
+    sql_code : str
+        The SQL query string
+    ibis_var : str or None
+        Variable name for Ibis expression, if available
+    """
+    source_type: str
+    file_path: str
+    sql_code: str
+    ibis_var: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary format for JSON serialization.
+
+        Returns
+        -------
+        dict
+            Example as dictionary
+        """
+        result = {
+            "source": self.source_type,
+            "file": self.file_path,
+            "sql": self.sql_code,
+        }
+
+        if self.ibis_var:
+            result["ibis_var"] = self.ibis_var
+
+        return result
+
+
+class GitHubRepositoryMiner:
+    """Mines SQL→Ibis code examples from GitHub repositories.
+
+    This class handles repository cloning, file discovery, and pattern
+    extraction to find SQL code that demonstrates SQL→Ibis translations.
+    """
 
     def __init__(self, cache_dir: Path = Path("data/mining/repos")):
-        """Initialize miner.
+        """Initialize the repository miner.
 
         Parameters
         ----------
@@ -21,53 +104,98 @@ class GitHubMiner:
         self.cache_dir = cache_dir
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
-    def clone_repo(self, repo_url: str, repo_name: str) -> Path:
-        """Clone a GitHub repository.
+    def clone_repository(self, repo_url: str, local_name: str) -> Path:
+        """Clone a GitHub repository using shallow clone.
+
+        If the repository is already cloned, returns existing path.
 
         Parameters
         ----------
         repo_url : str
             GitHub repository URL
-        repo_name : str
-            Name for the local directory
+        local_name : str
+            Local directory name for the cloned repository
 
         Returns
         -------
         Path
-            Path to cloned repository
+            Path to cloned repository directory
+
+        Raises
+        ------
+        subprocess.CalledProcessError
+            If git clone fails
         """
-        repo_path = self.cache_dir / repo_name
+        repo_path = self.cache_dir / local_name
 
         if repo_path.exists():
             print(f"Repository already cloned: {repo_path}")
             return repo_path
 
         print(f"Cloning {repo_url}...")
-        subprocess.run(
-            ["git", "clone", "--depth", "1", repo_url, str(repo_path)],
-            check=True,
-            capture_output=True
-        )
+        self._execute_git_clone(repo_url, repo_path)
 
         return repo_path
 
-    def extract_python_files(self, repo_path: Path) -> List[Path]:
-        """Find all Python files in a repository.
+    def _execute_git_clone(self, repo_url: str, destination: Path) -> None:
+        """Execute git clone command with shallow depth.
 
         Parameters
         ----------
-        repo_path : Path
-            Path to repository
+        repo_url : str
+            Repository URL to clone
+        destination : Path
+            Local destination path
+        """
+        subprocess.run(
+            [
+                "git", "clone",
+                "--depth", str(GIT_CLONE_DEPTH),
+                repo_url,
+                str(destination)
+            ],
+            check=True,
+            capture_output=True,
+            text=True
+        )
+
+    def find_python_files(self, directory: Path) -> List[Path]:
+        """Recursively find all Python files in a directory.
+
+        Parameters
+        ----------
+        directory : Path
+            Root directory to search
 
         Returns
         -------
         list of Path
-            Python files
+            All discovered Python files
         """
-        return list(repo_path.rglob("*.py"))
+        return list(directory.rglob("*.py"))
 
-    def find_sql_conversions(self, python_file: Path) -> List[Dict[str, Any]]:
-        """Find SQL→Ibis conversions in a Python file.
+    def find_jupyter_notebooks(self, directory: Path) -> List[Path]:
+        """Recursively find all Jupyter notebooks in a directory.
+
+        Parameters
+        ----------
+        directory : Path
+            Root directory to search
+
+        Returns
+        -------
+        list of Path
+            All discovered notebook files
+        """
+        return list(directory.rglob("*.ipynb"))
+
+    def extract_sql_examples(self, python_file: Path) -> List[SQLExample]:
+        """Extract SQL→Ibis examples from a Python file.
+
+        Searches for multiple patterns:
+        1. Table.sql() or Backend.sql() method calls
+        2. Direct .sql() calls
+        3. Multi-line SQL string assignments
 
         Parameters
         ----------
@@ -76,229 +204,560 @@ class GitHubMiner:
 
         Returns
         -------
-        list of dict
-            Found examples with SQL and Ibis code
+        list of SQLExample
+            Discovered SQL examples with metadata
         """
-        try:
-            content = python_file.read_text()
-        except Exception:
+        content = self._read_file_safely(python_file)
+        if content is None:
             return []
 
         examples = []
 
-        # Pattern 1: Table.sql() or Backend.sql() - THE MAIN SQL→Ibis PATTERN
-        # e.g., expr = t.sql("SELECT x FROM t WHERE x > 0")
-        # or:   expr = con.sql("SELECT x FROM t WHERE x > 0")
-        sql_method_pattern = r'(\w+)\s*=\s*(?:\w+)\.sql\(\s*["\'](.+?)["\']\s*\)'
-        for match in re.finditer(sql_method_pattern, content, re.DOTALL):
-            var_name = match.group(1).strip()
-            sql = match.group(2).strip()
-
-            if "SELECT" in sql.upper():  # Filter for actual SQL queries
-                examples.append({
-                    "source": "table.sql()",
-                    "file": str(python_file),
-                    "sql": sql,
-                    "ibis_var": var_name,
-                })
-
-        # Pattern 2: Direct SQL strings in function calls
-        # con.sql("SELECT ...")
-        direct_sql_pattern = r'\.sql\(\s*["\'](.+?)["\']\s*\)'
-        for match in re.finditer(direct_sql_pattern, content, re.DOTALL):
-            sql = match.group(1).strip()
-            if "SELECT" in sql.upper():
-                examples.append({
-                    "source": "direct_sql",
-                    "file": str(python_file),
-                    "sql": sql,
-                })
-
-        # Pattern 3: SQL strings in multi-line format
-        # sql = """
-        # SELECT ...
-        # """
-        multiline_sql_pattern = r'sql\s*=\s*"""(.+?)"""'
-        for match in re.finditer(multiline_sql_pattern, content, re.DOTALL):
-            sql = match.group(1).strip()
-            if "SELECT" in sql.upper():
-                examples.append({
-                    "source": "multiline_sql",
-                    "file": str(python_file),
-                    "sql": sql,
-                })
+        # Extract examples using all patterns
+        examples.extend(self._extract_sql_method_calls(content, python_file))
+        examples.extend(self._extract_direct_sql_calls(content, python_file))
+        examples.extend(self._extract_multiline_sql(content, python_file))
 
         return examples
 
+    def _read_file_safely(self, file_path: Path) -> Optional[str]:
+        """Read file content with error handling.
 
-def mine_ibis_repo() -> List[Dict[str, Any]]:
-    """Mine examples from the official Ibis repository.
+        Parameters
+        ----------
+        file_path : Path
+            File to read
+
+        Returns
+        -------
+        str or None
+            File content, or None if read failed
+        """
+        try:
+            return file_path.read_text(encoding="utf-8")
+        except (IOError, UnicodeDecodeError):
+            return None
+
+    def _extract_sql_method_calls(
+        self,
+        content: str,
+        source_file: Path
+    ) -> List[SQLExample]:
+        """Extract SQL from .sql() method calls with variable assignment.
+
+        Pattern: var = obj.sql("SELECT ...")
+
+        Parameters
+        ----------
+        content : str
+            File content
+        source_file : Path
+            Source file path
+
+        Returns
+        -------
+        list of SQLExample
+            Extracted examples
+        """
+        examples = []
+
+        for match in re.finditer(PATTERN_SQL_METHOD, content, re.DOTALL):
+            variable_name = match.group(1).strip()
+            sql_code = match.group(2).strip()
+
+            if self._is_valid_sql_query(sql_code):
+                examples.append(SQLExample(
+                    source_type="table.sql()",
+                    file_path=str(source_file),
+                    sql_code=sql_code,
+                    ibis_var=variable_name
+                ))
+
+        return examples
+
+    def _extract_direct_sql_calls(
+        self,
+        content: str,
+        source_file: Path
+    ) -> List[SQLExample]:
+        """Extract SQL from direct .sql() method calls.
+
+        Pattern: obj.sql("SELECT ...")
+
+        Parameters
+        ----------
+        content : str
+            File content
+        source_file : Path
+            Source file path
+
+        Returns
+        -------
+        list of SQLExample
+            Extracted examples
+        """
+        examples = []
+
+        for match in re.finditer(PATTERN_DIRECT_SQL, content, re.DOTALL):
+            sql_code = match.group(1).strip()
+
+            if self._is_valid_sql_query(sql_code):
+                examples.append(SQLExample(
+                    source_type="direct_sql",
+                    file_path=str(source_file),
+                    sql_code=sql_code
+                ))
+
+        return examples
+
+    def _extract_multiline_sql(
+        self,
+        content: str,
+        source_file: Path
+    ) -> List[SQLExample]:
+        """Extract SQL from multi-line string assignments.
+
+        Pattern:
+        sql = \"\"\"
+        SELECT ...
+        \"\"\"
+
+        Parameters
+        ----------
+        content : str
+            File content
+        source_file : Path
+            Source file path
+
+        Returns
+        -------
+        list of SQLExample
+            Extracted examples
+        """
+        examples = []
+
+        for match in re.finditer(PATTERN_MULTILINE_SQL, content, re.DOTALL):
+            sql_code = match.group(1).strip()
+
+            if self._is_valid_sql_query(sql_code):
+                examples.append(SQLExample(
+                    source_type="multiline_sql",
+                    file_path=str(source_file),
+                    sql_code=sql_code
+                ))
+
+        return examples
+
+    def _is_valid_sql_query(self, sql_code: str) -> bool:
+        """Check if string appears to be a SQL query.
+
+        Parameters
+        ----------
+        sql_code : str
+            Code to validate
+
+        Returns
+        -------
+        bool
+            True if appears to be SQL query
+        """
+        return SQL_KEYWORD in sql_code.upper()
+
+
+class RepositoryScanner:
+    """Scans repositories for SQL→Ibis examples.
+
+    Coordinates the mining process across directories and file types.
+    """
+
+    def __init__(self, miner: GitHubRepositoryMiner):
+        """Initialize scanner with miner instance.
+
+        Parameters
+        ----------
+        miner : GitHubRepositoryMiner
+            Miner instance to use for extraction
+        """
+        self.miner = miner
+
+    def scan_repository(
+        self,
+        repo_path: Path,
+        repo_name: str,
+        target_directories: Optional[List[str]] = None
+    ) -> List[Dict[str, Any]]:
+        """Scan repository for SQL examples.
+
+        Parameters
+        ----------
+        repo_path : Path
+            Root path of cloned repository
+        repo_name : str
+            Repository name for logging
+        target_directories : list of str, optional
+            Specific subdirectories to scan, or None for entire repo
+
+        Returns
+        -------
+        list of dict
+            All extracted examples as dictionaries
+        """
+        scan_paths = self._get_scan_paths(repo_path, target_directories)
+
+        all_examples = []
+
+        # Scan Python files
+        all_examples.extend(self._scan_python_files(scan_paths, repo_path, repo_name))
+
+        # Scan Jupyter notebooks
+        all_examples.extend(self._scan_notebooks(scan_paths, repo_path, repo_name))
+
+        print(f"\nFound {len(all_examples)} potential examples from {repo_name}")
+        return all_examples
+
+    def _get_scan_paths(
+        self,
+        repo_path: Path,
+        target_directories: Optional[List[str]]
+    ) -> List[Path]:
+        """Determine which directories to scan.
+
+        Parameters
+        ----------
+        repo_path : Path
+            Repository root path
+        target_directories : list of str or None
+            Specific directories, or None for entire repo
+
+        Returns
+        -------
+        list of Path
+            Paths to scan
+        """
+        if target_directories:
+            return [repo_path / dir_name for dir_name in target_directories]
+        return [repo_path]
+
+    def _scan_python_files(
+        self,
+        scan_paths: List[Path],
+        repo_path: Path,
+        repo_name: str
+    ) -> List[Dict[str, Any]]:
+        """Scan Python files in target paths.
+
+        Parameters
+        ----------
+        scan_paths : list of Path
+            Directories to scan
+        repo_path : Path
+            Repository root path
+        repo_name : str
+            Repository name for display
+
+        Returns
+        -------
+        list of dict
+            Extracted examples
+        """
+        examples = []
+
+        for scan_path in scan_paths:
+            if not scan_path.exists():
+                print(f"Directory not found: {scan_path}")
+                continue
+
+            python_files = self.miner.find_python_files(scan_path)
+            directory_label = self._get_directory_label(scan_path, repo_path, repo_name)
+
+            print(f"Scanning {len(python_files)} Python files in {directory_label}...")
+
+            for python_file in python_files:
+                file_examples = self.miner.extract_sql_examples(python_file)
+
+                if file_examples:
+                    print(f"  Found {len(file_examples)} in {python_file.name}")
+
+                # Convert to dictionaries
+                examples.extend(ex.to_dict() for ex in file_examples)
+
+        return examples
+
+    def _scan_notebooks(
+        self,
+        scan_paths: List[Path],
+        repo_path: Path,
+        repo_name: str
+    ) -> List[Dict[str, Any]]:
+        """Scan Jupyter notebooks in target paths.
+
+        Parameters
+        ----------
+        scan_paths : list of Path
+            Directories to scan
+        repo_path : Path
+            Repository root path
+        repo_name : str
+            Repository name for display
+
+        Returns
+        -------
+        list of dict
+            Extracted examples
+        """
+        examples = []
+
+        for scan_path in scan_paths:
+            if not scan_path.exists():
+                continue
+
+            notebooks = self.miner.find_jupyter_notebooks(scan_path)
+            if not notebooks:
+                continue
+
+            directory_label = self._get_directory_label(scan_path, repo_path, repo_name)
+            print(f"Scanning {len(notebooks)} Jupyter notebooks in {directory_label}...")
+
+            try:
+                from src.datagen.mining.ibis_doc_extractor import extract_from_jupyter
+
+                for notebook in notebooks:
+                    notebook_examples = extract_from_jupyter(notebook)
+
+                    if notebook_examples:
+                        print(f"  Found {len(notebook_examples)} in {notebook.name}")
+
+                    examples.extend(notebook_examples)
+
+            except ImportError:
+                print("Warning: ibis_doc_extractor not available, skipping notebooks")
+                break
+
+        return examples
+
+    def _get_directory_label(
+        self,
+        scan_path: Path,
+        repo_path: Path,
+        repo_name: str
+    ) -> str:
+        """Get human-readable label for directory.
+
+        Parameters
+        ----------
+        scan_path : Path
+            Directory being scanned
+        repo_path : Path
+            Repository root
+        repo_name : str
+            Repository name
+
+        Returns
+        -------
+        str
+            Display label
+        """
+        if scan_path == repo_path:
+            return repo_name
+
+        try:
+            return str(scan_path.relative_to(repo_path))
+        except ValueError:
+            return str(scan_path)
+
+
+def mine_repository(
+    repo_url: str,
+    repo_name: str,
+    scan_directories: Optional[List[str]] = None,
+    miner: Optional[GitHubRepositoryMiner] = None
+) -> List[Dict[str, Any]]:
+    """Mine SQL→Ibis examples from a single GitHub repository.
+
+    This is the main entry point for mining a repository.
+
+    Parameters
+    ----------
+    repo_url : str
+        GitHub repository URL
+    repo_name : str
+        Local name for the repository
+    scan_directories : list of str, optional
+        Specific subdirectories to scan, or None for entire repo
+    miner : GitHubRepositoryMiner, optional
+        Miner instance to use, or None to create new one
 
     Returns
     -------
     list of dict
-        Extracted examples
+        All extracted SQL examples with metadata
     """
-    miner = GitHubMiner()
+    if miner is None:
+        miner = GitHubRepositoryMiner()
 
-    # Clone Ibis repository
-    repo_path = miner.clone_repo(
-        "https://github.com/ibis-project/ibis.git",
-        "ibis"
-    )
-
-    # Focus on test files and documentation examples
-    test_dirs = [
-        repo_path / "ibis" / "tests",
-        repo_path / "docs" / "examples",
-        repo_path / "docs" / "tutorials",
-        repo_path / "docs" / "how-to",
-    ]
-
-    all_examples = []
-
-    for test_dir in test_dirs:
-        if not test_dir.exists():
-            print(f"Directory not found: {test_dir}")
-            continue
-
-        python_files = list(test_dir.rglob("*.py"))
-        print(f"Scanning {len(python_files)} Python files in {test_dir.name}...")
-
-        for py_file in python_files:
-            examples = miner.find_sql_conversions(py_file)
-            if examples:
-                print(f"  Found {len(examples)} in {py_file.name}")
-            all_examples.extend(examples)
-
-    print(f"\nFound {len(all_examples)} potential examples from Ibis repo")
-    return all_examples
-
-
-def mine_ibis_tutorial() -> List[Dict[str, Any]]:
-    """Mine examples from the Ibis tutorial repository.
-
-    Returns
-    -------
-    list of dict
-        Extracted examples
-    """
-    miner = GitHubMiner()
-
-    # Clone Ibis tutorial repository
-    repo_path = miner.clone_repo(
-        "https://github.com/ibis-project/ibis-tutorial.git",
-        "ibis-tutorial"
-    )
-
-    all_examples = []
-
-    # Search all Python files in the tutorial
-    python_files = list(repo_path.rglob("*.py"))
-    print(f"\nScanning {len(python_files)} Python files in ibis-tutorial...")
-
-    for py_file in python_files:
-        examples = miner.find_sql_conversions(py_file)
-        if examples:
-            print(f"  Found {len(examples)} in {py_file.name}")
-        all_examples.extend(examples)
-
-    # Also search notebooks
-    notebooks = list(repo_path.rglob("*.ipynb"))
-    print(f"Scanning {len(notebooks)} Jupyter notebooks in ibis-tutorial...")
-
-    for notebook in notebooks:
-        # Use the doc extractor for notebooks
-        from src.datagen.mining.ibis_doc_extractor import extract_from_jupyter
-        examples = extract_from_jupyter(notebook)
-        if examples:
-            print(f"  Found {len(examples)} in {notebook.name}")
-        all_examples.extend(examples)
-
-    print(f"\nFound {len(all_examples)} potential examples from ibis-tutorial")
-    return all_examples
-
-
-def mine_ibis_examples() -> List[Dict[str, Any]]:
-    """Mine examples from the Ibis examples repository.
-
-    Returns
-    -------
-    list of dict
-        Extracted examples
-    """
-    miner = GitHubMiner()
-
-    # Clone Ibis examples repository
+    # Clone repository
     try:
-        repo_path = miner.clone_repo(
-            "https://github.com/ibis-project/ibis-examples.git",
-            "ibis-examples"
-        )
-    except Exception as e:
-        print(f"Could not clone ibis-examples: {e}")
+        repo_path = miner.clone_repository(repo_url, repo_name)
+    except subprocess.CalledProcessError as e:
+        print(f"Error cloning {repo_name}: {e}")
         return []
 
+    # Scan for examples
+    scanner = RepositoryScanner(miner)
+    return scanner.scan_repository(repo_path, repo_name, scan_directories)
+
+
+def load_repository_config(config_path: Path) -> List[RepositoryConfig]:
+    """Load repository configurations from file.
+
+    File format: repo_url|repo_name|optional,scan,dirs
+
+    Parameters
+    ----------
+    config_path : Path
+        Path to configuration file
+
+    Returns
+    -------
+    list of RepositoryConfig
+        Parsed repository configurations
+    """
+    configs = []
+
+    with open(config_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+
+            # Skip comments and empty lines
+            if not line or line.startswith("#"):
+                continue
+
+            config = _parse_config_line(line)
+            if config:
+                configs.append(config)
+
+    return configs
+
+
+def _parse_config_line(line: str) -> Optional[RepositoryConfig]:
+    """Parse a single configuration line.
+
+    Parameters
+    ----------
+    line : str
+        Configuration line
+
+    Returns
+    -------
+    RepositoryConfig or None
+        Parsed config, or None if invalid
+    """
+    parts = line.split("|")
+
+    if len(parts) < 2:
+        print(f"Skipping invalid config line: {line}")
+        return None
+
+    repo_url = parts[0].strip()
+    repo_name = parts[1].strip()
+
+    # Parse optional scan directories
+    scan_dirs = None
+    if len(parts) >= 3 and parts[2].strip():
+        scan_dirs = [d.strip() for d in parts[2].split(",")]
+
+    return RepositoryConfig(
+        url=repo_url,
+        name=repo_name,
+        scan_dirs=scan_dirs
+    )
+
+
+def mine_from_config(config_path: Path) -> List[Dict[str, Any]]:
+    """Mine examples from all repositories in configuration file.
+
+    Parameters
+    ----------
+    config_path : Path
+        Path to repository configuration file
+
+    Returns
+    -------
+    list of dict
+        All extracted examples from all repositories
+    """
+    repo_configs = load_repository_config(config_path)
+    print(f"Loaded {len(repo_configs)} repositories from {config_path}")
+
+    miner = GitHubRepositoryMiner()
     all_examples = []
 
-    # Search all Python files
-    python_files = list(repo_path.rglob("*.py"))
-    print(f"\nScanning {len(python_files)} Python files in ibis-examples...")
+    for index, config in enumerate(repo_configs, start=1):
+        print(f"\n[{index}/{len(repo_configs)}] Mining from {config.name}...")
+        print(f"  URL: {config.url}")
 
-    for py_file in python_files:
-        examples = miner.find_sql_conversions(py_file)
-        if examples:
-            print(f"  Found {len(examples)} in {py_file.name}")
+        if config.scan_dirs:
+            print(f"  Directories: {', '.join(config.scan_dirs)}")
+
+        examples = mine_repository(
+            config.url,
+            config.name,
+            config.scan_dirs,
+            miner
+        )
         all_examples.extend(examples)
 
-    print(f"\nFound {len(all_examples)} potential examples from ibis-examples")
     return all_examples
 
 
-def save_mined_examples(examples: List[Dict[str, Any]], output_path: Path):
-    """Save mined examples to JSON.
+def save_examples_to_jsonl(
+    examples: List[Dict[str, Any]],
+    output_path: Path
+) -> None:
+    """Save extracted examples to JSONL file.
 
     Parameters
     ----------
     examples : list of dict
-        Mined examples
+        Examples to save
     output_path : Path
-        Output file path
+        Destination file path
     """
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with open(output_path, "w") as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         for example in examples:
-            f.write(json.dumps(example) + "\n")
+            json_line = json.dumps(example, ensure_ascii=False)
+            f.write(json_line + "\n")
 
     print(f"Saved {len(examples)} examples to {output_path}")
 
 
-if __name__ == "__main__":
-    print("="*60)
+def main() -> None:
+    """Main entry point for GitHub repository mining."""
+    print("=" * HEADER_WIDTH)
     print("Mining SQL→Ibis examples from GitHub repositories")
-    print("="*60)
+    print("=" * HEADER_WIDTH)
 
-    all_examples = []
+    # Locate configuration file
+    config_path = Path(__file__).parent / "repo_urls.txt"
 
-    # Mine from main Ibis repository
-    print("\n[1/3] Mining from ibis-project/ibis...")
-    examples = mine_ibis_repo()
-    all_examples.extend(examples)
+    if not config_path.exists():
+        print(f"\nError: Configuration file not found: {config_path}")
+        print("Please create a repo_urls.txt file with repository URLs.")
+        exit(1)
 
-    # Mine from Ibis tutorial repository
-    print("\n[2/3] Mining from ibis-project/ibis-tutorial...")
-    examples = mine_ibis_tutorial()
-    all_examples.extend(examples)
+    # Mine all configured repositories
+    all_examples = mine_from_config(config_path)
 
-    # Mine from Ibis examples repository
-    print("\n[3/3] Mining from ibis-project/ibis-examples...")
-    examples = mine_ibis_examples()
-    all_examples.extend(examples)
-
-    print("\n" + "="*60)
+    print("\n" + "=" * HEADER_WIDTH)
     print(f"TOTAL: Found {len(all_examples)} examples across all repositories")
-    print("="*60)
+    print("=" * HEADER_WIDTH)
 
+    # Save results
     output_path = Path("data/mining/ibis_mined.jsonl")
-    save_mined_examples(all_examples, output_path)
+    save_examples_to_jsonl(all_examples, output_path)
+
+
+if __name__ == "__main__":
+    main()
