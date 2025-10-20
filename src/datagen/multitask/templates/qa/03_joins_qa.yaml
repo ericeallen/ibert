@@ -1,0 +1,130 @@
+# Q&A: Join Operations
+name: joins_qa
+description: Questions about joining tables in Ibis
+task: qa
+difficulty: medium
+features:
+  - qa
+  - joins
+  - merge
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Answer questions about Ibis clearly and concisely with code examples when helpful.
+
+variations:
+  - name: basic_join
+    input:
+      question: "How do I join two tables in Ibis?"
+    target:
+      answer: "Use the join() method with a join condition."
+      code_example: "orders.join(customers, orders.customer_id == customers.customer_id)"
+
+  - name: left_join
+    input:
+      question: "How do I do a left join in Ibis?"
+    target:
+      answer: "Use the left_join() method."
+      code_example: "users.left_join(profiles, users.user_id == profiles.user_id)"
+
+  - name: inner_vs_left
+    input:
+      question: "What's the difference between join() and left_join()?"
+    target:
+      answer: "join() is an inner join (only matching rows), left_join() keeps all rows from the left table."
+      code_examples:
+        - "table_a.join(table_b, condition)  # Inner join - only matches"
+        - "table_a.left_join(table_b, condition)  # Left join - all from table_a"
+
+  - name: outer_join
+    input:
+      question: "How do I do a full outer join in Ibis?"
+    target:
+      answer: "Use the outer_join() method."
+      code_example: "table_a.outer_join(table_b, table_a.id == table_b.id)"
+
+  - name: multiple_join_conditions
+    input:
+      question: "How do I join on multiple columns?"
+    target:
+      answer: "Combine multiple conditions with & operator."
+      code_example: "sales_a.join(sales_b, (sales_a.region == sales_b.region) & (sales_a.quarter == sales_b.quarter))"
+
+  - name: anti_join
+    input:
+      question: "How do I find rows in one table that don't exist in another?"
+    target:
+      answer: "Use anti_join() or left join with null filter."
+      code_examples:
+        - "table_a.anti_join(table_b, table_a.id == table_b.id)"
+        - "table_a.left_join(table_b, table_a.id == table_b.id).filter(table_b.id.isnull())"
+
+  - name: semi_join
+    input:
+      question: "What is a semi join and when would I use it?"
+    target:
+      answer: "Semi join returns rows from left table that have matches in right table, without duplicating or adding right table columns."
+      code_example: "products.semi_join(recent_orders, products.product_id == recent_orders.product_id)"
+
+  - name: self_join
+    input:
+      question: "How do I join a table to itself?"
+    target:
+      answer: "Relabel one copy of the table and join it to the original."
+      code_example: |
+        managers = employees.relabel({'employee_id': 'manager_id', 'name': 'manager_name'})
+        employees.join(managers, employees.manager_id == managers.manager_id)
+
+  - name: chaining_joins
+    input:
+      question: "How do I join multiple tables together?"
+    target:
+      answer: "Chain join methods together."
+      code_example: "orders.join(customers, orders.customer_id == customers.customer_id).join(products, orders.product_id == products.product_id)"
+
+  - name: cross_join
+    input:
+      question: "How do I do a cartesian product / cross join?"
+    target:
+      answer: "Use cross_join() method."
+      code_example: "colors.cross_join(sizes)"
+
+  - name: asof_join
+    input:
+      question: "What is an asof join and when is it useful?"
+    target:
+      answer: "Asof join matches on nearest key (useful for time-series). Joins based on closest preceding timestamp."
+      code_example: "trades.asof_join(quotes, 'timestamp', predicates=trades.symbol == quotes.symbol)"
+
+  - name: join_column_conflict
+    input:
+      question: "What happens when joined tables have columns with the same name?"
+    target:
+      answer: "Both columns are kept. Access them through table prefixes or use relabel() to rename."
+      code_example: |
+        # Relabel before joining to avoid conflicts
+        customers_renamed = customers.relabel({'id': 'customer_id'})
+        orders.join(customers_renamed, ...)
+
+  - name: join_with_filter
+    input:
+      question: "Can I filter before or after joining?"
+    target:
+      answer: "Yes, you can filter before joining (more efficient) or after joining."
+      code_examples:
+        - "filtered_orders.join(customers, ...)  # Filter first"
+        - "orders.join(customers, ...).filter(...)  # Filter after"
+
+  - name: join_performance
+    input:
+      question: "How can I make joins faster?"
+    target:
+      answer: "Filter before joining to reduce data size, ensure join keys are indexed in your backend."
+      code_example: "orders.filter(orders.date >= '2024-01-01').join(customers, ...)  # Reduce data first"
+
+  - name: null_in_joins
+    input:
+      question: "How are NULL values handled in joins?"
+    target:
+      answer: "NULLs don't match in joins (NULL != NULL). Rows with NULL join keys won't match."
+      code_example: "# NULL values in join columns won't create matches"

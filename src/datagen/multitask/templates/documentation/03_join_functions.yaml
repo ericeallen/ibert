@@ -1,0 +1,273 @@
+# Documentation: Join operations
+name: join_functions_docs
+description: Generate docstrings for join operations
+task: documentation
+difficulty: medium
+features:
+  - documentation
+  - join
+  - merge
+
+system_prompt: |
+  You are an expert in Ibis and Python documentation.
+  Generate a docstring for the provided function in the specified style.
+  Output only the docstring, properly formatted.
+
+variations:
+  - name: inner_join_google
+    input:
+      code: |
+        def enrich_orders_with_customers(orders, customers):
+            return orders.join(customers, orders.customer_id == customers.customer_id)
+      style: google
+    target:
+      docstring: |
+        """Enrich order data with customer information.
+
+        Performs an inner join to add customer details to orders.
+
+        Args:
+            orders: Order table with customer_id column
+            customers: Customer table with customer_id and customer details
+
+        Returns:
+            Combined table with all columns from both orders and customers
+            for matching customer_ids
+        """
+
+  - name: left_join_numpy
+    input:
+      code: |
+        def get_users_with_optional_profiles(users, profiles):
+            return users.left_join(profiles, users.user_id == profiles.user_id)
+      style: numpy
+    target:
+      docstring: |
+        """Get all users with their profile data if available.
+
+        Performs a left join to include all users, with profile data
+        where it exists.
+
+        Parameters
+        ----------
+        users : ibis.Table
+            User table with user_id column
+        profiles : ibis.Table
+            Profile table with user_id and profile information
+
+        Returns
+        -------
+        ibis.Table
+            Table with all users; profile columns will be null for users
+            without profiles
+        """
+
+  - name: multiple_join_google
+    input:
+      code: |
+        def create_order_summary(orders, customers, products):
+            return (orders
+                .join(customers, orders.customer_id == customers.customer_id)
+                .join(products, orders.product_id == products.product_id))
+      style: google
+    target:
+      docstring: |
+        """Create comprehensive order summary with customer and product details.
+
+        Joins orders with customers and products to create a denormalized view.
+
+        Args:
+            orders: Order table with customer_id and product_id
+            customers: Customer table with customer details
+            products: Product table with product details
+
+        Returns:
+            Denormalized table combining order, customer, and product information
+        """
+
+  - name: self_join_google
+    input:
+      code: |
+        def find_employee_managers(employees):
+            managers = employees.relabel({'employee_id': 'manager_id', 'name': 'manager_name'})
+            return employees.join(managers, employees.manager_id == managers.manager_id)
+      style: google
+    target:
+      docstring: |
+        """Find each employee with their manager's information.
+
+        Performs a self-join to associate employees with their managers.
+
+        Args:
+            employees: Employee table with employee_id, manager_id, and name columns
+
+        Returns:
+            Table with employee information plus their manager's name
+        """
+
+  - name: outer_join_numpy
+    input:
+      code: |
+        def compare_sales_targets(actual_sales, sales_targets):
+            return actual_sales.outer_join(
+                sales_targets,
+                actual_sales.region == sales_targets.region
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Compare actual sales with targets for all regions.
+
+        Uses outer join to include regions with targets but no sales,
+        and regions with sales but no targets.
+
+        Parameters
+        ----------
+        actual_sales : ibis.Table
+            Table with region and actual sales data
+        sales_targets : ibis.Table
+            Table with region and target sales data
+
+        Returns
+        -------
+        ibis.Table
+            Table showing both actual and target data for all regions;
+            null values indicate missing data in either table
+        """
+
+  - name: join_with_filter_google
+    input:
+      code: |
+        def get_recent_high_value_orders(orders, customers, since_date, min_amount):
+            return (orders
+                .filter((orders.order_date >= since_date) & (orders.amount >= min_amount))
+                .join(customers, orders.customer_id == customers.customer_id))
+      style: google
+    target:
+      docstring: |
+        """Get recent high-value orders with customer details.
+
+        Filters orders by date and amount before joining with customer data.
+
+        Args:
+            orders: Order table with order_date, amount, and customer_id
+            customers: Customer table with customer details
+            since_date: Earliest order date to include
+            min_amount: Minimum order amount to include
+
+        Returns:
+            High-value recent orders enriched with customer information
+        """
+
+  - name: multiple_join_keys_numpy
+    input:
+      code: |
+        def join_regional_sales(sales_a, sales_b):
+            return sales_a.join(
+                sales_b,
+                (sales_a.region == sales_b.region) & (sales_a.quarter == sales_b.quarter)
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Join sales data from two sources by region and quarter.
+
+        Parameters
+        ----------
+        sales_a : ibis.Table
+            First sales table with region and quarter columns
+        sales_b : ibis.Table
+            Second sales table with region and quarter columns
+
+        Returns
+        -------
+        ibis.Table
+            Combined sales data matched on both region and quarter
+
+        Notes
+        -----
+        Only includes rows where both region and quarter match between tables.
+        """
+
+  - name: join_with_aggregation_google
+    input:
+      code: |
+        def customer_order_summary(customers, orders):
+            order_stats = orders.group_by('customer_id').agg(
+                total_orders=orders.count(),
+                total_spent=orders.amount.sum()
+            )
+            return customers.join(order_stats, customers.customer_id == order_stats.customer_id)
+      style: google
+    target:
+      docstring: |
+        """Create customer summary with order statistics.
+
+        Aggregates order data and joins with customer information.
+
+        Args:
+            customers: Customer table with customer_id and customer details
+            orders: Order table with customer_id and amount columns
+
+        Returns:
+            Table with customer details plus total_orders and total_spent
+            for each customer
+
+        Example:
+            >>> summary = customer_order_summary(customers, orders)
+            >>> summary[['customer_id', 'name', 'total_orders', 'total_spent']]
+        """
+
+  - name: anti_join_google
+    input:
+      code: |
+        def find_customers_without_orders(customers, orders):
+            return customers.left_join(
+                orders, customers.customer_id == orders.customer_id
+            ).filter(orders.order_id.isnull())
+      style: google
+    target:
+      docstring: |
+        """Find customers who have never placed an order.
+
+        Uses left join followed by null filtering to identify customers
+        with no matching orders.
+
+        Args:
+            customers: Customer table with customer_id
+            orders: Order table with customer_id and order_id
+
+        Returns:
+            Table of customers with no orders (anti-join result)
+        """
+
+  - name: semi_join_numpy
+    input:
+      code: |
+        def get_active_products(products, recent_orders):
+            return products.semi_join(recent_orders, products.product_id == recent_orders.product_id)
+      style: numpy
+    target:
+      docstring: |
+        """Get products that have been ordered recently.
+
+        Returns products that appear in recent orders without duplicating
+        rows or adding order columns.
+
+        Parameters
+        ----------
+        products : ibis.Table
+            Product table with product_id and product details
+        recent_orders : ibis.Table
+            Recent order table with product_id column
+
+        Returns
+        -------
+        ibis.Table
+            Products that exist in recent_orders, with product columns only
+
+        Notes
+        -----
+        Semi-join returns only products table columns, unlike inner join
+        which would include order columns and create duplicates.
+        """

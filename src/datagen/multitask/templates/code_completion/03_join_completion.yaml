@@ -1,0 +1,214 @@
+# Code Completion: Join operations
+name: join_completion
+description: Complete partial join expressions
+task: code_completion
+difficulty: medium
+features:
+  - join
+  - completion
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Complete the partial Ibis expression provided by the user.
+  Output only the completed code, no explanations.
+
+variations:
+  - name: inner_join_simple
+    input:
+      partial_code: "orders.join(customers, orders.customer_id =="
+    target:
+      completed_code: "orders.join(customers, orders.customer_id == customers.customer_id)"
+    context:
+      tables:
+        orders:
+          schema:
+            order_id: int64
+            customer_id: int64
+            amount: float64
+        customers:
+          schema:
+            customer_id: int64
+            name: string
+
+  - name: left_join
+    input:
+      partial_code: "users.left_join(profiles,"
+    target:
+      completed_code: "users.left_join(profiles, users.user_id == profiles.user_id)"
+    context:
+      tables:
+        users:
+          schema:
+            user_id: int64
+            email: string
+        profiles:
+          schema:
+            user_id: int64
+            bio: string
+
+  - name: join_multiple_conditions
+    input:
+      partial_code: "sales_a.join(sales_b, (sales_a.region == sales_b.region) &"
+    target:
+      completed_code: "sales_a.join(sales_b, (sales_a.region == sales_b.region) & (sales_a.quarter == sales_b.quarter))"
+    context:
+      tables:
+        sales_a:
+          schema:
+            region: string
+            quarter: int64
+            amount: float64
+        sales_b:
+          schema:
+            region: string
+            quarter: int64
+            units: int64
+
+  - name: outer_join
+    input:
+      partial_code: "actual.outer_join(targets,"
+    target:
+      completed_code: "actual.outer_join(targets, actual.region == targets.region)"
+    context:
+      tables:
+        actual:
+          schema:
+            region: string
+            sales: float64
+        targets:
+          schema:
+            region: string
+            target: float64
+
+  - name: anti_join
+    input:
+      partial_code: "customers.anti_join(orders,"
+    target:
+      completed_code: "customers.anti_join(orders, customers.customer_id == orders.customer_id)"
+    context:
+      tables:
+        customers:
+          schema:
+            customer_id: int64
+            name: string
+        orders:
+          schema:
+            customer_id: int64
+            order_id: int64
+
+  - name: semi_join
+    input:
+      partial_code: "products.semi_join(recent_orders,"
+    target:
+      completed_code: "products.semi_join(recent_orders, products.product_id == recent_orders.product_id)"
+    context:
+      tables:
+        products:
+          schema:
+            product_id: int64
+            name: string
+        recent_orders:
+          schema:
+            product_id: int64
+            order_date: timestamp
+
+  - name: chained_joins
+    input:
+      partial_code: "orders.join(customers, orders.customer_id == customers.customer_id).join(products,"
+    target:
+      completed_code: "orders.join(customers, orders.customer_id == customers.customer_id).join(products, orders.product_id == products.product_id)"
+    context:
+      tables:
+        orders:
+          schema:
+            order_id: int64
+            customer_id: int64
+            product_id: int64
+        customers:
+          schema:
+            customer_id: int64
+            name: string
+        products:
+          schema:
+            product_id: int64
+            name: string
+
+  - name: join_with_filter
+    input:
+      partial_code: "orders.filter(orders.amount > 100).join(customers,"
+    target:
+      completed_code: "orders.filter(orders.amount > 100).join(customers, orders.customer_id == customers.customer_id)"
+    context:
+      tables:
+        orders:
+          schema:
+            customer_id: int64
+            amount: float64
+        customers:
+          schema:
+            customer_id: int64
+            name: string
+
+  - name: join_with_select
+    input:
+      partial_code: "orders.join(customers, orders.customer_id == customers.customer_id).select('order_id', 'name',"
+    target:
+      completed_code: "orders.join(customers, orders.customer_id == customers.customer_id).select('order_id', 'name', 'amount')"
+    context:
+      tables:
+        orders:
+          schema:
+            order_id: int64
+            customer_id: int64
+            amount: float64
+        customers:
+          schema:
+            customer_id: int64
+            name: string
+
+  - name: self_join
+    input:
+      partial_code: "employees.join(employees.relabel({'employee_id': 'manager_id', 'name': 'manager_name'}),"
+    target:
+      completed_code: "employees.join(employees.relabel({'employee_id': 'manager_id', 'name': 'manager_name'}), employees.manager_id == employees.manager_id)"
+    context:
+      tables:
+        employees:
+          schema:
+            employee_id: int64
+            manager_id: int64
+            name: string
+
+  - name: join_with_aggregation
+    input:
+      partial_code: "customers.join(orders.group_by('customer_id').agg(total=orders.amount.sum()),"
+    target:
+      completed_code: "customers.join(orders.group_by('customer_id').agg(total=orders.amount.sum()), customers.customer_id == orders.customer_id)"
+    context:
+      tables:
+        customers:
+          schema:
+            customer_id: int64
+            name: string
+        orders:
+          schema:
+            customer_id: int64
+            amount: float64
+
+  - name: asof_join
+    input:
+      partial_code: "trades.asof_join(quotes, 'timestamp',"
+    target:
+      completed_code: "trades.asof_join(quotes, 'timestamp', predicates=trades.symbol == quotes.symbol)"
+    context:
+      tables:
+        trades:
+          schema:
+            timestamp: timestamp
+            symbol: string
+            price: float64
+        quotes:
+          schema:
+            timestamp: timestamp
+            symbol: string
+            bid: float64

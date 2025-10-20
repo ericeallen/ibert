@@ -1,0 +1,195 @@
+# Error Resolution: Syntax errors
+name: syntax_errors
+description: Fix syntax errors in Ibis code
+task: error_resolution
+difficulty: easy
+features:
+  - syntax_error
+  - debugging
+  - error_fix
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Fix the compilation or type error in the provided Ibis code.
+  Output the fixed code and a brief explanation.
+
+variations:
+  - name: missing_parenthesis
+    input:
+      broken_code: "table.filter(table.age > 18.select('name', 'age')"
+      error: "SyntaxError: invalid syntax"
+      context_info: "Missing closing parenthesis"
+    target:
+      fixed_code: "table.filter(table.age > 18).select('name', 'age')"
+      explanation: "Added missing closing parenthesis after filter condition"
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            name: string
+
+  - name: wrong_method_chaining
+    input:
+      broken_code: "table.group_by('category')['amount'].sum()"
+      error: "TypeError: 'GroupBy' object is not subscriptable"
+      context_info: "Cannot use brackets on group_by result"
+    target:
+      fixed_code: "table.group_by('category').agg(total=table.amount.sum())"
+      explanation: "Changed to proper agg() method instead of bracket notation"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+
+  - name: incorrect_string_quotes
+    input:
+      broken_code: "table.filter(table.status == active)"
+      error: "NameError: name 'active' is not defined"
+      context_info: "String literal needs quotes"
+    target:
+      fixed_code: "table.filter(table.status == 'active')"
+      explanation: "Added quotes around 'active' to make it a string literal"
+    context:
+      tables:
+        table:
+          schema:
+            status: string
+
+  - name: missing_table_reference
+    input:
+      broken_code: "table.group_by('category').agg(total=amount.sum())"
+      error: "NameError: name 'amount' is not defined"
+      context_info: "Need to reference column through table"
+    target:
+      fixed_code: "table.group_by('category').agg(total=table.amount.sum())"
+      explanation: "Added table. prefix to amount column reference"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+
+  - name: wrong_operator_precedence
+    input:
+      broken_code: "table.filter(table.age > 18 & table.is_active)"
+      error: "TypeError: unsupported operand type(s) for &"
+      context_info: "Need parentheses for correct operator precedence"
+    target:
+      fixed_code: "table.filter((table.age > 18) & table.is_active)"
+      explanation: "Added parentheses around age comparison for correct precedence"
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            is_active: boolean
+
+  - name: typo_in_method_name
+    input:
+      broken_code: "table.groupe_by('category').agg(total=table.amount.sum())"
+      error: "AttributeError: 'Table' object has no attribute 'groupe_by'"
+      context_info: "Typo in method name"
+    target:
+      fixed_code: "table.group_by('category').agg(total=table.amount.sum())"
+      explanation: "Fixed typo: 'groupe_by' → 'group_by'"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+
+  - name: wrong_aggregation_syntax
+    input:
+      broken_code: "table.group_by('category').sum('amount')"
+      error: "TypeError: sum() takes 0 positional arguments but 1 was given"
+      context_info: "Need to use agg() method"
+    target:
+      fixed_code: "table.group_by('category').agg(total=table.amount.sum())"
+      explanation: "Changed to proper agg() syntax instead of directly calling sum()"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+
+  - name: missing_comma_in_select
+    input:
+      broken_code: "table.select('name' 'age', 'email')"
+      error: "SyntaxError: invalid syntax"
+      context_info: "Missing comma between arguments"
+    target:
+      fixed_code: "table.select('name', 'age', 'email')"
+      explanation: "Added missing comma between 'name' and 'age'"
+    context:
+      tables:
+        table:
+          schema:
+            name: string
+            age: int64
+            email: string
+
+  - name: bracket_vs_parenthesis
+    input:
+      broken_code: "table.filter[table.age > 18]"
+      error: "TypeError: 'method' object is not subscriptable"
+      context_info: "filter is a method, use parentheses not brackets"
+    target:
+      fixed_code: "table.filter(table.age > 18)"
+      explanation: "Changed brackets to parentheses for method call"
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+
+  - name: wrong_join_syntax
+    input:
+      broken_code: "orders.join(customers, 'customer_id')"
+      error: "TypeError: join() argument must be a boolean expression"
+      context_info: "Join condition must be a comparison expression"
+    target:
+      fixed_code: "orders.join(customers, orders.customer_id == customers.customer_id)"
+      explanation: "Changed to proper join condition with comparison operator"
+    context:
+      tables:
+        orders:
+          schema:
+            customer_id: int64
+        customers:
+          schema:
+            customer_id: int64
+
+  - name: indentation_error
+    input:
+      broken_code: "result = table.filter(table.age > 18)\n  .select('name', 'age')"
+      error: "IndentationError: unexpected indent"
+      context_info: "Method chaining should be aligned"
+    target:
+      fixed_code: "result = table.filter(table.age > 18).select('name', 'age')"
+      explanation: "Put method chain on same line or use proper line continuation"
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            name: string
+
+  - name: double_negation
+    input:
+      broken_code: "table.filter(not table.email.isnull())"
+      error: "TypeError: bad operand type for unary ~"
+      context_info: "Use notnull() instead of not isnull()"
+    target:
+      fixed_code: "table.filter(table.email.notnull())"
+      explanation: "Changed to notnull() method instead of negating isnull()"
+    context:
+      tables:
+        table:
+          schema:
+            email: string

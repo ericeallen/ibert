@@ -1,0 +1,224 @@
+# Documentation: Filter and selection functions
+name: filter_functions_docs
+description: Generate docstrings for filtering and selection operations
+task: documentation
+difficulty: easy
+features:
+  - documentation
+  - filter
+  - select
+
+system_prompt: |
+  You are an expert in Ibis and Python documentation.
+  Generate a docstring for the provided function in the specified style.
+  Output only the docstring, properly formatted.
+
+variations:
+  - name: simple_filter_google
+    input:
+      code: |
+        def get_adult_users(table):
+            return table.filter(table.age >= 18)
+      style: google
+    target:
+      docstring: |
+        """Get adult users from the table.
+
+        Args:
+            table: Ibis table containing user data with age column
+
+        Returns:
+            Filtered table containing only users aged 18 and above
+        """
+
+  - name: simple_filter_numpy
+    input:
+      code: |
+        def get_adult_users(table):
+            return table.filter(table.age >= 18)
+      style: numpy
+    target:
+      docstring: |
+        """Get adult users from the table.
+
+        Parameters
+        ----------
+        table : ibis.Table
+            Ibis table containing user data with age column
+
+        Returns
+        -------
+        ibis.Table
+            Filtered table containing only users aged 18 and above
+        """
+
+  - name: compound_filter_google
+    input:
+      code: |
+        def get_active_adults(table):
+            return table.filter((table.age >= 18) & table.is_active)
+      style: google
+    target:
+      docstring: |
+        """Get active adult users from the table.
+
+        Filters for users who are both 18 or older and have active status.
+
+        Args:
+            table: Ibis table with age (int) and is_active (bool) columns
+
+        Returns:
+            Filtered table containing only active adult users
+        """
+
+  - name: select_columns_google
+    input:
+      code: |
+        def get_user_info(table):
+            return table.select('user_id', 'name', 'email')
+      style: google
+    target:
+      docstring: |
+        """Get basic user information columns.
+
+        Args:
+            table: Ibis table containing user data
+
+        Returns:
+            Table with only user_id, name, and email columns
+        """
+
+  - name: filter_and_select_google
+    input:
+      code: |
+        def get_high_value_transactions(transactions, threshold=1000):
+            return transactions.filter(transactions.amount > threshold).select('transaction_id', 'amount', 'user_id')
+      style: google
+    target:
+      docstring: |
+        """Get high-value transactions above a threshold.
+
+        Args:
+            transactions: Ibis table containing transaction data
+            threshold: Minimum transaction amount (default: 1000)
+
+        Returns:
+            Table with transaction_id, amount, and user_id for transactions
+            exceeding the threshold
+        """
+
+  - name: filter_null_values_numpy
+    input:
+      code: |
+        def remove_null_emails(users):
+            return users.filter(users.email.notnull())
+      style: numpy
+    target:
+      docstring: |
+        """Remove users with null email addresses.
+
+        Parameters
+        ----------
+        users : ibis.Table
+            User table with email column
+
+        Returns
+        -------
+        ibis.Table
+            Table containing only users with non-null email addresses
+        """
+
+  - name: filter_by_list_google
+    input:
+      code: |
+        def get_users_by_status(table, statuses):
+            return table.filter(table.status.isin(statuses))
+      style: google
+    target:
+      docstring: |
+        """Get users with specific status values.
+
+        Args:
+            table: Ibis table containing user data with status column
+            statuses: List of status values to filter for
+
+        Returns:
+            Table containing users whose status is in the provided list
+
+        Example:
+            >>> get_users_by_status(users, ['active', 'pending'])
+        """
+
+  - name: temporal_filter_google
+    input:
+      code: |
+        def get_recent_events(events, since_date):
+            return events.filter(events.created_at >= since_date)
+      style: google
+    target:
+      docstring: |
+        """Get events created on or after a specific date.
+
+        Args:
+            events: Ibis table containing event data with created_at timestamp
+            since_date: Minimum date/timestamp for filtering
+
+        Returns:
+            Table containing events from the specified date onwards
+        """
+
+  - name: string_pattern_filter_numpy
+    input:
+      code: |
+        def find_users_by_name_pattern(users, pattern):
+            return users.filter(users.name.like(pattern))
+      style: numpy
+    target:
+      docstring: |
+        """Find users whose names match a pattern.
+
+        Parameters
+        ----------
+        users : ibis.Table
+            User table with name column
+        pattern : str
+            SQL LIKE pattern (use % as wildcard)
+
+        Returns
+        -------
+        ibis.Table
+            Users whose names match the pattern
+
+        Examples
+        --------
+        >>> find_users_by_name_pattern(users, 'John%')  # Names starting with John
+        >>> find_users_by_name_pattern(users, '%smith%')  # Names containing smith
+        """
+
+  - name: complex_filter_google
+    input:
+      code: |
+        def get_premium_active_users(users, min_age=18, min_spend=500):
+            return users.filter(
+                (users.age >= min_age) &
+                users.is_active &
+                (users.total_spend >= min_spend)
+            )
+      style: google
+    target:
+      docstring: |
+        """Get premium active users based on multiple criteria.
+
+        Filters for users who are:
+        - At least the minimum age
+        - Currently active
+        - Have spent at least the minimum amount
+
+        Args:
+            users: Ibis table with age, is_active, and total_spend columns
+            min_age: Minimum age requirement (default: 18)
+            min_spend: Minimum total spending requirement (default: 500)
+
+        Returns:
+            Table containing users meeting all premium criteria
+        """

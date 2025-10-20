@@ -1,0 +1,138 @@
+# Q&A: Aggregation and Grouping Operations
+name: aggregation_qa
+description: Questions about aggregation and grouping in Ibis
+task: qa
+difficulty: medium
+features:
+  - qa
+  - aggregation
+  - group_by
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Answer questions about Ibis clearly and concisely with code examples when helpful.
+
+variations:
+  - name: how_to_groupby
+    input:
+      question: "How do I group by a column and sum another column in Ibis?"
+    target:
+      answer: "Use the group_by() method followed by agg() with the sum aggregation."
+      code_example: "table.group_by('category').agg(total=table.amount.sum())"
+
+  - name: multiple_aggregations
+    input:
+      question: "How do I compute multiple aggregations in a single group_by operation?"
+    target:
+      answer: "Pass multiple named aggregations to the agg() method."
+      code_examples:
+        - "table.group_by('region').agg(total=table.sales.sum(), avg=table.sales.mean(), count=table.count())"
+
+  - name: count_distinct
+    input:
+      question: "How do I count unique values in Ibis?"
+    target:
+      answer: "Use the nunique() method on a column within an aggregation."
+      code_example: "table.group_by('page').agg(unique_visitors=table.user_id.nunique())"
+
+  - name: groupby_multiple_columns
+    input:
+      question: "How do I group by multiple columns in Ibis?"
+    target:
+      answer: "Pass a list of column names to group_by()."
+      code_example: "table.group_by(['region', 'category']).agg(total=table.sales.sum())"
+
+  - name: having_clause
+    input:
+      question: "How do I filter groups after aggregation (like SQL HAVING)?"
+    target:
+      answer: "Apply filter() after the aggregation."
+      code_example: |
+        result = table.group_by('customer_id').agg(order_count=table.count())
+        result.filter(result.order_count >= 10)
+
+  - name: conditional_aggregation
+    input:
+      question: "How do I count rows meeting a condition within each group?"
+    target:
+      answer: "Use a boolean expression with sum() to count True values."
+      code_example: "table.group_by('category').agg(high_value=(table.amount > 1000).sum())"
+
+  - name: aggregation_functions
+    input:
+      question: "What aggregation functions are available in Ibis?"
+    target:
+      answer: "Common aggregations include sum(), mean(), min(), max(), count(), std(), var(), nunique(), and more."
+      code_example: |
+        table.group_by('category').agg(
+            total=table.amount.sum(),
+            average=table.amount.mean(),
+            minimum=table.amount.min(),
+            maximum=table.amount.max(),
+            count=table.count()
+        )
+
+  - name: aggregate_without_groupby
+    input:
+      question: "How do I aggregate the entire table without grouping?"
+    target:
+      answer: "Use aggregate() or agg() directly without group_by()."
+      code_examples:
+        - "table.aggregate(total=table.amount.sum())"
+        - "table.agg(avg_age=table.age.mean())"
+
+  - name: first_last_in_group
+    input:
+      question: "How do I get the first or last value in each group?"
+    target:
+      answer: "Use first() or last() aggregation functions."
+      code_example: "table.group_by('customer_id').agg(first_purchase=table.purchase_date.min(), last_purchase=table.purchase_date.max())"
+
+  - name: stddev_variance
+    input:
+      question: "How do I calculate standard deviation and variance by group?"
+    target:
+      answer: "Use the std() and var() methods."
+      code_example: "table.group_by('category').agg(std_price=table.price.std(), var_price=table.price.var())"
+
+  - name: percentage_of_total
+    input:
+      question: "How do I calculate what percentage each group represents of the total?"
+    target:
+      answer: "Compute group totals, then divide by overall total."
+      code_example: |
+        grouped = table.group_by('category').agg(group_total=table.sales.sum())
+        overall_total = table.sales.sum()
+        grouped.mutate(percentage=grouped.group_total / overall_total * 100)
+
+  - name: filter_before_aggregation
+    input:
+      question: "Should I filter before or after grouping?"
+    target:
+      answer: "Filter before grouping (WHERE) to reduce data, filter after grouping (HAVING) to filter aggregated results."
+      code_examples:
+        - "table.filter(table.year == 2024).group_by('region').agg(total=table.sales.sum())  # Filter before"
+        - "result = table.group_by('region').agg(total=table.sales.sum())\nresult.filter(result.total > 10000)  # Filter after"
+
+  - name: count_vs_size
+    input:
+      question: "What's the difference between count() and counting rows?"
+    target:
+      answer: "count() counts non-null values in a column, while table.count() counts all rows."
+      code_examples:
+        - "table.email.count()  # Count non-null emails"
+        - "table.count()  # Count all rows"
+
+  - name: aggregation_with_null
+    input:
+      question: "How are NULL values handled in aggregations?"
+    target:
+      answer: "Most aggregations ignore NULL values. sum(), mean(), etc. compute over non-null values only."
+      code_example: "table.group_by('category').agg(avg_rating=table.rating.mean())  # NULLs ignored"
+
+  - name: median_calculation
+    input:
+      question: "How do I calculate the median in Ibis?"
+    target:
+      answer: "Use the approx_median() method for approximate median."
+      code_example: "table.group_by('category').agg(median_price=table.price.approx_median())"

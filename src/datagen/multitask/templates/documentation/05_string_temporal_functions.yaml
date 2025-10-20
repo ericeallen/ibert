@@ -1,0 +1,330 @@
+# Documentation: String and temporal operations
+name: string_temporal_functions_docs
+description: Generate docstrings for string and date/time operations
+task: documentation
+difficulty: medium
+features:
+  - documentation
+  - strings
+  - temporal
+  - dates
+
+system_prompt: |
+  You are an expert in Ibis and Python documentation.
+  Generate a docstring for the provided function in the specified style.
+  Output only the docstring, properly formatted.
+
+variations:
+  - name: string_concatenation_google
+    input:
+      code: |
+        def create_full_name(users):
+            return users.mutate(full_name=users.first_name + ' ' + users.last_name)
+      style: google
+    target:
+      docstring: |
+        """Create full name by concatenating first and last names.
+
+        Args:
+            users: User table with first_name and last_name columns
+
+        Returns:
+            Table with added full_name column (first_name + space + last_name)
+        """
+
+  - name: string_case_conversion_numpy
+    input:
+      code: |
+        def normalize_email_addresses(users):
+            return users.mutate(
+                email_normalized=users.email.lower().strip()
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Normalize email addresses to lowercase and remove whitespace.
+
+        Parameters
+        ----------
+        users : ibis.Table
+            User table with email column
+
+        Returns
+        -------
+        ibis.Table
+            Table with email_normalized column containing trimmed,
+            lowercase email addresses
+        """
+
+  - name: substring_extraction_google
+    input:
+      code: |
+        def extract_area_code(phone_numbers):
+            return phone_numbers.mutate(
+                area_code=phone_numbers.phone.substr(0, 3)
+            )
+      style: google
+    target:
+      docstring: |
+        """Extract area code from phone numbers.
+
+        Extracts first 3 characters as area code.
+
+        Args:
+            phone_numbers: Table with phone column
+
+        Returns:
+            Table with area_code column containing first 3 digits
+        """
+
+  - name: string_pattern_matching_google
+    input:
+      code: |
+        def find_gmail_users(users):
+            return users.filter(users.email.like('%@gmail.com'))
+      style: google
+    target:
+      docstring: |
+        """Filter for users with Gmail addresses.
+
+        Args:
+            users: User table with email column
+
+        Returns:
+            Table containing only users with @gmail.com email addresses
+        """
+
+  - name: regex_extraction_numpy
+    input:
+      code: |
+        def extract_domain_from_email(users):
+            return users.mutate(
+                domain=users.email.re_extract(r'@(.+)$', 1)
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Extract domain name from email addresses.
+
+        Uses regex to extract text after @ symbol.
+
+        Parameters
+        ----------
+        users : ibis.Table
+            User table with email column
+
+        Returns
+        -------
+        ibis.Table
+            Table with domain column containing email domain
+            (e.g., 'gmail.com' from 'user@gmail.com')
+        """
+
+  - name: date_extraction_google
+    input:
+      code: |
+        def extract_date_parts(events):
+            return events.mutate(
+                year=events.event_date.year(),
+                month=events.event_date.month(),
+                day=events.event_date.day()
+            )
+      style: google
+    target:
+      docstring: |
+        """Extract year, month, and day from event dates.
+
+        Args:
+            events: Event table with event_date timestamp column
+
+        Returns:
+            Table with added year, month, and day columns as integers
+        """
+
+  - name: date_arithmetic_numpy
+    input:
+      code: |
+        def add_expiration_date(subscriptions, days=30):
+            return subscriptions.mutate(
+                expiration_date=subscriptions.start_date + ibis.interval(days=days)
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Calculate subscription expiration dates.
+
+        Adds specified number of days to start date.
+
+        Parameters
+        ----------
+        subscriptions : ibis.Table
+            Subscription table with start_date column
+        days : int, optional
+            Number of days until expiration (default: 30)
+
+        Returns
+        -------
+        ibis.Table
+            Table with expiration_date column
+        """
+
+  - name: date_difference_google
+    input:
+      code: |
+        def calculate_customer_age(customers):
+            return customers.mutate(
+                days_since_signup=(ibis.now() - customers.signup_date).to_unit('D')
+            )
+      style: google
+    target:
+      docstring: |
+        """Calculate how many days since each customer signed up.
+
+        Args:
+            customers: Customer table with signup_date column
+
+        Returns:
+            Table with days_since_signup column showing days elapsed
+        """
+
+  - name: date_truncation_numpy
+    input:
+      code: |
+        def group_by_month(transactions):
+            return transactions.mutate(
+                month=transactions.transaction_date.truncate('M')
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Truncate transaction dates to month for grouping.
+
+        Parameters
+        ----------
+        transactions : ibis.Table
+            Transaction table with transaction_date column
+
+        Returns
+        -------
+        ibis.Table
+            Table with month column showing first day of each month
+
+        Notes
+        -----
+        Useful for monthly aggregations and time-series analysis.
+        """
+
+  - name: string_length_google
+    input:
+      code: |
+        def filter_by_comment_length(posts, min_length=10):
+            return posts.filter(posts.comment.length() >= min_length)
+      style: google
+    target:
+      docstring: |
+        """Filter posts with comments above minimum length.
+
+        Args:
+            posts: Post table with comment column
+            min_length: Minimum comment length in characters (default: 10)
+
+        Returns:
+            Posts with comments of at least min_length characters
+        """
+
+  - name: string_replacement_numpy
+    input:
+      code: |
+        def clean_phone_numbers(contacts):
+            return contacts.mutate(
+                phone_cleaned=contacts.phone.replace('-', '').replace('(', '').replace(')', '')
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Remove formatting characters from phone numbers.
+
+        Removes dashes, parentheses, and other formatting.
+
+        Parameters
+        ----------
+        contacts : ibis.Table
+            Contact table with phone column
+
+        Returns
+        -------
+        ibis.Table
+            Table with phone_cleaned column containing only digits
+        """
+
+  - name: date_formatting_google
+    input:
+      code: |
+        def format_dates_for_display(events):
+            return events.mutate(
+                date_display=events.event_date.strftime('%Y-%m-%d %H:%M')
+            )
+      style: google
+    target:
+      docstring: |
+        """Format event dates for display.
+
+        Args:
+            events: Event table with event_date timestamp column
+
+        Returns:
+            Table with date_display column in 'YYYY-MM-DD HH:MM' format
+
+        Example:
+            >>> format_dates_for_display(events)
+            # date_display: '2024-03-15 14:30'
+        """
+
+  - name: string_splitting_google
+    input:
+      code: |
+        def extract_first_word(products):
+            return products.mutate(
+                brand=products.product_name.split(' ')[0]
+            )
+      style: google
+    target:
+      docstring: |
+        """Extract first word from product names as brand.
+
+        Args:
+            products: Product table with product_name column
+
+        Returns:
+            Table with brand column containing first word of product_name
+        """
+
+  - name: weekday_extraction_numpy
+    input:
+      code: |
+        def add_weekday_info(sales):
+            return sales.mutate(
+                day_of_week=sales.sale_date.day_of_week.full_name(),
+                is_weekend=(sales.sale_date.day_of_week.index() >= 5)
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Add weekday name and weekend indicator.
+
+        Parameters
+        ----------
+        sales : ibis.Table
+            Sales table with sale_date column
+
+        Returns
+        -------
+        ibis.Table
+            Table with added columns:
+            - day_of_week: Name of day (Monday, Tuesday, etc.)
+            - is_weekend: Boolean indicating if sale was on weekend
+
+        Notes
+        -----
+        Weekend is defined as Saturday (5) or Sunday (6).
+        """

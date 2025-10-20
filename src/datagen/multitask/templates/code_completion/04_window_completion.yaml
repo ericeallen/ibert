@@ -1,0 +1,195 @@
+# Code Completion: Window function operations
+name: window_completion
+description: Complete partial window function expressions
+task: code_completion
+difficulty: hard
+features:
+  - window
+  - completion
+  - analytics
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Complete the partial Ibis expression provided by the user.
+  Output only the completed code, no explanations.
+
+variations:
+  - name: row_number_basic
+    input:
+      partial_code: "window = ibis.window(group_by='category', order_by='sales')\ntable.mutate(rank="
+    target:
+      completed_code: "window = ibis.window(group_by='category', order_by='sales')\ntable.mutate(rank=ibis.row_number().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            sales: float64
+
+  - name: running_total
+    input:
+      partial_code: "window = ibis.window(order_by='date', rows=(None, 0))\ntable.mutate(running_total="
+    target:
+      completed_code: "window = ibis.window(order_by='date', rows=(None, 0))\ntable.mutate(running_total=table.amount.sum().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            date: timestamp
+            amount: float64
+
+  - name: moving_average
+    input:
+      partial_code: "window = ibis.window(order_by='date', rows=(6, 0))\ntable.mutate(ma_7="
+    target:
+      completed_code: "window = ibis.window(order_by='date', rows=(6, 0))\ntable.mutate(ma_7=table.value.mean().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            date: timestamp
+            value: float64
+
+  - name: lag_function
+    input:
+      partial_code: "window = ibis.window(order_by='date')\ntable.mutate(previous_value="
+    target:
+      completed_code: "window = ibis.window(order_by='date')\ntable.mutate(previous_value=table.value.lag().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            date: timestamp
+            value: float64
+
+  - name: lead_function
+    input:
+      partial_code: "window = ibis.window(order_by='date')\ntable.mutate(next_value="
+    target:
+      completed_code: "window = ibis.window(order_by='date')\ntable.mutate(next_value=table.value.lead().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            date: timestamp
+            value: float64
+
+  - name: rank_function
+    input:
+      partial_code: "window = ibis.window(group_by='region', order_by=ibis.desc('sales'))\ntable.mutate(rank="
+    target:
+      completed_code: "window = ibis.window(group_by='region', order_by=ibis.desc('sales'))\ntable.mutate(rank=ibis.rank().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            region: string
+            sales: float64
+
+  - name: dense_rank
+    input:
+      partial_code: "window = ibis.window(order_by=ibis.desc('score'))\ntable.mutate(rank="
+    target:
+      completed_code: "window = ibis.window(order_by=ibis.desc('score'))\ntable.mutate(rank=ibis.dense_rank().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            score: float64
+
+  - name: percent_rank
+    input:
+      partial_code: "window = ibis.window(order_by='test_score')\ntable.mutate(percentile="
+    target:
+      completed_code: "window = ibis.window(order_by='test_score')\ntable.mutate(percentile=ibis.percent_rank().over(window) * 100)"
+    context:
+      tables:
+        table:
+          schema:
+            test_score: float64
+
+  - name: ntile_quartiles
+    input:
+      partial_code: "window = ibis.window(order_by='value')\ntable.mutate(quartile="
+    target:
+      completed_code: "window = ibis.window(order_by='value')\ntable.mutate(quartile=ibis.ntile(4).over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            value: float64
+
+  - name: first_value
+    input:
+      partial_code: "window = ibis.window(group_by='group', order_by='date')\ntable.mutate(first_value="
+    target:
+      completed_code: "window = ibis.window(group_by='group', order_by='date')\ntable.mutate(first_value=table.value.first().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            group: string
+            date: timestamp
+            value: float64
+
+  - name: last_value
+    input:
+      partial_code: "window = ibis.window(group_by='group', order_by='date')\ntable.mutate(last_value="
+    target:
+      completed_code: "window = ibis.window(group_by='group', order_by='date')\ntable.mutate(last_value=table.value.last().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            group: string
+            date: timestamp
+            value: float64
+
+  - name: cumulative_sum
+    input:
+      partial_code: "window = ibis.window(group_by='customer_id', order_by='purchase_date', rows=(None, 0))\ntable.mutate(lifetime_value="
+    target:
+      completed_code: "window = ibis.window(group_by='customer_id', order_by='purchase_date', rows=(None, 0))\ntable.mutate(lifetime_value=table.amount.sum().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            customer_id: int64
+            purchase_date: timestamp
+            amount: float64
+
+  - name: window_aggregation_sum
+    input:
+      partial_code: "window = ibis.window(group_by='category')\ntable.mutate(category_total="
+    target:
+      completed_code: "window = ibis.window(group_by='category')\ntable.mutate(category_total=table.sales.sum().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            sales: float64
+
+  - name: window_aggregation_count
+    input:
+      partial_code: "window = ibis.window(group_by='region')\ntable.mutate(region_count="
+    target:
+      completed_code: "window = ibis.window(group_by='region')\ntable.mutate(region_count=ibis.count().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            region: string
+
+  - name: year_over_year_comparison
+    input:
+      partial_code: "window = ibis.window(group_by='product_id', order_by='year')\ntable.mutate(previous_year_sales="
+    target:
+      completed_code: "window = ibis.window(group_by='product_id', order_by='year')\ntable.mutate(previous_year_sales=table.sales.lag().over(window))"
+    context:
+      tables:
+        table:
+          schema:
+            product_id: int64
+            year: int64
+            sales: float64

@@ -1,0 +1,179 @@
+# Ibis to SQL: Aggregation operations
+name: aggregation_to_sql
+description: Translate Ibis aggregation expressions to SQL
+task: ibis_to_sql
+difficulty: medium
+features:
+  - aggregation
+  - group_by
+  - translation
+
+system_prompt: |
+  You are an expert in Ibis and SQL.
+  Translate the Ibis expression to equivalent SQL for the specified dialect.
+  Output only the SQL query.
+
+variations:
+  - name: simple_groupby_sum
+    input:
+      ibis: "table.group_by('category').agg(total=table.amount.sum())"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT category, SUM(amount) AS total
+        FROM table
+        GROUP BY category
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+
+  - name: multiple_aggregations
+    input:
+      ibis: "table.group_by('region').agg(total_sales=table.sales.sum(), avg_sales=table.sales.mean(), count=table.count())"
+      dialect: "postgres"
+    target:
+      sql: |
+        SELECT region, SUM(sales) AS total_sales, AVG(sales) AS avg_sales, COUNT(*) AS count
+        FROM table
+        GROUP BY region
+    context:
+      tables:
+        table:
+          schema:
+            region: string
+            sales: float64
+
+  - name: count_distinct
+    input:
+      ibis: "table.group_by('page').agg(unique_visitors=table.user_id.nunique())"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT page, COUNT(DISTINCT user_id) AS unique_visitors
+        FROM table
+        GROUP BY page
+    context:
+      tables:
+        table:
+          schema:
+            page: string
+            user_id: int64
+
+  - name: multiple_groupby_keys
+    input:
+      ibis: "table.group_by(['region', 'category']).agg(total=table.amount.sum())"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT region, category, SUM(amount) AS total
+        FROM table
+        GROUP BY region, category
+    context:
+      tables:
+        table:
+          schema:
+            region: string
+            category: string
+            amount: float64
+
+  - name: having_clause
+    input:
+      ibis: "result = table.group_by('customer_id').agg(order_count=table.count())\nresult.filter(result.order_count >= 10)"
+      dialect: "postgres"
+    target:
+      sql: |
+        SELECT customer_id, COUNT(*) AS order_count
+        FROM table
+        GROUP BY customer_id
+        HAVING COUNT(*) >= 10
+    context:
+      tables:
+        table:
+          schema:
+            customer_id: int64
+
+  - name: min_max_aggregation
+    input:
+      ibis: "table.group_by('product').agg(min_price=table.price.min(), max_price=table.price.max())"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT product, MIN(price) AS min_price, MAX(price) AS max_price
+        FROM table
+        GROUP BY product
+    context:
+      tables:
+        table:
+          schema:
+            product: string
+            price: float64
+
+  - name: conditional_aggregation
+    input:
+      ibis: "table.group_by('category').agg(high_value_count=(table.amount > 100).sum())"
+      dialect: "postgres"
+    target:
+      sql: |
+        SELECT category, SUM(CASE WHEN amount > 100 THEN 1 ELSE 0 END) AS high_value_count
+        FROM table
+        GROUP BY category
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+
+  - name: std_aggregation
+    input:
+      ibis: "table.group_by('category').agg(avg_price=table.price.mean(), std_price=table.price.std())"
+      dialect: "postgres"
+    target:
+      sql: |
+        SELECT category, AVG(price) AS avg_price, STDDEV(price) AS std_price
+        FROM table
+        GROUP BY category
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            price: float64
+
+  - name: filter_before_aggregation
+    input:
+      ibis: "table.filter(table.year == 2024).group_by('region').agg(total=table.sales.sum())"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT region, SUM(sales) AS total
+        FROM table
+        WHERE year = 2024
+        GROUP BY region
+    context:
+      tables:
+        table:
+          schema:
+            year: int64
+            region: string
+            sales: float64
+
+  - name: aggregation_with_order
+    input:
+      ibis: "table.group_by('category').agg(total=table.sales.sum()).order_by(ibis.desc('total'))"
+      dialect: "postgres"
+    target:
+      sql: |
+        SELECT category, SUM(sales) AS total
+        FROM table
+        GROUP BY category
+        ORDER BY total DESC
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            sales: float64

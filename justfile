@@ -70,13 +70,53 @@ doc INPUT='':
 generate-data:
     PYTHONPATH={{project_root}} {{python}} src/datagen/sql2ibis/generate_dataset.py
 
-# Validate existing dataset
+# Generate ALL training data (templates + augmented + multitask + mined)
+generate-all:
+    ./scripts/generate_all_data.sh
+
+# Generate multi-task training data (all 6 tasks)
+generate-multitask:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/multitask/generate_multitask_data.py
+
+# Generate data for specific task (code_completion, ibis_to_sql, error_resolution, qa, documentation)
+generate-task TASK:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/multitask/generate_multitask_data.py --task {{TASK}}
+
+# Validate existing SQL→Ibis dataset
 validate-data:
     PYTHONPATH={{project_root}} {{python}} src/datagen/sql2ibis/generate_dataset.py
+
+# Validate multi-task training data (all tasks)
+validate-multitask:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/multitask/validate_multitask_data.py
+
+# Validate specific task data
+validate-task TASK:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/multitask/validate_multitask_data.py --task {{TASK}}
+
+# Validate with verbose error messages
+validate-multitask-verbose:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/multitask/validate_multitask_data.py --verbose
 
 # List all templates
 list-templates:
     ls -1 src/datagen/sql2ibis/templates/*.yaml
+
+# List multi-task templates
+list-multitask-templates:
+    find src/datagen/multitask/templates -name "*.yaml" -type f | sort
+
+# Show multi-task data statistics
+multitask-stats:
+    #!/usr/bin/env bash
+    echo "Multi-Task Dataset Statistics:"
+    echo "=============================="
+    for file in data/multitask/*.jsonl; do
+        if [ -f "$file" ]; then
+            count=$(wc -l < "$file")
+            echo "$(basename $file): $count examples"
+        fi
+    done
 
 # Show dataset stats
 dataset-stats:
@@ -96,6 +136,14 @@ mine-ibis-repo:
 # Extract examples from Ibis documentation
 mine-ibis-docs:
     PYTHONPATH={{project_root}} {{python}} src/datagen/mining/ibis_doc_extractor.py
+
+# Mine multi-task examples from Ibis codebase (all 6 tasks)
+mine-multitask:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/mining/multitask_miner.py
+
+# Mine examples for specific task
+mine-task TASK:
+    PYTHONPATH={{project_root}} {{python}} src/datagen/mining/multitask_miner.py --task {{TASK}}
 
 # Show augmented dataset stats
 augmented-stats:

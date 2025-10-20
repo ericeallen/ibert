@@ -1,0 +1,280 @@
+# Documentation: Window functions
+name: window_functions_docs
+description: Generate docstrings for window function operations
+task: documentation
+difficulty: hard
+features:
+  - documentation
+  - window
+  - analytics
+
+system_prompt: |
+  You are an expert in Ibis and Python documentation.
+  Generate a docstring for the provided function in the specified style.
+  Output only the docstring, properly formatted.
+
+variations:
+  - name: row_number_google
+    input:
+      code: |
+        def rank_sales_by_region(sales):
+            window = ibis.window(group_by='region', order_by=ibis.desc('amount'))
+            return sales.mutate(rank=ibis.row_number().over(window))
+      style: google
+    target:
+      docstring: |
+        """Rank sales within each region by amount.
+
+        Assigns a sequential rank to each sale within its region,
+        ordered by amount (highest first).
+
+        Args:
+            sales: Sales table with region and amount columns
+
+        Returns:
+            Sales table with added rank column (1 = highest amount in region)
+        """
+
+  - name: running_total_numpy
+    input:
+      code: |
+        def calculate_running_total(transactions):
+            window = ibis.window(order_by='transaction_date', rows=(None, 0))
+            return transactions.mutate(running_total=transactions.amount.sum().over(window))
+      style: numpy
+    target:
+      docstring: |
+        """Calculate running total of transaction amounts.
+
+        Computes cumulative sum of amounts ordered by transaction date.
+
+        Parameters
+        ----------
+        transactions : ibis.Table
+            Transaction table with transaction_date and amount columns
+
+        Returns
+        -------
+        ibis.Table
+            Original table with running_total column showing cumulative sum
+            up to and including each row
+
+        Notes
+        -----
+        Uses rows between unbounded preceding and current row.
+        """
+
+  - name: moving_average_google
+    input:
+      code: |
+        def calculate_moving_average(daily_sales, window_days=7):
+            window = ibis.window(order_by='sale_date', rows=(window_days-1, 0))
+            return daily_sales.mutate(moving_avg=daily_sales.amount.mean().over(window))
+      style: google
+    target:
+      docstring: |
+        """Calculate moving average of sales over a window.
+
+        Args:
+            daily_sales: Table with sale_date and amount columns
+            window_days: Number of days to include in average (default: 7)
+
+        Returns:
+            Table with moving_avg column showing average of current and
+            previous (window_days - 1) days
+
+        Example:
+            >>> calculate_moving_average(sales, window_days=30)  # 30-day moving average
+        """
+
+  - name: lag_lead_google
+    input:
+      code: |
+        def compare_with_previous(metrics):
+            window = ibis.window(order_by='metric_date')
+            return metrics.mutate(
+                previous_value=metrics.value.lag().over(window),
+                next_value=metrics.value.lead().over(window),
+                change_from_prev=metrics.value - metrics.value.lag().over(window)
+            )
+      style: google
+    target:
+      docstring: |
+        """Add previous and next values for comparison.
+
+        Adds columns showing the value from the previous row, next row,
+        and change from previous.
+
+        Args:
+            metrics: Time-series table with metric_date and value columns
+
+        Returns:
+            Table with added columns:
+            - previous_value: Value from previous row
+            - next_value: Value from next row
+            - change_from_prev: Difference from previous value
+        """
+
+  - name: partition_rank_numpy
+    input:
+      code: |
+        def top_products_per_category(products):
+            window = ibis.window(group_by='category', order_by=ibis.desc('sales'))
+            ranked = products.mutate(rank=ibis.row_number().over(window))
+            return ranked.filter(ranked.rank <= 5)
+      style: numpy
+    target:
+      docstring: |
+        """Get top 5 products by sales in each category.
+
+        Parameters
+        ----------
+        products : ibis.Table
+            Product table with category and sales columns
+
+        Returns
+        -------
+        ibis.Table
+            Top 5 products per category, ranked by sales (highest first)
+
+        Examples
+        --------
+        >>> top_products_per_category(product_sales)
+        # Returns rank 1-5 products for each category
+        """
+
+  - name: percent_rank_google
+    input:
+      code: |
+        def calculate_percentile_ranks(students):
+            window = ibis.window(order_by=ibis.desc('test_score'))
+            return students.mutate(
+                percentile=ibis.percent_rank().over(window) * 100
+            )
+      style: google
+    target:
+      docstring: |
+        """Calculate percentile rank for student test scores.
+
+        Args:
+            students: Table with test_score column
+
+        Returns:
+            Table with percentile column (0-100) showing each student's
+            relative position (100 = highest score)
+        """
+
+  - name: first_last_value_numpy
+    input:
+      code: |
+        def get_period_bounds(daily_metrics):
+            window = ibis.window(group_by='month', order_by='date')
+            return daily_metrics.mutate(
+                month_start_value=daily_metrics.value.first().over(window),
+                month_end_value=daily_metrics.value.last().over(window)
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Add first and last values for each month.
+
+        Parameters
+        ----------
+        daily_metrics : ibis.Table
+            Daily metrics with month, date, and value columns
+
+        Returns
+        -------
+        ibis.Table
+            Table with added columns:
+            - month_start_value: First value in the month
+            - month_end_value: Last value in the month
+
+        Notes
+        -----
+        Useful for calculating monthly changes or identifying trends.
+        """
+
+  - name: dense_rank_google
+    input:
+      code: |
+        def rank_with_ties(competition_results):
+            window = ibis.window(order_by=ibis.desc('score'))
+            return competition_results.mutate(
+                rank=ibis.dense_rank().over(window)
+            )
+      style: google
+    target:
+      docstring: |
+        """Rank competition results handling ties appropriately.
+
+        Uses dense_rank to ensure tied scores get the same rank, with
+        no gaps in rank values.
+
+        Args:
+            competition_results: Table with score column
+
+        Returns:
+            Table with rank column (ties receive same rank, ranks are consecutive)
+
+        Example:
+            Scores [100, 95, 95, 90] get ranks [1, 2, 2, 3] (not [1, 2, 2, 4])
+        """
+
+  - name: ntile_google
+    input:
+      code: |
+        def create_quartiles(customer_values):
+            window = ibis.window(order_by='lifetime_value')
+            return customer_values.mutate(
+                quartile=ibis.ntile(4).over(window)
+            )
+      style: google
+    target:
+      docstring: |
+        """Divide customers into quartiles by lifetime value.
+
+        Args:
+            customer_values: Table with lifetime_value column
+
+        Returns:
+            Table with quartile column (1-4) indicating which quartile
+            each customer belongs to
+
+        Notes:
+            Quartile 1 = lowest 25%, Quartile 4 = highest 25%
+        """
+
+  - name: complex_window_numpy
+    input:
+      code: |
+        def sales_analytics(sales):
+            category_window = ibis.window(group_by='category', order_by=ibis.desc('amount'))
+            time_window = ibis.window(order_by='sale_date', rows=(6, 0))
+            return sales.mutate(
+                category_rank=ibis.row_number().over(category_window),
+                weekly_avg=sales.amount.mean().over(time_window),
+                pct_of_category=sales.amount / sales.amount.sum().over(category_window) * 100
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Generate comprehensive sales analytics with multiple window functions.
+
+        Parameters
+        ----------
+        sales : ibis.Table
+            Sales table with category, amount, and sale_date columns
+
+        Returns
+        -------
+        ibis.Table
+            Sales table enriched with:
+            - category_rank: Rank within category by amount
+            - weekly_avg: 7-day moving average
+            - pct_of_category: Percentage of total category sales
+
+        Notes
+        -----
+        Demonstrates using multiple window specifications in a single operation.
+        """

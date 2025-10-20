@@ -247,22 +247,46 @@ just doc myfunction.py
 
 ### Data Generation Commands
 
+#### 🚀 Quick Start - Generate Everything
+
 ```bash
-# Generate base training data from templates
+# Generate ALL training data with one command!
+# This runs the complete pipeline:
+#   1. Template-based SQL→Ibis generation
+#   2. Augmented variations
+#   3. Multi-task generation (all 6 tasks)
+#   4. Data validation
+#   5. Mining from Ibis codebase
+#   6. Final concatenation
+just generate-all
+```
+
+#### Individual Generation Steps
+
+```bash
+# Generate multi-task training data (all 6 tasks)
+just generate-multitask
+
+# Validate all multi-task data
+just validate-multitask
+
+# Mine examples from Ibis codebase (all 6 tasks)
+just mine-multitask
+
+# Mine specific task
+just mine-task documentation
+
+# Generate SQL→Ibis data from templates
 just generate-data
 
 # Generate augmented data with variations
 just generate-augmented
 
-# Mine examples from GitHub repositories
-just mine-ibis-repo
-
-# Extract examples from documentation
-just mine-ibis-docs
-
-# Concatenate all data sources into single file
+# Concatenate all data sources (templates + mined + multitask)
 just concatenate-data
 ```
+
+**See [MULTITASK_MINING.md](MULTITASK_MINING.md) for mining details and [VALIDATION_RESULTS.md](VALIDATION_RESULTS.md) for validation results.**
 
 ### View Statistics
 

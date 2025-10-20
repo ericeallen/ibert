@@ -1,0 +1,111 @@
+# Q&A: Basic Ibis Operations
+name: basic_operations_qa
+description: Questions about fundamental Ibis operations
+task: qa
+difficulty: easy
+features:
+  - qa
+  - filtering
+  - selection
+  - basics
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Answer questions about Ibis clearly and concisely with code examples when helpful.
+
+variations:
+  - name: how_to_filter
+    input:
+      question: "How do I filter rows in Ibis where age is greater than 18?"
+    target:
+      answer: "Use the filter() method with a comparison expression."
+      code_example: "table.filter(table.age > 18)"
+
+  - name: select_columns
+    input:
+      question: "How do I select specific columns from an Ibis table?"
+    target:
+      answer: "Use the select() method or bracket notation with column names."
+      code_examples:
+        - "table.select('name', 'age')"
+        - "table[['name', 'age']]"
+
+  - name: rename_column
+    input:
+      question: "How do I rename a column in Ibis?"
+    target:
+      answer: "Use the relabel() method with a dictionary mapping old names to new names."
+      code_example: "table.relabel({'old_name': 'new_name'})"
+
+  - name: sort_table
+    input:
+      question: "How do I sort an Ibis table by a column?"
+    target:
+      answer: "Use the order_by() method. Add ibis.desc() for descending order."
+      code_examples:
+        - "table.order_by('age')  # ascending"
+        - "table.order_by(ibis.desc('age'))  # descending"
+
+  - name: limit_rows
+    input:
+      question: "How do I get only the first 10 rows from an Ibis table?"
+    target:
+      answer: "Use the limit() or head() method."
+      code_examples:
+        - "table.limit(10)"
+        - "table.head(10)"
+
+  - name: count_rows
+    input:
+      question: "How do I count the number of rows in an Ibis table?"
+    target:
+      answer: "Use the count() method."
+      code_example: "table.count()"
+
+  - name: unique_values
+    input:
+      question: "How do I get unique values from a column in Ibis?"
+    target:
+      answer: "Use the distinct() method."
+      code_example: "table.select('category').distinct()"
+
+  - name: null_check
+    input:
+      question: "How do I filter out rows where a column is null in Ibis?"
+    target:
+      answer: "Use the notnull() method in a filter."
+      code_example: "table.filter(table.email.notnull())"
+
+  - name: multiple_conditions
+    input:
+      question: "How do I filter with multiple conditions in Ibis?"
+    target:
+      answer: "Use & for AND and | for OR, with parentheses for precedence."
+      code_examples:
+        - "table.filter((table.age > 18) & (table.is_active == True))"
+        - "table.filter((table.status == 'active') | (table.status == 'pending'))"
+
+  - name: column_exists
+    input:
+      question: "How do I check if a column exists in an Ibis table?"
+    target:
+      answer: "Check if the column name is in the table's schema or columns list."
+      code_examples:
+        - "'age' in table.columns"
+        - "'age' in table.schema().names"
+
+  - name: add_column
+    input:
+      question: "How do I add a new computed column to an Ibis table?"
+    target:
+      answer: "Use the mutate() method or bracket assignment."
+      code_examples:
+        - "table.mutate(age_plus_one=table.age + 1)"
+        - "table['age_plus_one'] = table.age + 1"
+
+  - name: drop_column
+    input:
+      question: "How do I remove a column from an Ibis table?"
+    target:
+      answer: "Use the drop() method."
+      code_example: "table.drop('unwanted_column')"

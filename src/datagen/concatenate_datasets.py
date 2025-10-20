@@ -42,6 +42,7 @@ class DatasetConcatenator:
         self.data_dir = data_dir
         self.sql2ibis_dir = data_dir / "sql2ibis"
         self.mining_dir = data_dir / "mining"
+        self.multitask_dir = data_dir / "multitask"
 
     def find_training_files(self) -> List[Path]:
         """Discover all JSONL files containing training data.
@@ -49,6 +50,7 @@ class DatasetConcatenator:
         Searches for:
         - Template-generated files in sql2ibis/
         - Mined data files in mining/ (excluding test fixtures)
+        - Multi-task training files in multitask/
 
         Returns
         -------
@@ -62,6 +64,9 @@ class DatasetConcatenator:
 
         # Collect mined training files (excluding test fixtures)
         training_files.extend(self._find_mined_files())
+
+        # Collect multi-task training files (excluding the combined file)
+        training_files.extend(self._find_multitask_files())
 
         return sorted(training_files)
 
@@ -97,6 +102,24 @@ class DatasetConcatenator:
             for file_path in self.mining_dir.glob("*.jsonl"):
                 # Exclude test fixtures from cloned repositories
                 if REPOS_DIRNAME not in file_path.parts:
+                    files.append(file_path)
+
+        return files
+
+    def _find_multitask_files(self) -> List[Path]:
+        """Find multi-task training data files, excluding combined file.
+
+        Returns
+        -------
+        list of Path
+            Paths to task-specific data files
+        """
+        files = []
+
+        if self.multitask_dir.exists():
+            for file_path in self.multitask_dir.glob("*.jsonl"):
+                # Exclude the combined file to avoid duplication
+                if file_path.name != "train_complete.jsonl":
                     files.append(file_path)
 
         return files

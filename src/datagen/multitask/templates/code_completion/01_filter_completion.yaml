@@ -1,0 +1,122 @@
+# Code Completion: Filter operations
+name: filter_completion
+description: Complete partial filter/where expressions
+task: code_completion
+difficulty: easy
+features:
+  - filter
+  - completion
+  - predicates
+
+# System prompt that will be used for this task
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Complete the partial Ibis expression provided by the user.
+  Output only the completed code, no explanations.
+
+variations:
+  - name: simple_numeric_filter
+    input:
+      partial_code: "table.filter(table.age >"
+    target:
+      completed_code: "table.filter(table.age > 18)"
+      explanation: "Complete numeric comparison filter"
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            name: string
+
+  - name: boolean_filter
+    input:
+      partial_code: "table.filter(table.is_active &"
+    target:
+      completed_code: "table.filter(table.is_active & (table.age > 21))"
+      explanation: "Complete compound boolean filter"
+    context:
+      tables:
+        table:
+          schema:
+            is_active: boolean
+            age: int64
+
+  - name: string_filter
+    input:
+      partial_code: "table.filter(table.name.like("
+    target:
+      completed_code: "table.filter(table.name.like('%John%'))"
+      explanation: "Complete string pattern matching"
+    context:
+      tables:
+        table:
+          schema:
+            name: string
+            email: string
+
+  - name: select_after_filter
+    input:
+      partial_code: "table.filter(table.amount > 100).select("
+    target:
+      completed_code: "table.filter(table.amount > 100).select('user_id', 'amount')"
+      explanation: "Complete column selection after filter"
+    context:
+      tables:
+        table:
+          schema:
+            user_id: int64
+            amount: float64
+            timestamp: timestamp
+
+  - name: groupby_after_filter
+    input:
+      partial_code: "table.filter(table.category == 'sales').group_by("
+    target:
+      completed_code: "table.filter(table.category == 'sales').group_by('region').agg(total=table.amount.sum())"
+      explanation: "Complete aggregation after filter"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            region: string
+            amount: float64
+
+  - name: temporal_filter
+    input:
+      partial_code: "table.filter(table.created_at >"
+    target:
+      completed_code: "table.filter(table.created_at > '2024-01-01')"
+      explanation: "Complete temporal comparison"
+    context:
+      tables:
+        table:
+          schema:
+            created_at: timestamp
+            user_id: int64
+
+  - name: null_check
+    input:
+      partial_code: "table.filter(table.email.notnull("
+    target:
+      completed_code: "table.filter(table.email.notnull())"
+      explanation: "Complete null checking method"
+    context:
+      tables:
+        table:
+          schema:
+            email: string
+            phone: string
+
+  - name: isin_filter
+    input:
+      partial_code: "table.filter(table.status.isin(["
+    target:
+      completed_code: "table.filter(table.status.isin(['active', 'pending']))"
+      explanation: "Complete membership test"
+    context:
+      tables:
+        table:
+          schema:
+            status: string
+            user_id: int64

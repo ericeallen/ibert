@@ -1,0 +1,259 @@
+# Documentation: Aggregation and grouping functions
+name: aggregation_functions_docs
+description: Generate docstrings for aggregation and grouping operations
+task: documentation
+difficulty: medium
+features:
+  - documentation
+  - aggregation
+  - group_by
+
+system_prompt: |
+  You are an expert in Ibis and Python documentation.
+  Generate a docstring for the provided function in the specified style.
+  Output only the docstring, properly formatted.
+
+variations:
+  - name: simple_groupby_google
+    input:
+      code: |
+        def sales_by_region(sales):
+            return sales.group_by('region').agg(total_sales=sales.amount.sum())
+      style: google
+    target:
+      docstring: |
+        """Calculate total sales for each region.
+
+        Args:
+            sales: Ibis table containing sales data with region and amount columns
+
+        Returns:
+            Table with region and total_sales columns, one row per region
+        """
+
+  - name: multiple_aggregations_numpy
+    input:
+      code: |
+        def sales_summary(sales):
+            return sales.group_by('region').agg(
+                total=sales.amount.sum(),
+                average=sales.amount.mean(),
+                count=sales.count()
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Generate comprehensive sales summary by region.
+
+        Parameters
+        ----------
+        sales : ibis.Table
+            Sales table with region and amount columns
+
+        Returns
+        -------
+        ibis.Table
+            Summary table with columns:
+            - region: Geographic region
+            - total: Total sales amount
+            - average: Mean sales amount
+            - count: Number of transactions
+        """
+
+  - name: count_by_category_google
+    input:
+      code: |
+        def count_events_by_type(events):
+            return events.group_by('event_type').agg(count=events.count())
+      style: google
+    target:
+      docstring: |
+        """Count events by type.
+
+        Args:
+            events: Ibis table with event_type column
+
+        Returns:
+            Table showing count of events for each event type
+        """
+
+  - name: conditional_aggregation_google
+    input:
+      code: |
+        def high_value_transaction_stats(transactions):
+            return transactions.group_by('user_id').agg(
+                high_value_count=(transactions.amount > 1000).sum(),
+                high_value_total=(transactions.amount * (transactions.amount > 1000)).sum()
+            )
+      style: google
+    target:
+      docstring: |
+        """Calculate high-value transaction statistics per user.
+
+        Computes metrics for transactions exceeding $1000.
+
+        Args:
+            transactions: Transaction table with user_id and amount columns
+
+        Returns:
+            Table with user_id, count of high-value transactions, and their total amount
+        """
+
+  - name: multiple_groupby_keys_numpy
+    input:
+      code: |
+        def sales_by_region_and_product(sales):
+            return sales.group_by(['region', 'product_id']).agg(
+                total_sales=sales.amount.sum(),
+                units_sold=sales.quantity.sum()
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Aggregate sales by region and product.
+
+        Parameters
+        ----------
+        sales : ibis.Table
+            Sales table with region, product_id, amount, and quantity columns
+
+        Returns
+        -------
+        ibis.Table
+            Grouped table with columns:
+            - region: Geographic region
+            - product_id: Product identifier
+            - total_sales: Sum of sale amounts
+            - units_sold: Total quantity sold
+        """
+
+  - name: min_max_aggregation_google
+    input:
+      code: |
+        def price_range_by_category(products):
+            return products.group_by('category').agg(
+                min_price=products.price.min(),
+                max_price=products.price.max(),
+                avg_price=products.price.mean()
+            )
+      style: google
+    target:
+      docstring: |
+        """Calculate price range statistics by product category.
+
+        Args:
+            products: Product table with category and price columns
+
+        Returns:
+            Table with min, max, and average prices for each category
+        """
+
+  - name: having_clause_google
+    input:
+      code: |
+        def get_high_volume_customers(orders, min_orders=10):
+            result = orders.group_by('customer_id').agg(order_count=orders.count())
+            return result.filter(result.order_count >= min_orders)
+      style: google
+    target:
+      docstring: |
+        """Get customers with high order volume.
+
+        Args:
+            orders: Order table with customer_id column
+            min_orders: Minimum number of orders required (default: 10)
+
+        Returns:
+            Table with customer_id and order_count for customers meeting
+            the minimum order threshold
+        """
+
+  - name: complex_aggregation_numpy
+    input:
+      code: |
+        def customer_lifetime_value(transactions):
+            return transactions.group_by('customer_id').agg(
+                total_spent=transactions.amount.sum(),
+                avg_transaction=transactions.amount.mean(),
+                transaction_count=transactions.count(),
+                first_purchase=transactions.purchase_date.min(),
+                last_purchase=transactions.purchase_date.max()
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Calculate customer lifetime value metrics.
+
+        Parameters
+        ----------
+        transactions : ibis.Table
+            Transaction table with customer_id, amount, and purchase_date columns
+
+        Returns
+        -------
+        ibis.Table
+            Customer metrics including:
+            - customer_id: Customer identifier
+            - total_spent: Lifetime spending
+            - avg_transaction: Average transaction amount
+            - transaction_count: Total number of transactions
+            - first_purchase: Date of first purchase
+            - last_purchase: Date of most recent purchase
+        """
+
+  - name: distinct_count_google
+    input:
+      code: |
+        def unique_visitors_by_page(visits):
+            return visits.group_by('page_url').agg(
+                unique_visitors=visits.user_id.nunique(),
+                total_visits=visits.count()
+            )
+      style: google
+    target:
+      docstring: |
+        """Count unique visitors and total visits per page.
+
+        Args:
+            visits: Visit log table with page_url and user_id columns
+
+        Returns:
+            Table showing unique visitor count and total visit count for each page
+
+        Example:
+            >>> unique_visitors_by_page(visit_logs)
+            # Shows pages with their unique and total visitor counts
+        """
+
+  - name: stddev_aggregation_numpy
+    input:
+      code: |
+        def analyze_price_variability(products):
+            return products.group_by('category').agg(
+                avg_price=products.price.mean(),
+                std_price=products.price.std(),
+                price_variance=products.price.var()
+            )
+      style: numpy
+    target:
+      docstring: |
+        """Analyze price variability by product category.
+
+        Parameters
+        ----------
+        products : ibis.Table
+            Product table with category and price columns
+
+        Returns
+        -------
+        ibis.Table
+            Statistical summary with columns:
+            - category: Product category
+            - avg_price: Mean price
+            - std_price: Standard deviation of prices
+            - price_variance: Variance of prices
+
+        Notes
+        -----
+        Useful for identifying categories with inconsistent pricing.
+        """

@@ -1,0 +1,78 @@
+# Code Completion: Aggregation operations
+name: aggregation_completion
+description: Complete partial aggregation expressions
+task: code_completion
+difficulty: medium
+features:
+  - aggregation
+  - group_by
+  - completion
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Complete the partial Ibis expression provided by the user.
+  Output only the completed code, no explanations.
+
+variations:
+  - name: simple_groupby
+    input:
+      partial_code: "table.group_by('category').agg("
+    target:
+      completed_code: "table.group_by('category').agg(total=table.amount.sum())"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64
+            quantity: int64
+
+  - name: multiple_aggregations
+    input:
+      partial_code: "table.group_by('region').agg(total_sales=table.sales.sum(), avg_price="
+    target:
+      completed_code: "table.group_by('region').agg(total_sales=table.sales.sum(), avg_price=table.price.mean())"
+    context:
+      tables:
+        table:
+          schema:
+            region: string
+            sales: float64
+            price: float64
+
+  - name: count_aggregation
+    input:
+      partial_code: "table.group_by('user_id').agg(event_count="
+    target:
+      completed_code: "table.group_by('user_id').agg(event_count=table.count())"
+    context:
+      tables:
+        table:
+          schema:
+            user_id: int64
+            event_type: string
+
+  - name: multiple_groupby_keys
+    input:
+      partial_code: "table.group_by(['region', 'category']).agg("
+    target:
+      completed_code: "table.group_by(['region', 'category']).agg(total=table.amount.sum())"
+    context:
+      tables:
+        table:
+          schema:
+            region: string
+            category: string
+            amount: float64
+
+  - name: conditional_aggregation
+    input:
+      partial_code: "table.group_by('category').agg(high_value_count=(table.amount > 100).sum("
+    target:
+      completed_code: "table.group_by('category').agg(high_value_count=(table.amount > 100).sum())"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            amount: float64

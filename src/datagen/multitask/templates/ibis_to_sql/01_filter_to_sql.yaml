@@ -1,0 +1,125 @@
+# Ibis to SQL: Filter operations
+name: filter_to_sql
+description: Translate Ibis filter expressions to SQL
+task: ibis_to_sql
+difficulty: easy
+features:
+  - filter
+  - where
+  - translation
+
+system_prompt: |
+  You are an expert in Ibis and SQL.
+  Translate the Ibis expression to equivalent SQL for the specified dialect.
+  Output only the SQL query.
+
+variations:
+  - name: simple_numeric_filter
+    input:
+      ibis: "table.filter(table.age > 18)"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT *
+        FROM table
+        WHERE age > 18
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            name: string
+
+  - name: compound_filter
+    input:
+      ibis: "table.filter((table.age > 18) & (table.is_active == True))"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT *
+        FROM table
+        WHERE (age > 18) AND (is_active = TRUE)
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            is_active: boolean
+
+  - name: string_filter
+    input:
+      ibis: "table.filter(table.name == 'Alice')"
+      dialect: "postgres"
+    target:
+      sql: |
+        SELECT *
+        FROM table
+        WHERE name = 'Alice'
+    context:
+      tables:
+        table:
+          schema:
+            name: string
+            age: int64
+
+  - name: or_condition
+    input:
+      ibis: "table.filter((table.status == 'active') | (table.status == 'pending'))"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT *
+        FROM table
+        WHERE (status = 'active') OR (status = 'pending')
+    context:
+      tables:
+        table:
+          schema:
+            status: string
+
+  - name: isin_filter
+    input:
+      ibis: "table.filter(table.category.isin(['A', 'B', 'C']))"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT *
+        FROM table
+        WHERE category IN ('A', 'B', 'C')
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+
+  - name: null_check
+    input:
+      ibis: "table.filter(table.email.notnull())"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT *
+        FROM table
+        WHERE email IS NOT NULL
+    context:
+      tables:
+        table:
+          schema:
+            email: string
+
+  - name: filter_with_select
+    input:
+      ibis: "table.filter(table.amount > 100).select('user_id', 'amount')"
+      dialect: "duckdb"
+    target:
+      sql: |
+        SELECT user_id, amount
+        FROM table
+        WHERE amount > 100
+    context:
+      tables:
+        table:
+          schema:
+            user_id: int64
+            amount: float64
+            timestamp: timestamp

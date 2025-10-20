@@ -1,0 +1,136 @@
+# Error Resolution: Type errors
+name: type_errors
+description: Fix type mismatch errors in Ibis code
+task: error_resolution
+difficulty: easy
+features:
+  - type_error
+  - debugging
+  - error_fix
+
+system_prompt: |
+  You are an expert in Ibis, a Python library for data manipulation.
+  Fix the compilation or type error in the provided Ibis code.
+  Output the fixed code and a brief explanation.
+
+variations:
+  - name: string_to_int_comparison
+    input:
+      broken_code: "table.filter(table.age > '18')"
+      error: "TypeError: '>' not supported between 'int64' and 'str'"
+      context_info: "age column is int64 type"
+    target:
+      fixed_code: "table.filter(table.age > 18)"
+      explanation: "Removed quotes from 18 to compare as integer instead of string"
+    context:
+      tables:
+        table:
+          schema:
+            age: int64
+            name: string
+
+  - name: wrong_aggregation_type
+    input:
+      broken_code: "table.group_by('category').agg(total=table.name.sum())"
+      error: "AttributeError: 'StringColumn' object has no attribute 'sum'"
+      context_info: "Cannot sum string columns"
+    target:
+      fixed_code: "table.group_by('category').agg(count=table.name.count())"
+      explanation: "Changed sum() to count() since name is a string column"
+    context:
+      tables:
+        table:
+          schema:
+            category: string
+            name: string
+            amount: float64
+
+  - name: boolean_operator_typo
+    input:
+      broken_code: "table.filter(table.is_active && table.age > 18)"
+      error: "SyntaxError: invalid syntax"
+      context_info: "Python uses & for boolean AND, not &&"
+    target:
+      fixed_code: "table.filter(table.is_active & (table.age > 18))"
+      explanation: "Changed && to & (Python's bitwise AND for boolean operations) and added parentheses"
+    context:
+      tables:
+        table:
+          schema:
+            is_active: boolean
+            age: int64
+
+  - name: equality_vs_assignment
+    input:
+      broken_code: "table.filter(table.status = 'active')"
+      error: "SyntaxError: invalid syntax"
+      context_info: "Use == for comparison, not ="
+    target:
+      fixed_code: "table.filter(table.status == 'active')"
+      explanation: "Changed = to == for equality comparison"
+    context:
+      tables:
+        table:
+          schema:
+            status: string
+            user_id: int64
+
+  - name: missing_parentheses
+    input:
+      broken_code: "table.filter(table.amount > 100 & table.is_active)"
+      error: "TypeError: unsupported operand type(s) for &"
+      context_info: "Need parentheses for operator precedence"
+    target:
+      fixed_code: "table.filter((table.amount > 100) & table.is_active)"
+      explanation: "Added parentheses around comparison to fix operator precedence"
+    context:
+      tables:
+        table:
+          schema:
+            amount: float64
+            is_active: boolean
+
+  - name: wrong_column_reference
+    input:
+      broken_code: "events.filter(table.user_id == 1)"
+      error: "NameError: name 'table' is not defined"
+      context_info: "Should use events, not table"
+    target:
+      fixed_code: "events.filter(events.user_id == 1)"
+      explanation: "Changed table to events to match the table variable name"
+    context:
+      tables:
+        events:
+          schema:
+            user_id: int64
+            event_type: string
+
+  - name: null_comparison
+    input:
+      broken_code: "table.filter(table.email == None)"
+      error: "TypeError: Cannot compare column with None directly"
+      context_info: "Use .isnull() or .notnull() for null checks"
+    target:
+      fixed_code: "table.filter(table.email.isnull())"
+      explanation: "Changed == None to .isnull() for proper null comparison"
+    context:
+      tables:
+        table:
+          schema:
+            email: string
+            user_id: int64
+
+  - name: timestamp_string_comparison
+    input:
+      broken_code: "table.filter(table.created_at > 2024-01-01)"
+      error: "SyntaxError: invalid syntax"
+      context_info: "Timestamp literals need quotes"
+    target:
+      fixed_code: "table.filter(table.created_at > '2024-01-01')"
+      explanation: "Added quotes around date string for proper timestamp comparison"
+    context:
+      tables:
+        table:
+          schema:
+            created_at: timestamp
+            user_id: int64
