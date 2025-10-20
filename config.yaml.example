@@ -1,0 +1,44 @@
+# iBERT Configuration Example
+# Copy this file to config.yaml and customize as needed
+
+model:
+  # Model provider: huggingface (uses local inference via transformers)
+  provider: huggingface
+
+  # Model name - HuggingFace model ID for local models
+  # Default: Qwen/Qwen2.5-Coder-1.5B-Instruct (1.5B params, ~3GB, code-specialized)
+  #
+  # Alternative models (smaller = faster, less memory):
+  #   - Qwen/Qwen2.5-Coder-1.5B-Instruct (1.5B, ~3GB, code-specialized, RECOMMENDED)
+  #   - HuggingFaceTB/SmolLM2-1.7B-Instruct (1.7B, ~3.5GB, general purpose)
+  #   - meta-llama/Llama-3.2-1B-Instruct (1B, ~2GB, Meta's smallest)
+  #   - stabilityai/stable-code-3b (3B, ~6GB, code-focused)
+  #   - mistralai/Mistral-7B-Instruct-v0.3 (7B, ~14GB, slower, requires more RAM)
+  model_name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+
+  # Sampling temperature (0.0 to 1.0, lower = more deterministic)
+  temperature: 0.2
+
+  # Maximum tokens to generate (lower = faster responses)
+  # 256 tokens ≈ 20-60 seconds on CPU for 1.5B model
+  max_tokens: 256
+
+  # Device for inference: "auto", "cpu", "cuda", "mps"
+  # Recommended settings:
+  #   - "cpu" for 1-3B models on Mac (MPS has 4GB limit issues)
+  #   - "cuda" for NVIDIA GPUs
+  #   - "mps" for Apple Silicon with 7B+ models and sufficient RAM
+  device: cpu
+
+  # Load model in 8-bit to reduce memory usage (requires bitsandbytes)
+  # Only works with CUDA (NVIDIA GPUs), not supported on Mac/CPU
+  load_in_8bit: false
+
+  # Cache directory for downloaded models (~3GB for default 1.5B model)
+  cache_dir: .cache
+
+# Data directory for datasets
+data_dir: data
+
+# Logging level: DEBUG, INFO, WARNING, ERROR
+log_level: INFO

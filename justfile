@@ -1,8 +1,70 @@
-# iBERT Training Data Generation
+# iBERT Training Data Generation and Task Execution
 
 # Python interpreter
 python := ".venv/bin/python"
 project_root := `pwd`
+
+# ============================================================================
+# Task Execution Commands
+# ============================================================================
+
+# Complete partial Ibis code
+complete INPUT='':
+    #!/usr/bin/env bash
+    if [ -z "{{INPUT}}" ]; then
+        {{python}} {{project_root}}/bin/ibert-complete
+    else
+        {{python}} {{project_root}}/bin/ibert-complete "{{INPUT}}"
+    fi
+
+# Translate Ibis code to SQL
+to-sql INPUT='' DIALECT='standard SQL':
+    #!/usr/bin/env bash
+    if [ -z "{{INPUT}}" ]; then
+        {{python}} {{project_root}}/bin/ibert-to-sql --dialect "{{DIALECT}}"
+    else
+        {{python}} {{project_root}}/bin/ibert-to-sql "{{INPUT}}" --dialect "{{DIALECT}}"
+    fi
+
+# Translate SQL to Ibis code
+from-sql INPUT='':
+    #!/usr/bin/env bash
+    if [ -z "{{INPUT}}" ]; then
+        {{python}} {{project_root}}/bin/sql-to-ibert
+    else
+        {{python}} {{project_root}}/bin/sql-to-ibert "{{INPUT}}"
+    fi
+
+# Fix errors in Ibis code
+fix INPUT='':
+    #!/usr/bin/env bash
+    if [ -z "{{INPUT}}" ]; then
+        {{python}} {{project_root}}/bin/ibert-fix
+    else
+        {{python}} {{project_root}}/bin/ibert-fix "{{INPUT}}"
+    fi
+
+# Answer questions about Ibis
+qa INPUT='':
+    #!/usr/bin/env bash
+    if [ -z "{{INPUT}}" ]; then
+        {{python}} {{project_root}}/bin/ibert-qa
+    else
+        {{python}} {{project_root}}/bin/ibert-qa "{{INPUT}}"
+    fi
+
+# Generate function documentation
+doc INPUT='':
+    #!/usr/bin/env bash
+    if [ -z "{{INPUT}}" ]; then
+        {{python}} {{project_root}}/bin/ibert-doc
+    else
+        {{python}} {{project_root}}/bin/ibert-doc "{{INPUT}}"
+    fi
+
+# ============================================================================
+# Data Generation Commands
+# ============================================================================
 
 # Generate and validate SQL→Ibis training dataset
 generate-data:

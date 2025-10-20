@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+"""CLI script for Ibis code completion."""
+
+import sys
+from pathlib import Path
+
+# Add src to path
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from ibert.cli_utils import read_input
+from ibert.config import load_config
+from ibert.models import create_model
+from ibert.tasks import CodeCompletionTask
+
+
+def main():
+    """Run code completion on input."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Complete partial Ibis code expressions"
+    )
+    parser.add_argument(
+        "input",
+        nargs="?",
+        help="File containing partial code, or use stdin",
+    )
+    parser.add_argument(
+        "--context",
+        help="Additional context for completion",
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        help="Path to config file",
+    )
+
+    args = parser.parse_args()
+
+    # Load configuration
+    config = load_config(args.config)
+
+    # Read input with helpful error messages
+    input_text = read_input(args.input, "ibert-complete")
+
+    # Create model and task
+    try:
+        model = create_model(config)
+        task = CodeCompletionTask(model)
+
+        # Execute task
+        kwargs = {}
+        if args.context:
+            kwargs["context"] = args.context
+
+        result = task.execute(input_text, **kwargs)
+        print(result)
+
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

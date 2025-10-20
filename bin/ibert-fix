@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""CLI script for error resolution."""
+
+import sys
+from pathlib import Path
+
+# Add src to path
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from ibert.cli_utils import read_input
+from ibert.config import load_config
+from ibert.models import create_model
+from ibert.tasks import ErrorResolutionTask
+
+
+def main():
+    """Fix errors in Ibis code."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Fix compilation and type errors in Ibis code"
+    )
+    parser.add_argument(
+        "input",
+        nargs="?",
+        help="File containing code with errors, or use stdin",
+    )
+    parser.add_argument(
+        "--error",
+        help="Error message or traceback",
+    )
+    parser.add_argument(
+        "--context",
+        help="Additional context about the error",
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        help="Path to config file",
+    )
+
+    args = parser.parse_args()
+
+    # Load configuration
+    config = load_config(args.config)
+
+    # Read input with helpful error messages
+    input_text = read_input(args.input, "ibert-fix")
+
+    # Create model and task
+    try:
+        model = create_model(config)
+        task = ErrorResolutionTask(model)
+
+        # Execute task
+        kwargs = {}
+        if args.error:
+            kwargs["error"] = args.error
+        if args.context:
+            kwargs["context"] = args.context
+
+        result = task.execute(input_text, **kwargs)
+        print(result)
+
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

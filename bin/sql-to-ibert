@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""CLI script for SQL to Ibis translation."""
+
+import sys
+from pathlib import Path
+
+# Add src to path
+src_path = Path(__file__).parent.parent / "src"
+sys.path.insert(0, str(src_path))
+
+from ibert.cli_utils import read_input
+from ibert.config import load_config
+from ibert.models import create_model
+from ibert.tasks import SQLToIbisTask
+
+
+def main():
+    """Translate SQL to Ibis code."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Translate SQL queries to Ibis code"
+    )
+    parser.add_argument(
+        "input",
+        nargs="?",
+        help="File containing SQL query, or use stdin",
+    )
+    parser.add_argument(
+        "--table-name",
+        help="Table name",
+    )
+    parser.add_argument(
+        "--schema",
+        help="Schema information",
+    )
+    parser.add_argument(
+        "--config",
+        type=Path,
+        help="Path to config file",
+    )
+
+    args = parser.parse_args()
+
+    # Load configuration
+    config = load_config(args.config)
+
+    # Read input with helpful error messages
+    input_text = read_input(args.input, "sql-to-ibert")
+
+    # Create model and task
+    try:
+        model = create_model(config)
+        task = SQLToIbisTask(model)
+
+        # Execute task
+        kwargs = {}
+        if args.table_name:
+            kwargs["table_name"] = args.table_name
+        if args.schema:
+            kwargs["schema"] = args.schema
+
+        result = task.execute(input_text, **kwargs)
+        print(result)
+
+    except Exception as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

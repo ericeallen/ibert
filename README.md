@@ -14,15 +14,17 @@ iBERT (inspired by BERT, but not a BERT architecture) is a comprehensive trainin
 - **Validating** all examples through compiler/type-checker verification with DuckDB
 - **Augmenting** data with variations and parameter expansion
 
-### **ASPIRATIONAL: Multi-Task Training Framework**
+### Multi-Task System
 
-Once trained, the iBERT model is intended to support six core tasks with weighted sampling:
+iBERT now includes a complete baseline implementation supporting six core tasks:
 1. **Code Completion** : Complete partial Ibis expressions
 2. **Ibis→SQL Translation** : Convert between representations
 3. **Error Resolution** : Fix compilation/type errors
 4. **Q&A** : Answer Ibis-related questions
 5. **Function Documentation** : Generate docstrings
 6. **SQL→Ibis** : Reverse translation
+
+Each task can be invoked via command-line scripts or the `just` command runner.
 
 ---
 
@@ -92,6 +94,8 @@ events.filter(events.event_date > '2024-01-01') \
 - Python 3.13+
 - [just](https://github.com/casey/just) command runner
 - Git (for repository mining)
+- 16GB+ RAM (for local model inference)
+- Optional: NVIDIA GPU or Apple Silicon for faster inference
 
 ### Installation
 
@@ -104,12 +108,31 @@ cd ibert
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install dependencies
+# Install dependencies (includes transformers, torch for local model)
 pip install -r requirements.txt
 
 # Install development dependencies (for testing)
 pip install -r requirements-dev.txt
 ```
+
+### Local Model Setup
+
+iBERT uses **Qwen2.5-Coder-1.5B-Instruct** running locally (no API key needed!):
+
+```bash
+# Copy and customize configuration
+cp config.yaml.example config.yaml
+
+# First run downloads the model (~3GB, one-time, 2-5 minutes)
+echo "What is Ibis?" | just qa
+```
+
+**See [LOCAL_MODEL_SETUP.md](LOCAL_MODEL_SETUP.md) for:**
+- Hardware requirements and optimization
+- GPU acceleration setup (CUDA/MPS)
+- Memory reduction with 8-bit quantization
+- Platform-specific instructions
+- Performance tuning tips
 
 ### Generate Your First Dataset
 
@@ -127,6 +150,100 @@ head data/sql2ibis/train.jsonl
 ---
 
 ## 📖 Usage Guide
+
+### Task Execution Commands
+
+iBERT provides command-line tools for all six tasks. Each tool accepts input from either a file or stdin.
+
+#### Code Completion
+
+Complete partial Ibis expressions:
+
+```bash
+# From stdin
+echo "table.filter(table.age >" | just complete
+
+# From file
+just complete mycode.py
+
+# Direct script usage
+./bin/ibert-complete mycode.py
+```
+
+#### Ibis to SQL Translation
+
+Convert Ibis code to SQL:
+
+```bash
+# Default (standard SQL)
+echo "table.filter(table.age > 18).select('name', 'age')" | just to-sql
+
+# Specific dialect
+just to-sql mycode.py postgres
+
+# With table name
+./bin/ibert-to-sql mycode.py --dialect duckdb --table-name users
+```
+
+#### SQL to Ibis Translation
+
+Convert SQL queries to Ibis code:
+
+```bash
+# From stdin
+echo "SELECT name, age FROM users WHERE age > 18" | just from-sql
+
+# From file
+just from-sql query.sql
+
+# With schema information
+./bin/sql-to-ibert query.sql --schema "id: int, name: string, age: int"
+```
+
+#### Error Resolution
+
+Fix compilation and type errors:
+
+```bash
+# From stdin
+echo 'table.filter(table.age > "18")' | just fix
+
+# With error message
+./bin/ibert-fix buggy.py --error "TypeError: '>' not supported"
+
+# With context
+./bin/ibert-fix buggy.py --context "age column is integer type"
+```
+
+#### Q&A
+
+Ask questions about Ibis:
+
+```bash
+# Simple question
+echo "What is lazy evaluation in Ibis?" | just qa
+
+# From file
+just qa question.txt
+
+# With context
+./bin/ibert-qa question.txt --context "I'm using DuckDB backend"
+```
+
+#### Function Documentation
+
+Generate docstrings for functions:
+
+```bash
+# Default (Google style)
+just doc myfunction.py
+
+# NumPy style
+./bin/ibert-doc myfunction.py --style numpy
+
+# Without examples
+./bin/ibert-doc myfunction.py --no-examples
+```
 
 ### Data Generation Commands
 
@@ -213,50 +330,137 @@ just concatenate-data
 
 ```
 ibert/
+├── bin/                           # Command-line executables
+│   ├── ibert-complete            # Code completion
+│   ├── ibert-to-sql              # Ibis → SQL translation
+│   ├── sql-to-ibert              # SQL → Ibis translation
+│   ├── ibert-fix                 # Error resolution
+│   ├── ibert-qa                  # Q&A system
+│   └── ibert-doc                 # Documentation generation
+│
 ├── src/
-│   └── datagen/                    # Data generation pipeline
+│   ├── ibert/                    # Core iBERT system
+│   │   ├── config/               # Configuration management
+│   │   │   └── config.py         # Config loading/saving
+│   │   ├── models/               # Model implementations
+│   │   │   ├── base.py           # Abstract model interface
+│   │   │   ├── mistral_model.py  # HuggingFace model wrapper
+│   │   │   └── factory.py        # Model factory
+│   │   └── tasks/                # Task handlers
+│   │       ├── code_completion.py
+│   │       ├── ibis_to_sql.py
+│   │       ├── sql_to_ibis.py
+│   │       ├── error_resolution.py
+│   │       ├── qa.py
+│   │       └── documentation.py
+│   │
+│   └── datagen/                  # Data generation pipeline
 │       ├── concatenate_datasets.py # Merge all data sources
-│       ├── sql2ibis/              # Template-based generation
-│       │   ├── templates/         # YAML template definitions
-│       │   ├── template_loader/   # Template parsing & expansion
-│       │   ├── eval/              # DuckDB validation
-│       │   └── translator/        # SQL parsing utilities
-│       ├── mining/                # Repository & doc mining
-│       │   ├── github_miner.py    # GitHub repository mining
+│       ├── sql2ibis/            # Template-based generation
+│       │   ├── templates/       # YAML template definitions
+│       │   ├── template_loader/ # Template parsing & expansion
+│       │   ├── eval/            # DuckDB validation
+│       │   └── translator/      # SQL parsing utilities
+│       ├── mining/              # Repository & doc mining
+│       │   ├── github_miner.py  # GitHub repository mining
 │       │   ├── ibis_doc_extractor.py # Documentation extraction
-│       │   └── repo_urls.txt      # Repositories to mine
-│       └── augmentation/          # Data augmentation
-│           └── augmenter.py       # Variation generation
+│       │   └── repo_urls.txt    # Repositories to mine
+│       └── augmentation/        # Data augmentation
+│           └── augmenter.py     # Variation generation
 │
-├── data/                          # Generated training data
-│   ├── sql2ibis/                 # Template-generated examples
-│   │   ├── train.jsonl           # Base dataset
+├── data/                        # Generated training data
+│   ├── sql2ibis/               # Template-generated examples
+│   │   ├── train.jsonl         # Base dataset
 │   │   └── train_augmented.jsonl # Augmented dataset
-│   ├── mining/                   # Mined examples
-│   │   ├── ibis_mined.jsonl      # GitHub examples
+│   ├── mining/                 # Mined examples
+│   │   ├── ibis_mined.jsonl    # GitHub examples
 │   │   ├── ibis_docs_mined.jsonl # Documentation examples
-│   │   └── repos/                # Cloned repositories
-│   └── train_complete.jsonl      # Concatenated dataset
+│   │   └── repos/              # Cloned repositories
+│   └── train_complete.jsonl    # Concatenated dataset
 │
-├── tests/                         # Comprehensive test suite
-│   ├── datagen/
+├── tests/                       # Comprehensive test suite
+│   ├── ibert/                  # Core system tests
+│   │   ├── models/             # Model tests
+│   │   ├── tasks/              # Task handler tests
+│   │   └── test_config.py      # Config tests
+│   ├── datagen/                # Data generation tests
 │   │   ├── test_concatenate_datasets.py
 │   │   └── mining/
 │   │       ├── test_github_miner.py
 │   │       └── test_ibis_doc_extractor.py
-│   └── README.md                 # Test documentation
+│   └── README.md               # Test documentation
 │
-├── justfile                      # Command definitions
-├── pytest.ini                    # Test configuration
-├── requirements.txt              # Production dependencies
-├── requirements-dev.txt          # Development dependencies
-├── CLAUDE.md                     # Project guidance for Claude
-└── README.md                     # This file
+├── config.yaml.example         # Example configuration
+├── justfile                    # Command definitions
+├── pytest.ini                  # Test configuration
+├── requirements.txt            # Production dependencies
+├── requirements-dev.txt        # Development dependencies
+├── CLAUDE.md                   # Project guidance for Claude
+└── README.md                   # This file
 ```
 
 ---
 
 ## 🔧 Configuration
+
+### Model Configuration
+
+Copy the example configuration and customize it:
+
+```bash
+cp config.yaml.example config.yaml
+```
+
+Edit `config.yaml`:
+
+```yaml
+model:
+  # Model provider (huggingface with local inference)
+  provider: huggingface
+
+  # HuggingFace model ID for local models
+  model_name: Qwen/Qwen2.5-Coder-1.5B-Instruct
+
+  # Sampling temperature (0.0 to 1.0)
+  temperature: 0.2
+
+  # Maximum tokens to generate
+  max_tokens: 256
+
+  # Device: "cpu", "cuda", "mps", "auto"
+  device: cpu
+
+  # Load in 8-bit for lower memory (requires bitsandbytes, CUDA only)
+  load_in_8bit: false
+
+  # Cache directory for downloaded models (~3GB for default model)
+  cache_dir: .cache
+
+# Data directory for datasets
+data_dir: data
+
+# Logging level
+log_level: INFO
+```
+
+**Local Model Benefits:**
+- ✅ No API key required
+- ✅ Complete privacy (no data sent to external servers)
+- ✅ Zero costs
+- ✅ Fast inference (20-60s per request on CPU for 1.5B model)
+
+**Model Options:**
+- `Qwen/Qwen2.5-Coder-1.5B-Instruct` (default, 1.5B parameters, code-specialized)
+- `HuggingFaceTB/SmolLM2-1.7B-Instruct` (1.7B, general purpose)
+- `meta-llama/Llama-3.2-1B-Instruct` (1B, Meta's smallest)
+- `stabilityai/stable-code-3b` (3B, code-focused)
+- `mistralai/Mistral-7B-Instruct-v0.3` (7B, slower but more capable)
+- Any HuggingFace causal LM (experimental)
+
+The system is designed to be model-agnostic. You can easily add new model providers by:
+1. Implementing a new model class that extends `BaseModel`
+2. Registering it in the factory
+3. Updating your config to use the new provider
 
 ### Adding New Repositories to Mine
 
@@ -470,14 +674,16 @@ mypy src/
 
 ## 🔮 Future Enhancements
 
-- [ ] Multi-task training framework integration
-- [ ] LoRA fine-tuning pipeline
-- [ ] Model serving infrastructure
+- [x] Multi-task system with all six tasks
+- [x] Model-agnostic architecture with baseline implementation
+- [ ] LoRA fine-tuning pipeline for specialized models
+- [ ] Model serving infrastructure (REST API)
 - [ ] Interactive web UI for data exploration
+- [ ] Support for additional model providers (OpenAI, Anthropic, local models)
 - [ ] Support for additional DSLs beyond Ibis
 - [ ] Distributed mining across compute cluster
 - [ ] Active learning for hard examples
-- [ ] Synthetic data generation with LLMs
+- [ ] Enhanced validation with execution feedback
 
 ---
 
@@ -501,7 +707,8 @@ See LICENSE.md
 
 ## 🙏 Acknowledgments
 
-- **Mistral AI**: For the Devstral base model
+- **Alibaba Cloud**: For the Qwen2.5-Coder baseline model
+- **HuggingFace**: For the transformers library and model hub
 - **DuckDB**: For fast, embedded SQL execution
 - **pytest**: For the testing framework
 

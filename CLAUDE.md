@@ -3,13 +3,14 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
-**iBERT** (name inspired by BERT but not a BERT architecture) is a code generation system for lazy-evaluated DSLs, targeting Ibis (Python→SQL framework). The project uses Mistral's Devstral as the base model, enhanced with LoRA fine-tuning and compiler/type-checker validation.
+**iBERT** (name inspired by BERT but not a BERT architecture) is a code generation system for lazy-evaluated DSLs, targeting Ibis (Python→SQL framework). The project includes data generation, validation, and a multi-task baseline model implementation.
 
 ## Key Technologies
-- **Base Model**: Devstral (`mistralai/Devstral-Small-2505`) - Mistral's code-focused model
-- **Fine-tuning**: LoRA (Low-Rank Adaptation) for parameter-efficient training
+- **Baseline Model**: Qwen2.5-Coder-1.5B-Instruct - Alibaba's code-specialized 1.5B parameter model
+- **Future Fine-tuning**: LoRA (Low-Rank Adaptation) for parameter-efficient training (planned)
 - **Target DSL**: Ibis - lazy-evaluated Python framework that compiles to SQL
 - **Validation**: DuckDB backend for executing and comparing SQL/Ibis equivalence
+- **Multi-Task System**: 6 tasks (code completion, translation, error resolution, Q&A, documentation)
 
 ## Development Commands
 
