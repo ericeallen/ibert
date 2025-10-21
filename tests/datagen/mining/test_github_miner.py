@@ -624,3 +624,5 @@ GROUP BY product_id
         sql_codes = [ex["sql"] for ex in examples]
         assert any("users" in sql.lower() for sql in sql_codes)
         assert any("orders" in sql.lower() for sql in sql_codes)
+
+

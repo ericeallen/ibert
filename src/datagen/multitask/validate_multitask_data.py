@@ -27,10 +27,9 @@ from typing import Any, Dict, List, Optional, Tuple
 import ibis
 import pandas as pd
 
-# Import existing SQL→Ibis validator
-sys.path.insert(0, str(Path(__file__).parent.parent / "sql2ibis"))
-from eval.validator import Validator as SQLIbisValidator
-from eval.fixtures import get_test_tables
+# Import existing SQL→Ibis validator using proper relative imports
+from ..sql2ibis.eval.validator import Validator as SQLIbisValidator
+from ..sql2ibis.eval.fixtures import get_test_tables
 
 
 class ValidationError(Exception):
@@ -77,7 +76,7 @@ class MultitaskValidator:
             schema = table_info.get("schema", {})
             if schema:
                 # Create a mock DataFrame with the right schema
-                mock_data = {}
+                mock_data: Dict[str, Any] = {}
                 for col, dtype in schema.items():
                     if "int" in dtype:
                         mock_data[col] = [1, 2, 3, 10, 20, 30]

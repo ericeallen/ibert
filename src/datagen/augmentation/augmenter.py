@@ -1,7 +1,7 @@
 """Synthetic data augmentation for SQL→Ibis examples."""
 
 import re
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import copy
 
 
@@ -112,7 +112,7 @@ class SyntheticAugmenter:
     def augment_by_value_permutation(
         self,
         example: Dict[str, Any],
-        value_ranges: Dict[str, List[Any]] = None
+        value_ranges: Optional[Dict[str, List[Any]]] = None
     ) -> List[Dict[str, Any]]:
         """Create variations by changing literal values.
 

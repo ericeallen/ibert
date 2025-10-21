@@ -738,3 +738,5 @@ result = orders.group_by('product_id').agg(
         assert any("users" in sql for sql in sql_codes)
         assert any("orders" in sql for sql in sql_codes)
         assert any("events" in sql for sql in sql_codes)
+
+
