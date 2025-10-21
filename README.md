@@ -1,9 +1,14 @@
-# iBERT: Multi Task Model for Lazy-Evaluated DSLs
+# iBERT: Multi-Task Code Generation for Lazy-Evaluated DSLs
 
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-102%20passing-green.svg)](tests/)
-[![Coverage](https://img.shields.io/badge/coverage-94%25-brightgreen.svg)](htmlcov/)
+[![Tests](https://img.shields.io/badge/tests-443%20passing-green.svg)](tests/)
+[![Coverage](https://img.shields.io/badge/coverage-81%25-brightgreen.svg)](htmlcov/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+> **📖 [Complete Documentation](DOCUMENTATION.md)** - Comprehensive guide with table of contents
+> **🚀 [Quick Start](QUICKSTART.md)** - Get started in 5 minutes
+> **⚙️ [Model Setup](LOCAL_MODEL_SETUP.md)** - Local inference configuration
+> **🧪 [Testing Guide](TESTING.md)** - Testing and coverage details
 
 ## 🎯 Overview
 
@@ -80,9 +85,9 @@ events.filter(events.event_date > '2024-01-01') \
 
 ### 🧪 Testing
 
-- **102 comprehensive tests** with 94% coverage
+- **443 comprehensive tests** with 81% coverage
 - Unit and integration tests for all components
-- Fast execution (< 0.5s for full suite)
+- Fast execution (<4s for full suite)
 - Pytest-based with coverage reporting
 
 ---
@@ -614,26 +619,27 @@ Only validated examples make it into the training dataset.
 
 The project includes a comprehensive test suite:
 
-- **102 tests** across 3 test modules
-- **94% coverage** for tested modules
-- Fast execution (< 0.5 seconds)
+- **443 tests** (7 skipped)
+- **81% coverage** (1,769/2,180 statements)
+- Fast execution (<4 seconds)
 - 100% passing rate
 
-See [tests/README.md](tests/README.md) for detailed testing documentation.
+See [TESTING.md](TESTING.md) and [TEST_COVERAGE.md](TEST_COVERAGE.md) for detailed testing documentation.
 
 ```bash
 # Run all tests
-just test
+PYTHONPATH=. .venv/bin/python -m pytest tests/ -v
 
 # Example output:
 # ============================= test session starts ==============================
-# collected 102 items
+# collected 450 items
 #
-# tests/datagen/test_concatenate_datasets.py .................... [ 31%]
-# tests/datagen/mining/test_github_miner.py ..................... [ 69%]
-# tests/datagen/mining/test_ibis_doc_extractor.py ............... [100%]
+# tests/ibert/tasks/... ✓✓✓✓✓✓ (all 6 task handlers - 100% coverage)
+# tests/datagen/sql2ibis/... ✓✓✓✓✓ (template generation)
+# tests/datagen/multitask/... ✓✓✓✓✓ (multi-task generation)
+# tests/datagen/mining/... ✓✓✓✓✓ (repository mining)
 #
-# ============================= 102 passed in 0.43s ==============================
+# ======================== 443 passed, 7 skipped in 3.6s ========================
 ```
 
 ---
