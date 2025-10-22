@@ -1,8 +1,8 @@
 """Synthetic data augmentation for SQL→Ibis examples."""
 
-import re
-from typing import List, Dict, Any, Optional
 import copy
+import re
+from typing import Any
 
 
 class SyntheticAugmenter:
@@ -24,10 +24,8 @@ class SyntheticAugmenter:
     }
 
     def augment_by_column_substitution(
-        self,
-        example: Dict[str, Any],
-        max_variations: int = 3
-    ) -> List[Dict[str, Any]]:
+        self, example: dict[str, Any], max_variations: int = 3
+    ) -> list[dict[str, Any]]:
         """Create variations by substituting column names.
 
         Parameters
@@ -50,7 +48,7 @@ class SyntheticAugmenter:
         # Find columns in the SQL
         for original_col, alternatives in self.COLUMN_SUBSTITUTIONS.items():
             if original_col in sql.lower():
-                for i, alt_col in enumerate(alternatives[:max_variations]):
+                for _i, alt_col in enumerate(alternatives[:max_variations]):
                     # Create variation
                     new_sql = self._replace_identifier(sql, original_col, alt_col)
                     new_ibis = self._replace_identifier(ibis_code, original_col, alt_col)
@@ -64,10 +62,7 @@ class SyntheticAugmenter:
 
         return variations
 
-    def augment_by_table_substitution(
-        self,
-        example: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def augment_by_table_substitution(self, example: dict[str, Any]) -> list[dict[str, Any]]:
         """Create variations by substituting table names.
 
         Parameters
@@ -99,21 +94,24 @@ class SyntheticAugmenter:
                         variation["target"]["ibis"] = new_ibis
 
                         # Update context table names
-                        if "context" in variation and "tables" in variation["context"]:
-                            if original_table in variation["context"]["tables"]:
-                                table_schema = variation["context"]["tables"].pop(original_table)
-                                variation["context"]["tables"][alt_table] = table_schema
+                        if (
+                            "context" in variation
+                            and "tables" in variation["context"]
+                            and original_table in variation["context"]["tables"]
+                        ):
+                            table_schema = variation["context"]["tables"].pop(original_table)
+                            variation["context"]["tables"][alt_table] = table_schema
 
-                        variation["meta"]["augmentation"] = f"table_sub_{original_table}_{alt_table}"
+                        variation["meta"]["augmentation"] = (
+                            f"table_sub_{original_table}_{alt_table}"
+                        )
                         variations.append(variation)
 
         return variations
 
     def augment_by_value_permutation(
-        self,
-        example: Dict[str, Any],
-        value_ranges: Optional[Dict[str, List[Any]]] = None
-    ) -> List[Dict[str, Any]]:
+        self, example: dict[str, Any], value_ranges: dict[str, list[Any]] | None = None
+    ) -> list[dict[str, Any]]:
         """Create variations by changing literal values.
 
         Parameters
@@ -140,7 +138,7 @@ class SyntheticAugmenter:
         ibis_code = example["target"]["ibis"]
 
         # Find numeric literals in SQL
-        numeric_pattern = r'\b(\d+)\b'
+        numeric_pattern = r"\b(\d+)\b"
         matches = list(re.finditer(numeric_pattern, sql))
 
         for match in matches[:1]:  # Limit to first numeric literal
@@ -177,14 +175,13 @@ class SyntheticAugmenter:
             Code with replacements
         """
         # Use word boundaries to avoid partial matches
-        pattern = r'\b' + re.escape(old_name) + r'\b'
+        pattern = r"\b" + re.escape(old_name) + r"\b"
         return re.sub(pattern, new_name, code, flags=re.IGNORECASE)
 
 
 def augment_dataset(
-    examples: List[Dict[str, Any]],
-    max_variations_per_example: int = 5
-) -> List[Dict[str, Any]]:
+    examples: list[dict[str, Any]], max_variations_per_example: int = 5
+) -> list[dict[str, Any]]:
     """Augment an entire dataset.
 
     Parameters
@@ -238,4 +235,6 @@ if __name__ == "__main__":
     value_variations = augmenter.augment_by_value_permutation(example)
     print(f"Value variations: {len(value_variations)}")
 
-    print(f"\nTotal: {len(col_variations) + len(table_variations) + len(value_variations)} variations from 1 example")
+    print(
+        f"\nTotal: {len(col_variations) + len(table_variations) + len(value_variations)} variations from 1 example"
+    )

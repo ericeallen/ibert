@@ -3,9 +3,6 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-import yaml
-
 from src.ibert.config import Config, ModelConfig, load_config, save_config
 
 
@@ -20,7 +17,7 @@ class TestModelConfig:
         assert config.temperature == 0.2
         assert config.max_tokens == 2048
         assert config.device == "auto"
-        assert config.load_in_8bit == False
+        assert not config.load_in_8bit
         assert config.cache_dir == ".cache"
 
     def test_custom_values(self):

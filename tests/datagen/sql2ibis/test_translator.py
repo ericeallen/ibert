@@ -4,17 +4,17 @@ import pytest
 from sqlglot import Expression
 
 from src.datagen.sql2ibis.translator.parser import (
-    parse_sql,
-    normalize_sql,
+    SQLParseError,
     UnsupportedDialectError,
-    SQLParseError
+    normalize_sql,
+    parse_sql,
 )
 from src.datagen.sql2ibis.translator.types import (
-    sql_type_to_ibis,
-    needs_explicit_cast,
-    generate_cast_expr,
+    SQL_TO_IBIS_TYPES,
     TypeInferenceError,
-    SQL_TO_IBIS_TYPES
+    generate_cast_expr,
+    needs_explicit_cast,
+    sql_type_to_ibis,
 )
 
 
@@ -399,7 +399,7 @@ class TestIntegration:
 
     def test_all_sql_types_have_mappings(self):
         """Test all SQL types in constant can be converted."""
-        for sql_type in SQL_TO_IBIS_TYPES.keys():
+        for sql_type in SQL_TO_IBIS_TYPES:
             ibis_type = sql_type_to_ibis(sql_type)
             assert isinstance(ibis_type, str)
             assert len(ibis_type) > 0

@@ -42,11 +42,9 @@ def read_input(args_input, script_name="script"):
         try:
             # Read with timeout using select on Unix-like systems
             import select
+
             ready, _, _ = select.select([sys.stdin], [], [], 0.1)
-            if ready:
-                input_text = sys.stdin.read()
-            else:
-                input_text = ""
+            input_text = sys.stdin.read() if ready else ""
         except (OSError, ValueError):
             # select() not available or stdin not selectable, just try to read
             input_text = sys.stdin.read()

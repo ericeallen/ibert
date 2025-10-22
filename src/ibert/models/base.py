@@ -1,7 +1,7 @@
 """Abstract base class for language models."""
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class BaseModel(ABC):
@@ -11,7 +11,7 @@ class BaseModel(ABC):
     (Mistral, OpenAI, Anthropic, local models, etc.) and future fine-tuned models.
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """Initialize the model with configuration.
 
         Args:
@@ -23,9 +23,9 @@ class BaseModel(ABC):
     def generate(
         self,
         prompt: str,
-        system_prompt: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        system_prompt: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate text completion from a prompt.
 
@@ -43,9 +43,9 @@ class BaseModel(ABC):
     @abstractmethod
     def generate_chat(
         self,
-        messages: List[Dict[str, str]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        messages: list[dict[str, str]],
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate response from a chat conversation.
 
@@ -59,7 +59,7 @@ class BaseModel(ABC):
         """
         pass
 
-    def train(self, training_data: Any, **kwargs) -> None:
+    def train(self, training_data: Any, **kwargs) -> None:  # noqa: B027
         """Train or fine-tune the model.
 
         For baseline models, this is a no-op. Subclasses for fine-tuned models
@@ -71,7 +71,7 @@ class BaseModel(ABC):
         """
         pass
 
-    def save(self, path: str) -> None:
+    def save(self, path: str) -> None:  # noqa: B027
         """Save model weights/checkpoints.
 
         For API-based models, this is a no-op. Subclasses for local models
@@ -82,7 +82,7 @@ class BaseModel(ABC):
         """
         pass
 
-    def load(self, path: str) -> None:
+    def load(self, path: str) -> None:  # noqa: B027
         """Load model weights/checkpoints.
 
         For API-based models, this is a no-op. Subclasses for local models

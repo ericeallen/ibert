@@ -2,19 +2,17 @@
 
 import json
 import logging
-import pytest
-from pathlib import Path
 
 import pandas as pd
 
 from src.datagen.sql2ibis.utils.io import (
-    read_jsonl,
-    write_jsonl,
     append_jsonl,
+    read_jsonl,
     read_parquet,
-    write_parquet
+    write_jsonl,
+    write_parquet,
 )
-from src.datagen.sql2ibis.utils.log import setup_logger, console
+from src.datagen.sql2ibis.utils.log import console, setup_logger
 
 
 class TestJSONLIO:
@@ -78,10 +76,7 @@ class TestJSONLIO:
     def test_read_jsonl_simple(self, tmp_path):
         """Test reading simple JSONL file."""
         input_file = tmp_path / "test.jsonl"
-        input_file.write_text(
-            '{"id": 1, "name": "Alice"}\n'
-            '{"id": 2, "name": "Bob"}\n'
-        )
+        input_file.write_text('{"id": 1, "name": "Alice"}\n{"id": 2, "name": "Bob"}\n')
 
         records = list(read_jsonl(input_file))
 
@@ -92,12 +87,7 @@ class TestJSONLIO:
     def test_read_jsonl_skips_empty_lines(self, tmp_path):
         """Test reading skips empty lines."""
         input_file = tmp_path / "test.jsonl"
-        input_file.write_text(
-            '{"id": 1}\n'
-            '\n'
-            '{"id": 2}\n'
-            '   \n'
-        )
+        input_file.write_text('{"id": 1}\n\n{"id": 2}\n   \n')
 
         records = list(read_jsonl(input_file))
 
@@ -164,7 +154,6 @@ class TestJSONLIO:
 
         assert output_file.exists()
 
-
     def test_roundtrip_jsonl(self, tmp_path):
         """Test write then read preserves data."""
         data = [
@@ -184,10 +173,7 @@ class TestParquetIO:
 
     def test_write_parquet_simple(self, tmp_path):
         """Test writing DataFrame to Parquet."""
-        df = pd.DataFrame({
-            "id": [1, 2, 3],
-            "name": ["Alice", "Bob", "Charlie"]
-        })
+        df = pd.DataFrame({"id": [1, 2, 3], "name": ["Alice", "Bob", "Charlie"]})
         output_file = tmp_path / "test.parquet"
 
         write_parquet(df, output_file)
@@ -205,10 +191,7 @@ class TestParquetIO:
 
     def test_read_parquet_simple(self, tmp_path):
         """Test reading Parquet file."""
-        df_original = pd.DataFrame({
-            "id": [1, 2, 3],
-            "value": [10.5, 20.3, 30.7]
-        })
+        df_original = pd.DataFrame({"id": [1, 2, 3], "value": [10.5, 20.3, 30.7]})
         file_path = tmp_path / "test.parquet"
         df_original.to_parquet(file_path)
 
@@ -218,12 +201,14 @@ class TestParquetIO:
 
     def test_parquet_roundtrip(self, tmp_path):
         """Test writing then reading Parquet preserves data."""
-        df_original = pd.DataFrame({
-            "id": [1, 2, 3],
-            "name": ["A", "B", "C"],
-            "score": [95.5, 87.3, 92.1],
-            "active": [True, False, True]
-        })
+        df_original = pd.DataFrame(
+            {
+                "id": [1, 2, 3],
+                "name": ["A", "B", "C"],
+                "score": [95.5, 87.3, 92.1],
+                "active": [True, False, True],
+            }
+        )
         file_path = tmp_path / "roundtrip.parquet"
 
         write_parquet(df_original, file_path)
@@ -244,12 +229,14 @@ class TestParquetIO:
 
     def test_parquet_preserves_types(self, tmp_path):
         """Test Parquet preserves data types."""
-        df = pd.DataFrame({
-            "int_col": [1, 2, 3],
-            "float_col": [1.1, 2.2, 3.3],
-            "str_col": ["a", "b", "c"],
-            "bool_col": [True, False, True]
-        })
+        df = pd.DataFrame(
+            {
+                "int_col": [1, 2, 3],
+                "float_col": [1.1, 2.2, 3.3],
+                "str_col": ["a", "b", "c"],
+                "bool_col": [True, False, True],
+            }
+        )
         file_path = tmp_path / "types.parquet"
 
         write_parquet(df, file_path)
@@ -334,7 +321,6 @@ class TestLogging:
 
     def test_console_exists(self):
         """Test console object is defined."""
-        from src.datagen.sql2ibis.utils.log import console
         from rich.console import Console
 
         assert isinstance(console, Console)

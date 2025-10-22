@@ -1,7 +1,7 @@
 """Parameter space expansion for generating variations."""
 
 import itertools
-from typing import Any, Dict, List, Iterator
+from typing import Any, Dict, Iterator, List
 
 
 def expand_parameter_space(param_space: Dict[str, List[Any]]) -> Iterator[Dict[str, Any]]:
@@ -42,7 +42,7 @@ def expand_parameter_space(param_space: Dict[str, List[Any]]) -> Iterator[Dict[s
 def expand_template_variations(
     base_variation: Dict[str, Any],
     param_space: Dict[str, List[Any]],
-    name_pattern: str = "{base_name}_{idx}"
+    name_pattern: str = "{base_name}_{idx}",
 ) -> List[Dict[str, Any]]:
     """Expand a single variation with parameter space.
 
@@ -78,10 +78,7 @@ def expand_template_variations(
     return variations
 
 
-def apply_substitutions(
-    template_str: str,
-    substitutions: Dict[str, str]
-) -> str:
+def apply_substitutions(template_str: str, substitutions: Dict[str, str]) -> str:
     """Apply string substitutions to a template.
 
     Parameters
@@ -150,8 +147,7 @@ class ParameterSpaceConfig:
 
 
 def create_column_variations(
-    base_params: Dict[str, Any],
-    column_mapping: Dict[str, List[str]]
+    base_params: Dict[str, Any], column_mapping: Dict[str, List[str]]
 ) -> List[Dict[str, Any]]:
     """Create variations by substituting column names.
 

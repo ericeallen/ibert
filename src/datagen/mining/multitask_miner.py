@@ -20,11 +20,13 @@ import argparse
 import ast
 import json
 import re
-import subprocess
+
+# Safe: subprocess only used for git operations with validated arguments - no shell injection risk
+import subprocess  # nosec B404
 import sys
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # Output directory configuration
 DEFAULT_REPO_PATH = Path("data/mining/repos/ibis")
@@ -55,7 +57,7 @@ class MultitaskMiner:
             "documentation": self._mine_documentation,
         }
 
-    def mine_all(self) -> Dict[str, int]:
+    def mine_all(self) -> dict[str, int]:
         """Mine examples for all tasks.
 
         Returns:
@@ -63,9 +65,9 @@ class MultitaskMiner:
         """
         stats = {}
         for task_name, miner_func in self.miners.items():
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"Mining {task_name} examples...")
-            print(f"{'='*60}")
+            print(f"{'=' * 60}")
             count = miner_func()
             stats[task_name] = count
             print(f"✓ Mined {count} examples for {task_name}")
@@ -83,8 +85,7 @@ class MultitaskMiner:
         """
         if task_name not in self.miners:
             raise ValueError(
-                f"Unknown task: {task_name}. "
-                f"Supported tasks: {list(self.miners.keys())}"
+                f"Unknown task: {task_name}. Supported tasks: {list(self.miners.keys())}"
             )
 
         print(f"\nMining {task_name} examples...")
@@ -111,12 +112,12 @@ class MultitaskMiner:
 
             try:
                 content = py_file.read_text(encoding="utf-8")
-            except (UnicodeDecodeError, IOError):
+            except (OSError, UnicodeDecodeError):
                 continue
 
             # Find method chains (likely Ibis expressions)
             # Pattern: variable.method1(...).method2(...).method3(...)
-            pattern = r'(\w+\.(filter|select|group_by|order_by|aggregate|join|mutate|relabel|limit|head|tail|distinct)\([^)]*\)(?:\.\w+\([^)]*\))*)'
+            pattern = r"(\w+\.(filter|select|group_by|order_by|aggregate|join|mutate|relabel|limit|head|tail|distinct)\([^)]*\)(?:\.\w+\([^)]*\))*)"
 
             matches = re.finditer(pattern, content)
             for match in matches:
@@ -127,12 +128,12 @@ class MultitaskMiner:
                     continue
 
                 # Extract chain components
-                methods = re.findall(r'\.\w+\([^)]*\)', full_expr)
+                methods = re.findall(r"\.\w+\([^)]*\)", full_expr)
 
                 # Create completion examples by taking prefixes
                 if len(methods) >= 2:
                     # Get table name/variable
-                    table_var = full_expr.split('.')[0]
+                    table_var = full_expr.split(".")[0]
 
                     # Create partial from first N methods
                     for i in range(1, len(methods)):
@@ -141,36 +142,39 @@ class MultitaskMiner:
                             partial += method
 
                         # Don't include the closing paren of the last method
-                        if ')' in partial:
+                        if ")" in partial:
                             # Find last method opening
-                            last_paren = partial.rfind('(')
+                            last_paren = partial.rfind("(")
                             if last_paren > 0:
                                 # Remove from opening paren to end
-                                partial_incomplete = partial[:last_paren + 1]
+                                partial_incomplete = partial[: last_paren + 1]
 
                                 example = {
                                     "id": str(uuid.uuid4()),
                                     "task": "code_completion",
                                     "source": "ibis_codebase",
-                                    "input": {
-                                        "partial_code": partial_incomplete.strip()
-                                    },
-                                    "target": {
-                                        "completed_code": full_expr.strip()
-                                    },
+                                    "input": {"partial_code": partial_incomplete.strip()},
+                                    "target": {"completed_code": full_expr.strip()},
                                     "meta": {
                                         "file": str(py_file.relative_to(self.repo_path)),
                                         "chain_length": len(methods),
-                                    }
+                                    },
                                 }
                                 examples.append(example)
                                 break  # One example per full expression
 
         # Deduplicate
-        seen = set()
-        unique_examples = []
+        seen: set[tuple[str, str]] = set()
+        unique_examples: list[dict[str, Any]] = []
         for ex in examples:
-            key = (ex["input"]["partial_code"], ex["target"]["completed_code"])
+            input_dict = ex["input"]
+            target_dict = ex["target"]
+            # Safe: type assertion for type checker - input/target are validated dict structures
+            assert isinstance(input_dict, dict)  # nosec B101
+            assert isinstance(target_dict, dict)  # nosec B101
+            partial = str(input_dict["partial_code"])
+            completed = str(target_dict["completed_code"])
+            key = (partial, completed)
             if key not in seen:
                 seen.add(key)
                 unique_examples.append(ex)
@@ -199,7 +203,7 @@ class MultitaskMiner:
 
             try:
                 content = py_file.read_text(encoding="utf-8")
-            except (UnicodeDecodeError, IOError):
+            except (OSError, UnicodeDecodeError):
                 continue
 
             # Pattern: .sql("SELECT ...") or .sql('SELECT ...')
@@ -222,26 +226,25 @@ class MultitaskMiner:
                         "id": str(uuid.uuid4()),
                         "task": "sql_to_ibis",
                         "source": "ibis_codebase",
-                        "input": {
-                            "sql": sql
-                        },
-                        "target": {
-                            "ibis": "# Mined example - Ibis equivalent to be inferred"
-                        },
+                        "input": {"sql": sql},
+                        "target": {"ibis": "# Mined example - Ibis equivalent to be inferred"},
                         "meta": {
                             "file": str(py_file.relative_to(self.repo_path)),
-                            "note": "SQL extracted from codebase, Ibis code needs manual review"
-                        }
+                            "note": "SQL extracted from codebase, Ibis code needs manual review",
+                        },
                     }
                     examples.append(example)
 
         # Deduplicate by SQL
-        seen_sql = set()
-        unique_examples = []
+        seen_sql: set[str] = set()
+        unique_examples: list[dict[str, Any]] = []
         for ex in examples:
-            sql = ex["input"]["sql"]
-            if sql not in seen_sql:
-                seen_sql.add(sql)
+            input_dict = ex["input"]
+            # Safe: type assertion for type checker - input is validated dict structure
+            assert isinstance(input_dict, dict)  # nosec B101
+            sql_text = str(input_dict["sql"])
+            if sql_text not in seen_sql:
+                seen_sql.add(sql_text)
                 unique_examples.append(ex)
 
         output_file = self.output_dir / "sql_to_ibis_mined.jsonl"
@@ -267,45 +270,43 @@ class MultitaskMiner:
 
             try:
                 content = py_file.read_text(encoding="utf-8")
-            except (UnicodeDecodeError, IOError):
+            except (OSError, UnicodeDecodeError):
                 continue
 
             # Find simple Ibis expressions (one-liners)
-            pattern = r'(\w+\.(filter|select|group_by|order_by|aggregate)\([^)]+\))'
+            pattern = r"(\w+\.(filter|select|group_by|order_by|aggregate)\([^)]+\))"
             matches = re.finditer(pattern, content)
 
             for match in matches:
                 ibis_expr = match.group(1).strip()
 
                 # Skip if too complex
-                if len(ibis_expr) > 200 or ibis_expr.count('(') > 3:
+                if len(ibis_expr) > 200 or ibis_expr.count("(") > 3:
                     continue
 
                 example = {
                     "id": str(uuid.uuid4()),
                     "task": "ibis_to_sql",
                     "source": "ibis_codebase",
-                    "input": {
-                        "ibis": ibis_expr,
-                        "dialect": "duckdb"
-                    },
-                    "target": {
-                        "sql": "# SQL to be generated by Ibis compiler"
-                    },
+                    "input": {"ibis": ibis_expr, "dialect": "duckdb"},
+                    "target": {"sql": "# SQL to be generated by Ibis compiler"},
                     "meta": {
                         "file": str(py_file.relative_to(self.repo_path)),
-                        "note": "Ibis expression extracted, SQL needs generation"
-                    }
+                        "note": "Ibis expression extracted, SQL needs generation",
+                    },
                 }
                 examples.append(example)
 
         # Limit and deduplicate
-        seen = set()
-        unique_examples = []
+        seen: set[str] = set()
+        unique_examples: list[dict[str, Any]] = []
         for ex in examples[:100]:  # Limit to first 100
-            ibis_code = ex["input"]["ibis"]
-            if ibis_code not in seen:
-                seen.add(ibis_code)
+            input_dict = ex["input"]
+            # Safe: type assertion for type checker - input is validated dict structure
+            assert isinstance(input_dict, dict)  # nosec B101
+            ibis_code_text = str(input_dict["ibis"])
+            if ibis_code_text not in seen:
+                seen.add(ibis_code_text)
                 unique_examples.append(ex)
 
         output_file = self.output_dir / "ibis_to_sql_mined.jsonl"
@@ -324,22 +325,32 @@ class MultitaskMiner:
 
         try:
             # Get recent commits with fixes
-            result = subprocess.run(
-                ["git", "log", "--grep=fix", "--grep=error", "--grep=bug",
-                 "-i", "--all", "--oneline", "-100"],
+            # Safe: git is a standard system tool with validated arguments - no shell injection risk
+            result = subprocess.run(  # nosec B603 B607
+                [
+                    "git",
+                    "log",
+                    "--grep=fix",
+                    "--grep=error",
+                    "--grep=bug",
+                    "-i",
+                    "--all",
+                    "--oneline",
+                    "-100",
+                ],
                 cwd=self.repo_path,
                 capture_output=True,
                 text=True,
-                timeout=30
+                timeout=30,
             )
 
             if result.returncode != 0:
-                print(f"  Warning: Could not read git history")
+                print("  Warning: Could not read git history")
                 output_file = self.output_dir / "error_resolution_mined.jsonl"
                 self._write_jsonl(output_file, [])
                 return 0
 
-            commits = result.stdout.strip().split('\n')
+            commits = result.stdout.strip().split("\n")
             print(f"  Found {len(commits)} fix commits")
 
             # For each commit, try to extract fix patterns
@@ -350,12 +361,13 @@ class MultitaskMiner:
                 commit_hash = commit_line.split()[0]
 
                 # Get commit diff
-                diff_result = subprocess.run(
+                # Safe: git is a standard system tool, commit_hash from git log output - no shell injection
+                diff_result = subprocess.run(  # nosec B603 B607
                     ["git", "show", commit_hash, "--format=", "-U0"],
                     cwd=self.repo_path,
                     capture_output=True,
                     text=True,
-                    timeout=10
+                    timeout=10,
                 )
 
                 if diff_result.returncode != 0:
@@ -365,7 +377,7 @@ class MultitaskMiner:
 
                 # Look for simple single-line fixes
                 # Pattern: - old_code\n+ new_code
-                fix_pattern = r'-\s*(.+?)\n\+\s*(.+?)(?:\n|$)'
+                fix_pattern = r"-\s*(.+?)\n\+\s*(.+?)(?:\n|$)"
                 fixes = re.finditer(fix_pattern, diff)
 
                 for fix in fixes:
@@ -375,25 +387,24 @@ class MultitaskMiner:
                     # Skip if not Python-like or too short
                     if len(broken) < 10 or len(fixed) < 10:
                         continue
-                    if not any(kw in broken.lower() for kw in ['ibis', 'table', 'filter', 'select']):
+                    if not any(
+                        kw in broken.lower() for kw in ["ibis", "table", "filter", "select"]
+                    ):
                         continue
 
                     example = {
                         "id": str(uuid.uuid4()),
                         "task": "error_resolution",
                         "source": "git_history",
-                        "input": {
-                            "broken_code": broken,
-                            "error": "Error inferred from git commit"
-                        },
+                        "input": {"broken_code": broken, "error": "Error inferred from git commit"},
                         "target": {
                             "fixed_code": fixed,
-                            "explanation": f"Fixed in commit {commit_hash}"
+                            "explanation": f"Fixed in commit {commit_hash}",
                         },
                         "meta": {
                             "commit": commit_hash,
-                            "note": "Extracted from git history, needs manual review"
-                        }
+                            "note": "Extracted from git history, needs manual review",
+                        },
                     }
                     examples.append(example)
 
@@ -423,11 +434,11 @@ class MultitaskMiner:
         for doc_file in doc_files:
             try:
                 content = doc_file.read_text(encoding="utf-8")
-            except (UnicodeDecodeError, IOError):
+            except (OSError, UnicodeDecodeError):
                 continue
 
             # Find FAQ or Q&A sections
-            qa_section_pattern = r'##\s*(FAQ|Q&A|Questions?|How [Tt]o[^#]+?)(.+?)(?=\n##|$)'
+            qa_section_pattern = r"##\s*(FAQ|Q&A|Questions?|How [Tt]o[^#]+?)(.+?)(?=\n##|$)"
             qa_sections = re.finditer(qa_section_pattern, content, re.DOTALL)
 
             for section in qa_sections:
@@ -435,7 +446,7 @@ class MultitaskMiner:
 
                 # Extract question-answer pairs
                 # Pattern: Question followed by answer
-                qa_pattern = r'\*\*Q:\*\*\s*(.+?)\n\*\*A:\*\*\s*(.+?)(?=\n\*\*Q:|$)'
+                qa_pattern = r"\*\*Q:\*\*\s*(.+?)\n\*\*A:\*\*\s*(.+?)(?=\n\*\*Q:|$)"
                 qa_pairs = re.finditer(qa_pattern, section_content, re.DOTALL)
 
                 for qa in qa_pairs:
@@ -449,21 +460,17 @@ class MultitaskMiner:
                         "id": str(uuid.uuid4()),
                         "task": "qa",
                         "source": "documentation",
-                        "input": {
-                            "question": question
-                        },
-                        "target": {
-                            "answer": answer
-                        },
+                        "input": {"question": question},
+                        "target": {"answer": answer},
                         "meta": {
                             "file": str(doc_file.relative_to(self.repo_path)),
-                            "section": section.group(1).strip()
-                        }
+                            "section": section.group(1).strip(),
+                        },
                     }
                     examples.append(example)
 
             # Also extract from "How to" headings
-            how_to_pattern = r'###?\s+(How (?:do I|to|can I)[^#\n]+?)(.+?)(?=\n##|$)'
+            how_to_pattern = r"###?\s+(How (?:do I|to|can I)[^#\n]+?)(.+?)(?=\n##|$)"
             how_tos = re.finditer(how_to_pattern, content, re.DOTALL | re.IGNORECASE)
 
             for how_to in how_tos:
@@ -471,7 +478,7 @@ class MultitaskMiner:
                 answer_text = how_to.group(2).strip()
 
                 # Take first paragraph as answer
-                answer = answer_text.split('\n\n')[0]
+                answer = answer_text.split("\n\n")[0]
 
                 if len(question) < 10 or len(answer) < 30:
                     continue
@@ -480,16 +487,12 @@ class MultitaskMiner:
                     "id": str(uuid.uuid4()),
                     "task": "qa",
                     "source": "documentation",
-                    "input": {
-                        "question": question
-                    },
-                    "target": {
-                        "answer": answer
-                    },
+                    "input": {"question": question},
+                    "target": {"answer": answer},
                     "meta": {
                         "file": str(doc_file.relative_to(self.repo_path)),
-                        "section": "How-to"
-                    }
+                        "section": "How-to",
+                    },
                 }
                 examples.append(example)
 
@@ -517,7 +520,7 @@ class MultitaskMiner:
             try:
                 content = py_file.read_text(encoding="utf-8")
                 tree = ast.parse(content)
-            except (UnicodeDecodeError, IOError, SyntaxError):
+            except (OSError, UnicodeDecodeError, SyntaxError):
                 continue
 
             # Extract functions with docstrings
@@ -531,7 +534,7 @@ class MultitaskMiner:
 
                 # Get function source
                 try:
-                    func_lines = content.split('\n')[node.lineno - 1:node.end_lineno]
+                    func_lines = content.split("\n")[node.lineno - 1 : node.end_lineno]
                     # Remove docstring from function
                     func_code_lines = []
                     in_docstring = False
@@ -540,18 +543,18 @@ class MultitaskMiner:
                             if not in_docstring:
                                 in_docstring = True
                                 # Keep the def line and signature
-                                if line.strip().startswith('def '):
+                                if line.strip().startswith("def "):
                                     func_code_lines.append(line)
                                 continue
                             else:
                                 in_docstring = False
                                 continue
-                        if not in_docstring and line.strip().startswith('def '):
+                        if not in_docstring and line.strip().startswith("def "):
                             func_code_lines.append(line)
 
                     # Build minimal function signature
                     if func_code_lines:
-                        func_signature = '\n'.join(func_code_lines[:3])  # def + args
+                        func_signature = "\n".join(func_code_lines[:3])  # def + args
                     else:
                         func_signature = f"def {node.name}(...):"
 
@@ -565,17 +568,12 @@ class MultitaskMiner:
                     "id": str(uuid.uuid4()),
                     "task": "documentation",
                     "source": "ibis_codebase",
-                    "input": {
-                        "code": func_signature,
-                        "style": style
-                    },
-                    "target": {
-                        "docstring": f'"""{docstring}"""'
-                    },
+                    "input": {"code": func_signature, "style": style},
+                    "target": {"docstring": f'"""{docstring}"""'},
                     "meta": {
                         "file": str(py_file.relative_to(self.repo_path)),
                         "function": node.name,
-                    }
+                    },
                 }
                 examples.append(example)
 
@@ -583,7 +581,7 @@ class MultitaskMiner:
         self._write_jsonl(output_file, examples[:200])  # Limit to 200
         return len(examples[:200])
 
-    def _write_jsonl(self, file_path: Path, examples: List[Dict[str, Any]]) -> None:
+    def _write_jsonl(self, file_path: Path, examples: list[dict[str, Any]]) -> None:
         """Write examples to JSONL file.
 
         Args:

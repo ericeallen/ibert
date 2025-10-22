@@ -1,7 +1,5 @@
 """Factory for creating model instances."""
 
-from typing import Any, Dict
-
 from ..config import Config
 from .base import BaseModel
 from .mistral_model import MistralModel
@@ -37,6 +35,5 @@ def create_model(config: Config) -> BaseModel:
         return MistralModel(model_config)
     else:
         raise ValueError(
-            f"Unsupported model provider: {provider}. "
-            f"Supported providers: huggingface, mistral"
+            f"Unsupported model provider: {provider}. Supported providers: huggingface, mistral"
         )

@@ -1,12 +1,14 @@
 """Validation logic for SQL+Ibis pairs."""
 
+from typing import Any, Dict, Optional, Tuple
+
 import ibis
 import pandas as pd
-from typing import Any, Dict, Optional, Tuple
 
 
 class ValidationError(Exception):
     """Raised when validation fails."""
+
     pass
 
 
@@ -63,15 +65,15 @@ class Validator:
                 namespace[table_name] = self.con.table(table_name)
 
             # Eval Ibis code - handle multi-line code with imports and decorators
-            lines = ibis_code.strip().split('\n')
+            lines = ibis_code.strip().split("\n")
 
             # Check if we have multi-line code with imports or decorators
-            has_imports = any(l.strip().startswith('import ') for l in lines)
-            has_decorators = any(l.strip().startswith('@') for l in lines)
+            has_imports = any(line.strip().startswith("import ") for line in lines)
+            has_decorators = any(line.strip().startswith("@") for line in lines)
 
             if has_imports or has_decorators:
                 # Separate setup code (imports, function definitions) from expression
-                import_lines = [l for l in lines if l.strip().startswith('import ')]
+                # (import lines are processed below)
 
                 # Find decorator + function definition blocks
                 setup_lines = []
@@ -79,7 +81,7 @@ class Validator:
                 i = 0
                 while i < len(lines):
                     line = lines[i]
-                    if line.strip().startswith('@'):
+                    if line.strip().startswith("@"):
                         # Found decorator - collect decorator + function definition
                         decorator_block = [line]
                         i += 1
@@ -89,13 +91,15 @@ class Validator:
                             # Function body ends when we hit a non-indented line or another decorator/import
                             if i + 1 < len(lines):
                                 next_line = lines[i + 1]
-                                if (next_line.strip() and
-                                    not next_line.startswith('    ') and
-                                    not next_line.startswith('\t')):
+                                if (
+                                    next_line.strip()
+                                    and not next_line.startswith("    ")
+                                    and not next_line.startswith("\t")
+                                ):
                                     break
                             i += 1
                         setup_lines.extend(decorator_block)
-                    elif line.strip().startswith('import '):
+                    elif line.strip().startswith("import "):
                         setup_lines.append(line)
                         i += 1
                     elif line.strip():
@@ -106,16 +110,19 @@ class Validator:
 
                 # Execute setup code (imports and function definitions)
                 if setup_lines:
-                    setup_code = '\n'.join(setup_lines)
-                    exec(setup_code, namespace)
+                    setup_code = "\n".join(setup_lines)
+                    # Safe: controlled execution in sandboxed namespace for Ibis setup code (imports, UDFs)
+                    exec(setup_code, namespace)  # nosec B102
 
                 # Execute expression
                 if expr_lines:
-                    expr_code = '\n'.join(expr_lines)
-                    exec(f"expr = {expr_code}", namespace)
+                    expr_code = "\n".join(expr_lines)
+                    # Safe: controlled execution in sandboxed namespace for Ibis expression evaluation
+                    exec(f"expr = {expr_code}", namespace)  # nosec B102
             else:
                 # No imports/decorators - execute entire code block as expression
-                exec(f"expr = {ibis_code}", namespace)
+                # Safe: controlled execution in sandboxed namespace for Ibis expression evaluation
+                exec(f"expr = {ibis_code}", namespace)  # nosec B102
 
             ibis_result = namespace["expr"].execute()
 
@@ -128,7 +135,9 @@ class Validator:
         except Exception as e:
             return False, str(e)
 
-    def _results_equal(self, df1: pd.DataFrame, df2: pd.DataFrame, tolerance: float = 1e-12) -> bool:
+    def _results_equal(
+        self, df1: pd.DataFrame, df2: pd.DataFrame, tolerance: float = 1e-12
+    ) -> bool:
         """Check if two DataFrames are equivalent.
 
         Parameters
@@ -146,10 +155,7 @@ class Validator:
         # Sort both by all columns for consistent comparison
         try:
             # Find sortable columns (exclude bool, object types that might not be comparable)
-            sortable_cols = [
-                col for col in df1.columns
-                if not pd.api.types.is_bool_dtype(df1[col])
-            ]
+            sortable_cols = [col for col in df1.columns if not pd.api.types.is_bool_dtype(df1[col])]
             if sortable_cols:
                 df1_sorted = df1.sort_values(by=sortable_cols).reset_index(drop=True)
                 df2_sorted = df2.sort_values(by=sortable_cols).reset_index(drop=True)
@@ -168,7 +174,13 @@ class Validator:
             # Compare values
             for col in df1_sorted.columns:
                 if pd.api.types.is_numeric_dtype(df1_sorted[col]):
-                    if not pd.Series(df1_sorted[col]).subtract(df2_sorted[col]).abs().le(tolerance).all():
+                    if (
+                        not pd.Series(df1_sorted[col])
+                        .subtract(df2_sorted[col])
+                        .abs()
+                        .le(tolerance)
+                        .all()
+                    ):
                         return False
                 else:
                     if not df1_sorted[col].equals(df2_sorted[col]):

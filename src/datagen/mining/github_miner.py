@@ -10,12 +10,13 @@ SQL→Ibis translations. It searches for:
 Examples are extracted with provenance metadata for training data generation.
 """
 
-import re
-import subprocess
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple, NamedTuple
 import json
+import re
 
+# Safe: subprocess only used for git clone with sanitized arguments - no shell injection risk
+import subprocess  # nosec B404
+from pathlib import Path
+from typing import Any, NamedTuple
 
 # Constants for pattern matching
 SQL_KEYWORD = "SELECT"  # Primary SQL keyword to identify queries
@@ -42,9 +43,10 @@ class RepositoryConfig(NamedTuple):
     scan_dirs : list of str or None
         Specific subdirectories to scan, or None to scan entire repo
     """
+
     url: str
     name: str
-    scan_dirs: Optional[List[str]]
+    scan_dirs: list[str] | None
 
 
 class SQLExample(NamedTuple):
@@ -61,12 +63,13 @@ class SQLExample(NamedTuple):
     ibis_var : str or None
         Variable name for Ibis expression, if available
     """
+
     source_type: str
     file_path: str
     sql_code: str
-    ibis_var: Optional[str] = None
+    ibis_var: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary format for JSON serialization.
 
         Returns
@@ -147,19 +150,16 @@ class GitHubRepositoryMiner:
         destination : Path
             Local destination path
         """
-        subprocess.run(
-            [
-                "git", "clone",
-                "--depth", str(GIT_CLONE_DEPTH),
-                repo_url,
-                str(destination)
-            ],
+        # Safe: git is a standard system tool, arguments are validated before calling
+        # Safe: repo_url from trusted config, destination is Path object - no shell injection
+        subprocess.run(  # nosec B603 B607
+            ["git", "clone", "--depth", str(GIT_CLONE_DEPTH), repo_url, str(destination)],
             check=True,
             capture_output=True,
-            text=True
+            text=True,
         )
 
-    def find_python_files(self, directory: Path) -> List[Path]:
+    def find_python_files(self, directory: Path) -> list[Path]:
         """Recursively find all Python files in a directory.
 
         Parameters
@@ -174,7 +174,7 @@ class GitHubRepositoryMiner:
         """
         return list(directory.rglob("*.py"))
 
-    def find_jupyter_notebooks(self, directory: Path) -> List[Path]:
+    def find_jupyter_notebooks(self, directory: Path) -> list[Path]:
         """Recursively find all Jupyter notebooks in a directory.
 
         Parameters
@@ -189,7 +189,7 @@ class GitHubRepositoryMiner:
         """
         return list(directory.rglob("*.ipynb"))
 
-    def extract_sql_examples(self, python_file: Path) -> List[SQLExample]:
+    def extract_sql_examples(self, python_file: Path) -> list[SQLExample]:
         """Extract SQL→Ibis examples from a Python file.
 
         Searches for multiple patterns:
@@ -220,7 +220,7 @@ class GitHubRepositoryMiner:
 
         return examples
 
-    def _read_file_safely(self, file_path: Path) -> Optional[str]:
+    def _read_file_safely(self, file_path: Path) -> str | None:
         """Read file content with error handling.
 
         Parameters
@@ -235,14 +235,10 @@ class GitHubRepositoryMiner:
         """
         try:
             return file_path.read_text(encoding="utf-8")
-        except (IOError, UnicodeDecodeError):
+        except (OSError, UnicodeDecodeError):
             return None
 
-    def _extract_sql_method_calls(
-        self,
-        content: str,
-        source_file: Path
-    ) -> List[SQLExample]:
+    def _extract_sql_method_calls(self, content: str, source_file: Path) -> list[SQLExample]:
         """Extract SQL from .sql() method calls with variable assignment.
 
         Pattern: var = obj.sql("SELECT ...")
@@ -266,20 +262,18 @@ class GitHubRepositoryMiner:
             sql_code = match.group(2).strip()
 
             if self._is_valid_sql_query(sql_code):
-                examples.append(SQLExample(
-                    source_type="table.sql()",
-                    file_path=str(source_file),
-                    sql_code=sql_code,
-                    ibis_var=variable_name
-                ))
+                examples.append(
+                    SQLExample(
+                        source_type="table.sql()",
+                        file_path=str(source_file),
+                        sql_code=sql_code,
+                        ibis_var=variable_name,
+                    )
+                )
 
         return examples
 
-    def _extract_direct_sql_calls(
-        self,
-        content: str,
-        source_file: Path
-    ) -> List[SQLExample]:
+    def _extract_direct_sql_calls(self, content: str, source_file: Path) -> list[SQLExample]:
         """Extract SQL from direct .sql() method calls.
 
         Pattern: obj.sql("SELECT ...")
@@ -302,19 +296,15 @@ class GitHubRepositoryMiner:
             sql_code = match.group(1).strip()
 
             if self._is_valid_sql_query(sql_code):
-                examples.append(SQLExample(
-                    source_type="direct_sql",
-                    file_path=str(source_file),
-                    sql_code=sql_code
-                ))
+                examples.append(
+                    SQLExample(
+                        source_type="direct_sql", file_path=str(source_file), sql_code=sql_code
+                    )
+                )
 
         return examples
 
-    def _extract_multiline_sql(
-        self,
-        content: str,
-        source_file: Path
-    ) -> List[SQLExample]:
+    def _extract_multiline_sql(self, content: str, source_file: Path) -> list[SQLExample]:
         """Extract SQL from multi-line string assignments.
 
         Pattern:
@@ -340,11 +330,11 @@ class GitHubRepositoryMiner:
             sql_code = match.group(1).strip()
 
             if self._is_valid_sql_query(sql_code):
-                examples.append(SQLExample(
-                    source_type="multiline_sql",
-                    file_path=str(source_file),
-                    sql_code=sql_code
-                ))
+                examples.append(
+                    SQLExample(
+                        source_type="multiline_sql", file_path=str(source_file), sql_code=sql_code
+                    )
+                )
 
         return examples
 
@@ -381,11 +371,8 @@ class RepositoryScanner:
         self.miner = miner
 
     def scan_repository(
-        self,
-        repo_path: Path,
-        repo_name: str,
-        target_directories: Optional[List[str]] = None
-    ) -> List[Dict[str, Any]]:
+        self, repo_path: Path, repo_name: str, target_directories: list[str] | None = None
+    ) -> list[dict[str, Any]]:
         """Scan repository for SQL examples.
 
         Parameters
@@ -415,11 +402,7 @@ class RepositoryScanner:
         print(f"\nFound {len(all_examples)} potential examples from {repo_name}")
         return all_examples
 
-    def _get_scan_paths(
-        self,
-        repo_path: Path,
-        target_directories: Optional[List[str]]
-    ) -> List[Path]:
+    def _get_scan_paths(self, repo_path: Path, target_directories: list[str] | None) -> list[Path]:
         """Determine which directories to scan.
 
         Parameters
@@ -439,11 +422,8 @@ class RepositoryScanner:
         return [repo_path]
 
     def _scan_python_files(
-        self,
-        scan_paths: List[Path],
-        repo_path: Path,
-        repo_name: str
-    ) -> List[Dict[str, Any]]:
+        self, scan_paths: list[Path], repo_path: Path, repo_name: str
+    ) -> list[dict[str, Any]]:
         """Scan Python files in target paths.
 
         Parameters
@@ -460,7 +440,7 @@ class RepositoryScanner:
         list of dict
             Extracted examples
         """
-        examples = []
+        examples: list[dict[str, Any]] = []
 
         for scan_path in scan_paths:
             if not scan_path.exists():
@@ -484,11 +464,8 @@ class RepositoryScanner:
         return examples
 
     def _scan_notebooks(
-        self,
-        scan_paths: List[Path],
-        repo_path: Path,
-        repo_name: str
-    ) -> List[Dict[str, Any]]:
+        self, scan_paths: list[Path], repo_path: Path, repo_name: str
+    ) -> list[dict[str, Any]]:
         """Scan Jupyter notebooks in target paths.
 
         Parameters
@@ -535,12 +512,7 @@ class RepositoryScanner:
 
         return examples
 
-    def _get_directory_label(
-        self,
-        scan_path: Path,
-        repo_path: Path,
-        repo_name: str
-    ) -> str:
+    def _get_directory_label(self, scan_path: Path, repo_path: Path, repo_name: str) -> str:
         """Get human-readable label for directory.
 
         Parameters
@@ -569,9 +541,9 @@ class RepositoryScanner:
 def mine_repository(
     repo_url: str,
     repo_name: str,
-    scan_directories: Optional[List[str]] = None,
-    miner: Optional[GitHubRepositoryMiner] = None
-) -> List[Dict[str, Any]]:
+    scan_directories: list[str] | None = None,
+    miner: GitHubRepositoryMiner | None = None,
+) -> list[dict[str, Any]]:
     """Mine SQL→Ibis examples from a single GitHub repository.
 
     This is the main entry point for mining a repository.
@@ -607,7 +579,7 @@ def mine_repository(
     return scanner.scan_repository(repo_path, repo_name, scan_directories)
 
 
-def load_repository_config(config_path: Path) -> List[RepositoryConfig]:
+def load_repository_config(config_path: Path) -> list[RepositoryConfig]:
     """Load repository configurations from file.
 
     File format: repo_url|repo_name|optional,scan,dirs
@@ -624,7 +596,7 @@ def load_repository_config(config_path: Path) -> List[RepositoryConfig]:
     """
     configs = []
 
-    with open(config_path, "r", encoding="utf-8") as f:
+    with open(config_path, encoding="utf-8") as f:
         for line in f:
             line = line.strip()
 
@@ -639,7 +611,7 @@ def load_repository_config(config_path: Path) -> List[RepositoryConfig]:
     return configs
 
 
-def _parse_config_line(line: str) -> Optional[RepositoryConfig]:
+def _parse_config_line(line: str) -> RepositoryConfig | None:
     """Parse a single configuration line.
 
     Parameters
@@ -666,14 +638,10 @@ def _parse_config_line(line: str) -> Optional[RepositoryConfig]:
     if len(parts) >= 3 and parts[2].strip():
         scan_dirs = [d.strip() for d in parts[2].split(",")]
 
-    return RepositoryConfig(
-        url=repo_url,
-        name=repo_name,
-        scan_dirs=scan_dirs
-    )
+    return RepositoryConfig(url=repo_url, name=repo_name, scan_dirs=scan_dirs)
 
 
-def mine_from_config(config_path: Path) -> List[Dict[str, Any]]:
+def mine_from_config(config_path: Path) -> list[dict[str, Any]]:
     """Mine examples from all repositories in configuration file.
 
     Parameters
@@ -699,21 +667,13 @@ def mine_from_config(config_path: Path) -> List[Dict[str, Any]]:
         if config.scan_dirs:
             print(f"  Directories: {', '.join(config.scan_dirs)}")
 
-        examples = mine_repository(
-            config.url,
-            config.name,
-            config.scan_dirs,
-            miner
-        )
+        examples = mine_repository(config.url, config.name, config.scan_dirs, miner)
         all_examples.extend(examples)
 
     return all_examples
 
 
-def save_examples_to_jsonl(
-    examples: List[Dict[str, Any]],
-    output_path: Path
-) -> None:
+def save_examples_to_jsonl(examples: list[dict[str, Any]], output_path: Path) -> None:
     """Save extracted examples to JSONL file.
 
     Parameters

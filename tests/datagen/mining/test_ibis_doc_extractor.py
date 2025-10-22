@@ -9,19 +9,18 @@ covering:
 """
 
 import json
-import pytest
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
+import pytest
 
 from src.datagen.mining.ibis_doc_extractor import (
-    MarkdownExtractor,
-    JupyterExtractor,
     DocumentationMiner,
     DocumentExample,
-    extract_from_markdown,
+    JupyterExtractor,
+    MarkdownExtractor,
     extract_from_jupyter,
-    SQL_KEYWORD,
-    IBIS_KEYWORD,
+    extract_from_markdown,
 )
 
 
@@ -35,7 +34,7 @@ class TestDocumentExample:
             file_path="/docs/example.md",
             sql_code="SELECT * FROM users",
             ibis_code="users.select()",
-            context="Full code block"
+            context="Full code block",
         )
 
         assert example.source_type == "markdown_doc"
@@ -49,7 +48,7 @@ class TestDocumentExample:
         example = DocumentExample(
             source_type="quarto_doc",
             file_path="/docs/example.qmd",
-            sql_code="SELECT COUNT(*) FROM events"
+            sql_code="SELECT COUNT(*) FROM events",
         )
 
         assert example.ibis_code is None
@@ -62,7 +61,7 @@ class TestDocumentExample:
             file_path="/docs/example.md",
             sql_code="SELECT * FROM users",
             ibis_code="users.select()",
-            context="code block"
+            context="code block",
         )
 
         result = example.to_dict()
@@ -79,7 +78,7 @@ class TestDocumentExample:
             source_type="jupyter_notebook",
             file_path="/notebooks/demo.ipynb",
             sql_code="SELECT id FROM products",
-            context="next cell"
+            context="next cell",
         )
 
         result = example.to_dict()
@@ -90,9 +89,7 @@ class TestDocumentExample:
     def test_to_dict_minimal(self):
         """Test converting minimal example to dictionary."""
         example = DocumentExample(
-            source_type="quarto_doc",
-            file_path="/docs/test.qmd",
-            sql_code="SELECT 1"
+            source_type="quarto_doc", file_path="/docs/test.qmd", sql_code="SELECT 1"
         )
 
         result = example.to_dict()
@@ -156,7 +153,7 @@ class TestMarkdownExtractor:
 
     def test_extract_quarto_examples(self, temp_md_file: Path):
         """Test extracting from Quarto Python blocks."""
-        content = '''
+        content = """
 # Example
 
 ```{python}
@@ -167,7 +164,7 @@ result = t.sql("SELECT * FROM users WHERE age > 18")
 ```{python}
 data = con.sql("SELECT COUNT(*) FROM events")
 ```
-'''
+"""
         temp_md_file.write_text(content)
         extractor = MarkdownExtractor(temp_md_file)
 
@@ -180,7 +177,7 @@ data = con.sql("SELECT COUNT(*) FROM events")
 
     def test_extract_sequential_blocks(self, temp_md_file: Path):
         """Test extracting sequential SQL→Python blocks."""
-        content = '''
+        content = """
 Here's an example:
 
 ```sql
@@ -193,7 +190,7 @@ GROUP BY user_id
 import ibis
 result = events.group_by('user_id').agg(event_count=ibis._.count())
 ```
-'''
+"""
         temp_md_file.write_text(content)
         extractor = MarkdownExtractor(temp_md_file)
 
@@ -206,7 +203,7 @@ result = events.group_by('user_id').agg(event_count=ibis._.count())
 
     def test_extract_sequential_blocks_no_ibis(self, temp_md_file: Path):
         """Test that SQL→Python blocks without ibis are skipped."""
-        content = '''
+        content = """
 ```sql
 SELECT * FROM users
 ```
@@ -214,7 +211,7 @@ SELECT * FROM users
 ```python
 print("hello")
 ```
-'''
+"""
         temp_md_file.write_text(content)
         extractor = MarkdownExtractor(temp_md_file)
 
@@ -224,7 +221,7 @@ print("hello")
 
     def test_extract_python_sql_strings(self, temp_md_file: Path):
         """Test extracting SQL strings from Python blocks."""
-        content = '''
+        content = """
 ```python
 query = "SELECT id, name FROM products WHERE price > 100"
 con.execute(query)
@@ -233,7 +230,7 @@ con.execute(query)
 ```py
 sql = "SELECT COUNT(*) FROM orders"
 ```
-'''
+"""
         temp_md_file.write_text(content)
         extractor = MarkdownExtractor(temp_md_file)
 
@@ -244,7 +241,7 @@ sql = "SELECT COUNT(*) FROM orders"
 
     def test_extract_examples_combined(self, temp_md_file: Path):
         """Test extracting all patterns from a document."""
-        content = '''
+        content = """
 # SQL→Ibis Examples
 
 ## Quarto Style
@@ -269,7 +266,7 @@ count = events.count()
 ```python
 query = "SELECT id FROM products"
 ```
-'''
+"""
         temp_md_file.write_text(content)
         extractor = MarkdownExtractor(temp_md_file)
 
@@ -296,7 +293,7 @@ class TestJupyterExtractor:
     """Test suite for the JupyterExtractor class."""
 
     @pytest.fixture
-    def sample_notebook(self) -> Dict[str, Any]:
+    def sample_notebook(self) -> dict[str, Any]:
         """Create sample notebook structure.
 
         Returns
@@ -308,34 +305,16 @@ class TestJupyterExtractor:
             "cells": [
                 {
                     "cell_type": "code",
-                    "source": [
-                        "import ibis\n",
-                        'result = t.sql("SELECT * FROM users")\n'
-                    ]
+                    "source": ["import ibis\n", 'result = t.sql("SELECT * FROM users")\n'],
                 },
-                {
-                    "cell_type": "code",
-                    "source": [
-                        "result.head()\n"
-                    ]
-                },
-                {
-                    "cell_type": "markdown",
-                    "source": [
-                        "# Example\n"
-                    ]
-                },
-                {
-                    "cell_type": "code",
-                    "source": [
-                        'con.sql("SELECT COUNT(*) FROM events")\n'
-                    ]
-                }
+                {"cell_type": "code", "source": ["result.head()\n"]},
+                {"cell_type": "markdown", "source": ["# Example\n"]},
+                {"cell_type": "code", "source": ['con.sql("SELECT COUNT(*) FROM events")\n']},
             ]
         }
 
     @pytest.fixture
-    def temp_notebook_file(self, tmp_path: Path, sample_notebook: Dict[str, Any]) -> Path:
+    def temp_notebook_file(self, tmp_path: Path, sample_notebook: dict[str, Any]) -> Path:
         """Create temporary notebook file.
 
         Parameters
@@ -396,7 +375,7 @@ class TestJupyterExtractor:
 
         assert sql is None
 
-    def test_get_next_cell_context(self, temp_notebook_file: Path, sample_notebook: Dict[str, Any]):
+    def test_get_next_cell_context(self, temp_notebook_file: Path, sample_notebook: dict[str, Any]):
         """Test getting next cell context."""
         extractor = JupyterExtractor(temp_notebook_file)
 
@@ -406,9 +385,7 @@ class TestJupyterExtractor:
         assert "result.head()" in context
 
     def test_get_next_cell_context_last_cell(
-        self,
-        temp_notebook_file: Path,
-        sample_notebook: Dict[str, Any]
+        self, temp_notebook_file: Path, sample_notebook: dict[str, Any]
     ):
         """Test getting context when current cell is last."""
         extractor = JupyterExtractor(temp_notebook_file)
@@ -418,18 +395,12 @@ class TestJupyterExtractor:
 
         assert context is None
 
-    def test_extract_from_cell(
-        self,
-        temp_notebook_file: Path,
-        sample_notebook: Dict[str, Any]
-    ):
+    def test_extract_from_cell(self, temp_notebook_file: Path, sample_notebook: dict[str, Any]):
         """Test extracting examples from a cell."""
         extractor = JupyterExtractor(temp_notebook_file)
 
         examples = extractor._extract_from_cell(
-            sample_notebook["cells"][0],
-            0,
-            sample_notebook["cells"]
+            sample_notebook["cells"][0], 0, sample_notebook["cells"]
         )
 
         assert len(examples) == 1
@@ -438,9 +409,7 @@ class TestJupyterExtractor:
         assert examples[0].context is not None
 
     def test_extract_from_cell_no_sql(
-        self,
-        temp_notebook_file: Path,
-        sample_notebook: Dict[str, Any]
+        self, temp_notebook_file: Path, sample_notebook: dict[str, Any]
     ):
         """Test extracting from cell without SQL."""
         extractor = JupyterExtractor(temp_notebook_file)
@@ -448,7 +417,7 @@ class TestJupyterExtractor:
         examples = extractor._extract_from_cell(
             sample_notebook["cells"][2],  # Markdown cell
             2,
-            sample_notebook["cells"]
+            sample_notebook["cells"],
         )
 
         assert len(examples) == 0
@@ -528,18 +497,22 @@ class TestDocumentationMiner:
 
         # Create markdown files
         md_file = docs_dir / "example.md"
-        md_file.write_text('''
+        md_file.write_text(
+            """
 ```{python}
 result = t.sql("SELECT * FROM users")
 ```
-''')
+"""
+        )
 
         qmd_file = docs_dir / "tutorial.qmd"
-        qmd_file.write_text('''
+        qmd_file.write_text(
+            """
 ```{python}
 con.sql("SELECT COUNT(*) FROM events")
 ```
-''')
+"""
+        )
 
         examples = miner._mine_markdown_files()
 
@@ -558,12 +531,7 @@ con.sql("SELECT COUNT(*) FROM events")
     def test_mine_notebooks(self, miner: DocumentationMiner, temp_repo: Path):
         """Test mining Jupyter notebooks."""
         notebook_data = {
-            "cells": [
-                {
-                    "cell_type": "code",
-                    "source": ['result = t.sql("SELECT * FROM users")']
-                }
-            ]
+            "cells": [{"cell_type": "code", "source": ['result = t.sql("SELECT * FROM users")']}]
         }
 
         notebook_file = temp_repo / "example.ipynb"
@@ -587,20 +555,17 @@ con.sql("SELECT COUNT(*) FROM events")
 
         # Create markdown file
         md_file = docs_dir / "guide.md"
-        md_file.write_text('''
+        md_file.write_text(
+            """
 ```{python}
 t.sql("SELECT * FROM users")
 ```
-''')
+"""
+        )
 
         # Create notebook
         notebook_data = {
-            "cells": [
-                {
-                    "cell_type": "code",
-                    "source": ['con.sql("SELECT COUNT(*) FROM events")']
-                }
-            ]
+            "cells": [{"cell_type": "code", "source": ['con.sql("SELECT COUNT(*) FROM events")']}]
         }
 
         notebook_file = temp_repo / "tutorial.ipynb"
@@ -618,11 +583,13 @@ class TestConvenienceFunctions:
     def test_extract_from_markdown(self, tmp_path: Path):
         """Test extract_from_markdown function."""
         md_file = tmp_path / "test.md"
-        md_file.write_text('''
+        md_file.write_text(
+            """
 ```{python}
 result = t.sql("SELECT * FROM users")
 ```
-''')
+"""
+        )
 
         examples = extract_from_markdown(md_file)
 
@@ -633,12 +600,7 @@ result = t.sql("SELECT * FROM users")
     def test_extract_from_jupyter(self, tmp_path: Path):
         """Test extract_from_jupyter function."""
         notebook_data = {
-            "cells": [
-                {
-                    "cell_type": "code",
-                    "source": ['t.sql("SELECT * FROM users")']
-                }
-            ]
+            "cells": [{"cell_type": "code", "source": ['t.sql("SELECT * FROM users")']}]
         }
 
         notebook_file = tmp_path / "test.ipynb"
@@ -668,7 +630,7 @@ class TestIntegration:
         tutorials_dir.mkdir()
 
         # Create markdown documentation
-        md_content = '''
+        md_content = """
 # Tutorial
 
 ## SQL Method
@@ -692,27 +654,21 @@ result = orders.group_by('product_id').agg(
     order_count=ibis._.count()
 )
 ```
-'''
+"""
         (tutorials_dir / "tutorial.md").write_text(md_content)
 
         # Create Jupyter notebook
         notebook_data = {
             "cells": [
-                {
-                    "cell_type": "markdown",
-                    "source": ["# Example Notebook"]
-                },
+                {"cell_type": "markdown", "source": ["# Example Notebook"]},
                 {
                     "cell_type": "code",
                     "source": [
-                        'import ibis\n',
-                        'result = con.sql("SELECT COUNT(*) FROM events")\n'
-                    ]
+                        "import ibis\n",
+                        'result = con.sql("SELECT COUNT(*) FROM events")\n',
+                    ],
                 },
-                {
-                    "cell_type": "code",
-                    "source": ["result.execute()"]
-                }
+                {"cell_type": "code", "source": ["result.execute()"]},
             ]
         }
 
@@ -738,5 +694,3 @@ result = orders.group_by('product_id').agg(
         assert any("users" in sql for sql in sql_codes)
         assert any("orders" in sql for sql in sql_codes)
         assert any("events" in sql for sql in sql_codes)
-
-

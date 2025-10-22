@@ -1,10 +1,9 @@
 """Tests for multi-task example mining system."""
 
 import json
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
 import subprocess
+
+import pytest
 
 from src.datagen.mining.multitask_miner import MultitaskMiner
 
@@ -19,7 +18,8 @@ class TestMultitaskMiner:
         repo.mkdir()
 
         # Create sample Python files
-        (repo / "example.py").write_text("""
+        (repo / "example.py").write_text(
+            """
 import ibis
 
 def filter_adults(table):
@@ -30,12 +30,14 @@ result = t.select(t.col1, t.col2).filter(t.col1 > 10).group_by(t.col2).aggregate
 
 # SQL call
 data = con.sql("SELECT * FROM users WHERE age > 18")
-        """)
+        """
+        )
 
         # Create docs directory
         docs = repo / "docs"
         docs.mkdir()
-        (docs / "guide.md").write_text("""
+        (docs / "guide.md").write_text(
+            """
 # User Guide
 
 ### How to filter data
@@ -46,10 +48,12 @@ You can filter data using the filter method.
 
 **Q:** How do I select columns?
 **A:** Use the select method to choose specific columns.
-        """)
+        """
+        )
 
         # Create file with docstring
-        (repo / "functions.py").write_text('''
+        (repo / "functions.py").write_text(
+            '''
 def calculate_average(table, column):
     """Calculate average of a column.
 
@@ -61,7 +65,8 @@ def calculate_average(table, column):
         Average value
     """
     return table[column].mean()
-''')
+'''
+        )
 
         return repo
 
@@ -103,12 +108,14 @@ def calculate_average(table, column):
     def test_mine_code_completion_deduplication(self, miner, temp_repo):
         """Test that duplicate code completions are removed."""
         # Create file with duplicate patterns
-        (temp_repo / "dup.py").write_text("""
+        (temp_repo / "dup.py").write_text(
+            """
 result1 = t.filter(t.age > 18)
 result2 = t.filter(t.age > 18)  # Exact duplicate
-        """)
+        """
+        )
 
-        count = miner._mine_code_completion()
+        miner._mine_code_completion()
 
         output_file = miner.output_dir / "code_completion_mined.jsonl"
         with open(output_file) as f:
@@ -142,23 +149,22 @@ result2 = t.filter(t.age > 18)  # Exact duplicate
     def test_mine_sql_to_ibis_filters_by_length(self, miner, temp_repo):
         """Test SQL mining filters by length."""
         # Create file with various SQL lengths
-        (temp_repo / "sql_test.py").write_text('''
+        (temp_repo / "sql_test.py").write_text(
+            """
 short = con.sql("SELECT 1")  # Too short
 good = con.sql("SELECT * FROM users WHERE age > 18")
 very_long = con.sql("SELECT " + "col, " * 100 + " FROM table")  # Too long
-        ''')
+        """
+        )
 
-        count = miner._mine_sql_to_ibis()
+        miner._mine_sql_to_ibis()
 
         output_file = miner.output_dir / "sql_to_ibis_mined.jsonl"
         with open(output_file) as f:
             examples = [json.loads(line) for line in f]
 
         # Should have at least the good one
-        assert any(
-            "users" in ex["input"]["sql"]
-            for ex in examples
-        )
+        assert any("users" in ex["input"]["sql"] for ex in examples)
 
     # Test _mine_ibis_to_sql
     def test_mine_ibis_to_sql(self, miner):
@@ -182,10 +188,7 @@ very_long = con.sql("SELECT " + "col, " * 100 + " FROM table")  # Too long
     def test_mine_ibis_to_sql_limits_results(self, miner, temp_repo):
         """Test that Ibis→SQL mining limits results."""
         # Create many expressions
-        code = "\n".join([
-            f"result{i} = table.filter(table.col{i} > {i})"
-            for i in range(200)
-        ])
+        code = "\n".join([f"result{i} = table.filter(table.col{i} > {i})" for i in range(200)])
         (temp_repo / "many_exprs.py").write_text(code)
 
         count = miner._mine_ibis_to_sql()
@@ -207,12 +210,10 @@ very_long = con.sql("SELECT " + "col, " * 100 + " FROM table")  # Too long
         # Initialize git repo
         subprocess.run(["git", "init"], cwd=temp_repo, capture_output=True)
         subprocess.run(
-            ["git", "config", "user.name", "Test User"],
-            cwd=temp_repo, capture_output=True
+            ["git", "config", "user.name", "Test User"], cwd=temp_repo, capture_output=True
         )
         subprocess.run(
-            ["git", "config", "user.email", "test@example.com"],
-            cwd=temp_repo, capture_output=True
+            ["git", "config", "user.email", "test@example.com"], cwd=temp_repo, capture_output=True
         )
 
         # Create a file and commit
@@ -220,8 +221,7 @@ very_long = con.sql("SELECT " + "col, " * 100 + " FROM table")  # Too long
         test_file.write_text("broken = table.filter(\n")
         subprocess.run(["git", "add", "."], cwd=temp_repo, capture_output=True)
         subprocess.run(
-            ["git", "commit", "-m", "Add broken code"],
-            cwd=temp_repo, capture_output=True
+            ["git", "commit", "-m", "Add broken code"], cwd=temp_repo, capture_output=True
         )
 
         # Fix and commit
@@ -229,7 +229,8 @@ very_long = con.sql("SELECT " + "col, " * 100 + " FROM table")  # Too long
         subprocess.run(["git", "add", "."], cwd=temp_repo, capture_output=True)
         subprocess.run(
             ["git", "commit", "-m", "fix: correct filter syntax"],
-            cwd=temp_repo, capture_output=True
+            cwd=temp_repo,
+            capture_output=True,
         )
 
         count = miner._mine_error_resolution()
@@ -251,7 +252,8 @@ very_long = con.sql("SELECT " + "col, " * 100 + " FROM table")  # Too long
         docs_dir = temp_repo / "docs"
         docs_dir.mkdir(exist_ok=True)
 
-        (docs_dir / "howto.md").write_text("""
+        (docs_dir / "howto.md").write_text(
+            """
 ### How to filter rows
 
 You can filter rows using the filter method. Example:
@@ -263,9 +265,10 @@ table.filter(table.age > 18)
 ### How do I aggregate data?
 
 Use the aggregate method with aggregation functions like sum(), mean(), etc.
-        """)
+        """
+        )
 
-        count = miner._mine_qa()
+        miner._mine_qa()
 
         output_file = miner.output_dir / "qa_mined.jsonl"
         with open(output_file) as f:
@@ -279,7 +282,9 @@ Use the aggregate method with aggregation functions like sum(), mean(), etc.
             assert "answer" in ex["target"]
 
     # Test _mine_documentation
-    @pytest.mark.skip(reason="Documentation extraction requires specific repo structure - tested in integration tests")
+    @pytest.mark.skip(
+        reason="Documentation extraction requires specific repo structure - tested in integration tests"
+    )
     def test_mine_documentation(self, miner):
         """Test documentation mining."""
         count = miner._mine_documentation()
@@ -298,10 +303,13 @@ Use the aggregate method with aggregation functions like sum(), mean(), etc.
         assert "style" in ex["input"]
         assert "docstring" in ex["target"]
 
-    @pytest.mark.skip(reason="Documentation style detection requires full docstring parser - tested in integration tests")
+    @pytest.mark.skip(
+        reason="Documentation style detection requires full docstring parser - tested in integration tests"
+    )
     def test_mine_documentation_detects_style(self, miner, temp_repo):
         """Test that documentation mining detects Google vs NumPy style."""
-        (temp_repo / "google_style.py").write_text('''
+        (temp_repo / "google_style.py").write_text(
+            '''
 def google_func():
     """Function with Google style.
 
@@ -312,9 +320,11 @@ def google_func():
         None
     """
     pass
-''')
+'''
+        )
 
-        (temp_repo / "numpy_style.py").write_text('''
+        (temp_repo / "numpy_style.py").write_text(
+            '''
 def numpy_func():
     """Function with NumPy style.
 
@@ -327,9 +337,10 @@ def numpy_func():
     None
     """
     pass
-''')
+'''
+        )
 
-        count = miner._mine_documentation()
+        miner._mine_documentation()
 
         output_file = miner.output_dir / "documentation_mined.jsonl"
         with open(output_file) as f:
@@ -342,8 +353,9 @@ def numpy_func():
     def test_mine_documentation_limits_results(self, miner, temp_repo):
         """Test documentation mining limits results."""
         # Create many functions
-        code = "\n".join([
-            f'''
+        code = "\n".join(
+            [
+                f'''
 def func{i}():
     """Docstring {i}.
 
@@ -352,8 +364,9 @@ def func{i}():
     """
     return {i}
 '''
-            for i in range(300)
-        ])
+                for i in range(300)
+            ]
+        )
         (temp_repo / "many_funcs.py").write_text(code)
 
         count = miner._mine_documentation()
@@ -364,10 +377,7 @@ def func{i}():
     # Test _write_jsonl
     def test_write_jsonl(self, miner):
         """Test JSONL writing."""
-        examples = [
-            {"id": "1", "data": "test1"},
-            {"id": "2", "data": "test2"}
-        ]
+        examples = [{"id": "1", "data": "test1"}, {"id": "2", "data": "test2"}]
 
         output_file = miner.output_dir / "test.jsonl"
         miner._write_jsonl(output_file, examples)
@@ -401,10 +411,17 @@ def func{i}():
 
         assert isinstance(stats, dict)
         assert len(stats) == 6
-        assert all(task in stats for task in [
-            "code_completion", "sql_to_ibis", "ibis_to_sql",
-            "error_resolution", "qa", "documentation"
-        ])
+        assert all(
+            task in stats
+            for task in [
+                "code_completion",
+                "sql_to_ibis",
+                "ibis_to_sql",
+                "error_resolution",
+                "qa",
+                "documentation",
+            ]
+        )
         assert all(isinstance(count, int) for count in stats.values())
 
     def test_mine_all_creates_all_files(self, miner):
@@ -417,7 +434,7 @@ def func{i}():
             "ibis_to_sql_mined.jsonl",
             "error_resolution_mined.jsonl",
             "qa_mined.jsonl",
-            "documentation_mined.jsonl"
+            "documentation_mined.jsonl",
         ]
 
         for filename in expected_files:
@@ -427,7 +444,9 @@ def func{i}():
 class TestIntegration:
     """Integration tests for multitask mining."""
 
-    @pytest.mark.skip(reason="End-to-end documentation mining requires complex setup - skipping for CI")
+    @pytest.mark.skip(
+        reason="End-to-end documentation mining requires complex setup - skipping for CI"
+    )
     def test_end_to_end_mining(self, tmp_path):
         """Test complete mining workflow."""
         # Create realistic repo structure
@@ -435,7 +454,8 @@ class TestIntegration:
         repo.mkdir()
 
         # Python file with various patterns
-        (repo / "api.py").write_text("""
+        (repo / "api.py").write_text(
+            """
 import ibis
 
 class DataProcessor:
@@ -459,12 +479,14 @@ class DataProcessor:
 
     def load_from_sql(self, conn):
         return conn.sql("SELECT id, name, age FROM users WHERE active = true")
-        """)
+        """
+        )
 
         # Documentation
         docs = repo / "docs"
         docs.mkdir()
-        (docs / "tutorial.md").write_text("""
+        (docs / "tutorial.md").write_text(
+            """
 # Tutorial
 
 ## How to get started
@@ -474,7 +496,8 @@ First, install Ibis. Then you can create connections and start querying data.
 ### How do I connect to a database?
 
 Use the connection method for your specific backend, like ibis.duckdb.connect().
-        """)
+        """
+        )
 
         # Run mining
         output_dir = tmp_path / "mined"
@@ -534,9 +557,7 @@ Use the connection method for your specific backend, like ibis.duckdb.connect().
 
         output_dir = tmp_path / "nonexistent" / "nested" / "output"
 
-        miner = MultitaskMiner(repo, output_dir)
+        MultitaskMiner(repo, output_dir)
 
         assert output_dir.exists()
         assert output_dir.is_dir()
-
-

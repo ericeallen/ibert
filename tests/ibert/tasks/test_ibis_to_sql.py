@@ -1,7 +1,5 @@
 """Tests for Ibis to SQL translation task."""
 
-import pytest
-
 from src.ibert.tasks import IbisToSQLTask
 
 
@@ -26,19 +24,13 @@ class TestIbisToSQLTask:
     def test_format_prompt_with_dialect(self, mock_model):
         """Test prompt formatting with dialect."""
         task = IbisToSQLTask(mock_model)
-        prompt = task.format_prompt(
-            "table.filter(table.age > 18)",
-            dialect="postgres"
-        )
+        prompt = task.format_prompt("table.filter(table.age > 18)", dialect="postgres")
         assert "postgres" in prompt
 
     def test_format_prompt_with_table_name(self, mock_model):
         """Test prompt formatting with table name."""
         task = IbisToSQLTask(mock_model)
-        prompt = task.format_prompt(
-            "table.filter(table.age > 18)",
-            table_name="users"
-        )
+        prompt = task.format_prompt("table.filter(table.age > 18)", table_name="users")
         assert "users" in prompt
 
     def test_execute(self, mock_model_with_response):

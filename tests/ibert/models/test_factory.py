@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.ibert.config import Config, ModelConfig
+from src.ibert.config import Config
 from src.ibert.models import create_model
 from src.ibert.models.mistral_model import MistralModel
 

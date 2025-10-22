@@ -4,11 +4,15 @@ import ibis
 import pandas as pd
 
 # Create test data
-df = pd.DataFrame({
-    "user_id": [1, 2, 3, 1, 2],
-    "event_ts": pd.to_datetime(["2024-01-01", "2024-01-01", "2024-01-02", "2024-01-02", "2024-01-03"]),
-    "amount": [10.0, 20.0, 30.0, 15.0, 25.0]
-})
+df = pd.DataFrame(
+    {
+        "user_id": [1, 2, 3, 1, 2],
+        "event_ts": pd.to_datetime(
+            ["2024-01-01", "2024-01-01", "2024-01-02", "2024-01-02", "2024-01-03"]
+        ),
+        "amount": [10.0, 20.0, 30.0, 15.0, 25.0],
+    }
+)
 
 # Connect to DuckDB and register table
 con = ibis.duckdb.connect()
@@ -41,9 +45,14 @@ print("=" * 60)
 
 # Try to get a code representation
 print(f"repr(expr2):\n{repr(expr2)}")
-print(f"\ndir(expr2) [relevant methods]:")
+print("\ndir(expr2) [relevant methods]:")
 for attr in dir(expr2):
-    if not attr.startswith('_') and 'sql' in attr.lower() or 'code' in attr.lower() or 'str' in attr.lower():
+    if (
+        not attr.startswith("_")
+        and "sql" in attr.lower()
+        or "code" in attr.lower()
+        or "str" in attr.lower()
+    ):
         print(f"  - {attr}")
 
 print("\n" + "=" * 60)
@@ -51,10 +60,7 @@ print("TEST 4: Check if expressions are equivalent")
 print("=" * 60)
 
 # Build same query with Ibis API
-expr2_ibis = events.group_by("user_id").aggregate(
-    n=events.count(),
-    total=events.amount.sum()
-)
+expr2_ibis = events.group_by("user_id").aggregate(n=events.count(), total=events.amount.sum())
 
 print("SQL-generated SQL:")
 print(ibis.to_sql(expr2))

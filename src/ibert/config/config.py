@@ -3,7 +3,6 @@
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 import yaml
 
@@ -19,8 +18,8 @@ class ModelConfig:
     device: str = "auto"  # auto, cpu, cuda, mps
     load_in_8bit: bool = False  # Load in 8-bit for lower memory
     cache_dir: str = ".cache"  # Directory for model cache
-    api_key: Optional[str] = None  # For API-based providers
-    base_url: Optional[str] = None  # For custom API endpoints
+    api_key: str | None = None  # For API-based providers
+    base_url: str | None = None  # For custom API endpoints
 
     def __post_init__(self):
         """Load API key from environment if not provided."""
@@ -71,7 +70,7 @@ class Config:
         }
 
 
-def load_config(config_path: Optional[Path] = None) -> Config:
+def load_config(config_path: Path | None = None) -> Config:
     """Load configuration from file or use defaults.
 
     Args:

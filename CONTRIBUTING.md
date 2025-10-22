@@ -46,7 +46,7 @@ pip install -e .[dev]
 4. **Install pre-commit hooks**
 
 ```bash
-pre-commit install
+.venv/bin/pre-commit install
 ```
 
 This will automatically run code quality checks before each commit.
@@ -67,8 +67,7 @@ PYTHONPATH=. .venv/bin/python -m pytest tests/
 
 We use strict code quality tools to ensure consistency:
 
-- **Black** - Code formatting (100 character line length)
-- **Ruff** - Fast Python linter
+- **Ruff** - Fast Python linter and formatter (replaces Black + Flake8)
 - **isort** - Import sorting
 - **mypy** - Static type checking
 - **Bandit** - Security vulnerability scanning
@@ -78,12 +77,12 @@ We use strict code quality tools to ensure consistency:
 
 ```bash
 # Run all checks (happens automatically on commit with pre-commit hooks)
-pre-commit run --all-files
+.venv/bin/pre-commit run --all-files
 
 # Run individual tools
-black src/ tests/
-ruff check src/ tests/
-mypy src/
+.venv/bin/ruff format src/ tests/  # Format code (Black-compatible)
+.venv/bin/ruff check src/ tests/   # Lint code
+.venv/bin/mypy src/
 ```
 
 ### Type Hints
@@ -264,7 +263,7 @@ just test
 PYTHONPATH=. .venv/bin/python -m pytest tests/ --cov=src
 
 # Pre-commit hooks must pass
-pre-commit run --all-files
+.venv/bin/pre-commit run --all-files
 ```
 
 4. **Commit your changes**
@@ -320,7 +319,7 @@ Brief description of changes
 
 ### Code Style
 
-- **Line length**: 100 characters (enforced by Black)
+- **Line length**: 100 characters (enforced by Ruff)
 - **Indentation**: 4 spaces (no tabs)
 - **Quotes**: Double quotes for strings, single for characters
 - **Imports**: Sorted alphabetically, grouped (stdlib, third-party, local)

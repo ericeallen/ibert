@@ -1,6 +1,6 @@
 """Mistral model implementation using local inference."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from .base import BaseModel
 
@@ -15,7 +15,7 @@ class MistralModel(BaseModel):
         pip install transformers torch accelerate
     """
 
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, config: dict[str, Any]):
         """Initialize local Mistral model.
 
         Args:
@@ -29,15 +29,13 @@ class MistralModel(BaseModel):
                 - lazy_load: If True, don't load model until first use (default: False, for testing)
         """
         super().__init__(config)
-        self._model_name = config.get(
-            "model_name", "mistralai/Mistral-7B-Instruct-v0.3"
-        )
-        self._temperature = config.get("temperature", 0.2)
-        self._max_tokens = config.get("max_tokens", 2048)
-        self._device = config.get("device", "auto")
-        self._load_in_8bit = config.get("load_in_8bit", False)
-        self._cache_dir = config.get("cache_dir", ".cache")
-        self._lazy_load = config.get("lazy_load", False)
+        self._model_name: str = str(config.get("model_name", "mistralai/Mistral-7B-Instruct-v0.3"))
+        self._temperature: float = float(config.get("temperature", 0.2))
+        self._max_tokens: int = int(config.get("max_tokens", 2048))
+        self._device: str = str(config.get("device", "auto"))
+        self._load_in_8bit: bool = bool(config.get("load_in_8bit", False))
+        self._cache_dir: str = str(config.get("cache_dir", ".cache"))
+        self._lazy_load: bool = bool(config.get("lazy_load", False))
 
         self._model = None
         self._tokenizer = None
@@ -52,8 +50,8 @@ class MistralModel(BaseModel):
         from pathlib import Path
 
         try:
+            import torch  # noqa: F401
             from transformers import AutoModelForCausalLM, AutoTokenizer
-            import torch
 
             # Check if model is already cached
             cache_path = Path(self._cache_dir)
@@ -83,10 +81,9 @@ class MistralModel(BaseModel):
                 )
 
             # Load tokenizer
-            print(
-                f"Loading tokenizer for {self._model_name}...", file=sys.stderr
-            )
-            self._tokenizer = AutoTokenizer.from_pretrained(
+            print(f"Loading tokenizer for {self._model_name}...", file=sys.stderr)
+            # Safe: model_name is from config, not user input - using trusted model registry
+            self._tokenizer = AutoTokenizer.from_pretrained(  # nosec B615
                 self._model_name, cache_dir=self._cache_dir
             )
 
@@ -102,7 +99,7 @@ class MistralModel(BaseModel):
                 )
                 print("This may take several minutes...\n", file=sys.stderr)
             else:
-                print(f"Loading model from cache...", file=sys.stderr)
+                print("Loading model from cache...", file=sys.stderr)
 
             # Special handling for MPS (Apple Silicon) to avoid memory allocation issues
             if self._device == "mps":
@@ -123,9 +120,8 @@ class MistralModel(BaseModel):
                 load_kwargs["load_in_8bit"] = True
                 print("Using 8-bit quantization for lower memory", file=sys.stderr)
 
-            self._model = AutoModelForCausalLM.from_pretrained(
-                self._model_name, **load_kwargs
-            )
+            # Safe: model_name is from config, not user input - using trusted model registry
+            self._model = AutoModelForCausalLM.from_pretrained(self._model_name, **load_kwargs)  # nosec B615
 
             # Move to MPS if requested
             if self._device == "mps" and not self._load_in_8bit:
@@ -140,9 +136,7 @@ class MistralModel(BaseModel):
             if hasattr(self._model, "device"):
                 device_info = f"on {self._model.device}"
 
-            print(
-                f"\n✓ Model loaded successfully {device_info}\n", file=sys.stderr
-            )
+            print(f"\n✓ Model loaded successfully {device_info}\n", file=sys.stderr)
 
         except ImportError as e:
             # Model will remain None, generate methods will raise helpful error
@@ -170,7 +164,7 @@ class MistralModel(BaseModel):
             )
             raise RuntimeError(error_msg)
 
-    def _format_messages(self, messages: List[Dict[str, str]]) -> str:
+    def _format_messages(self, messages: list[dict[str, str]]) -> str:
         """Format messages into Mistral instruction format.
 
         Args:
@@ -206,9 +200,9 @@ class MistralModel(BaseModel):
     def generate(
         self,
         prompt: str,
-        system_prompt: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        system_prompt: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate text completion from a prompt.
 
@@ -230,9 +224,9 @@ class MistralModel(BaseModel):
 
     def generate_chat(
         self,
-        messages: List[Dict[str, str]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        messages: list[dict[str, str]],
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate response from a chat conversation.
 
@@ -254,12 +248,14 @@ class MistralModel(BaseModel):
         # Format messages for Mistral
         formatted_prompt = self._format_messages(messages)
 
-        # Tokenize
-        inputs = self._tokenizer(
-            formatted_prompt, return_tensors="pt", padding=True
-        )
+        # Tokenize (tokenizer is guaranteed to be non-None by _ensure_model)
+        # Safe: type assertion for type checker - _ensure_model guarantees non-None
+        assert self._tokenizer is not None  # nosec B101
+        inputs = self._tokenizer(formatted_prompt, return_tensors="pt", padding=True)
 
         # Move to same device as model
+        # Safe: type assertion for type checker - _ensure_model guarantees non-None
+        assert self._model is not None  # nosec B101
         if hasattr(self._model, "device"):
             inputs = {k: v.to(self._model.device) for k, v in inputs.items()}
 
@@ -276,11 +272,10 @@ class MistralModel(BaseModel):
 
         # Decode only the new tokens (not the input)
         generated_tokens = outputs[0][inputs["input_ids"].shape[1] :]
-        response = self._tokenizer.decode(
-            generated_tokens, skip_special_tokens=True
-        )
+        response = self._tokenizer.decode(generated_tokens, skip_special_tokens=True)
 
-        return response.strip()
+        # Ensure response is a string
+        return str(response).strip()
 
     @property
     def model_name(self) -> str:

@@ -9,22 +9,21 @@ covering:
 - Configuration file parsing
 """
 
-import pytest
 import subprocess
 from pathlib import Path
-from typing import List, Dict, Any
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
+
+import pytest
 
 from src.datagen.mining.github_miner import (
-    GitHubRepositoryMiner,
-    RepositoryScanner,
-    RepositoryConfig,
-    SQLExample,
-    mine_repository,
-    load_repository_config,
-    _parse_config_line,
-    SQL_KEYWORD,
     GIT_CLONE_DEPTH,
+    GitHubRepositoryMiner,
+    RepositoryConfig,
+    RepositoryScanner,
+    SQLExample,
+    _parse_config_line,
+    load_repository_config,
+    mine_repository,
 )
 
 
@@ -37,7 +36,7 @@ class TestSQLExample:
             source_type="table.sql()",
             file_path="/path/to/file.py",
             sql_code="SELECT * FROM users",
-            ibis_var="result"
+            ibis_var="result",
         )
 
         assert example.source_type == "table.sql()"
@@ -50,7 +49,7 @@ class TestSQLExample:
         example = SQLExample(
             source_type="direct_sql",
             file_path="/path/to/file.py",
-            sql_code="SELECT COUNT(*) FROM events"
+            sql_code="SELECT COUNT(*) FROM events",
         )
 
         assert example.ibis_var is None
@@ -61,7 +60,7 @@ class TestSQLExample:
             source_type="table.sql()",
             file_path="/path/to/file.py",
             sql_code="SELECT * FROM users",
-            ibis_var="result"
+            ibis_var="result",
         )
 
         result = example.to_dict()
@@ -76,7 +75,7 @@ class TestSQLExample:
         example = SQLExample(
             source_type="direct_sql",
             file_path="/path/to/file.py",
-            sql_code="SELECT COUNT(*) FROM events"
+            sql_code="SELECT COUNT(*) FROM events",
         )
 
         result = example.to_dict()
@@ -91,9 +90,7 @@ class TestRepositoryConfig:
     def test_creation_with_scan_dirs(self):
         """Test creating config with scan directories."""
         config = RepositoryConfig(
-            url="https://github.com/user/repo.git",
-            name="repo",
-            scan_dirs=["src", "tests"]
+            url="https://github.com/user/repo.git", name="repo", scan_dirs=["src", "tests"]
         )
 
         assert config.url == "https://github.com/user/repo.git"
@@ -103,9 +100,7 @@ class TestRepositoryConfig:
     def test_creation_without_scan_dirs(self):
         """Test creating config without scan directories."""
         config = RepositoryConfig(
-            url="https://github.com/user/repo.git",
-            name="repo",
-            scan_dirs=None
+            url="https://github.com/user/repo.git", name="repo", scan_dirs=None
         )
 
         assert config.scan_dirs is None
@@ -152,7 +147,7 @@ class TestGitHubRepositoryMiner:
         assert miner.cache_dir == temp_cache_dir
         assert miner.cache_dir.exists()
 
-    @patch('subprocess.run')
+    @patch("subprocess.run")
     def test_clone_repository_new(self, mock_run, miner: GitHubRepositoryMiner):
         """Test cloning a new repository."""
         repo_url = "https://github.com/test/repo.git"
@@ -173,17 +168,13 @@ class TestGitHubRepositoryMiner:
         assert str(GIT_CLONE_DEPTH) in call_args
         assert repo_url in call_args
 
-    def test_clone_repository_already_exists(
-        self,
-        miner: GitHubRepositoryMiner,
-        capsys
-    ):
+    def test_clone_repository_already_exists(self, miner: GitHubRepositoryMiner, capsys):
         """Test cloning when repository already exists."""
         local_name = "existing-repo"
         repo_path = miner.cache_dir / local_name
         repo_path.mkdir(parents=True)
 
-        with patch('subprocess.run') as mock_run:
+        with patch("subprocess.run") as mock_run:
             result = miner.clone_repository("https://github.com/test/repo.git", local_name)
 
             assert result == repo_path
@@ -251,12 +242,12 @@ class TestGitHubRepositoryMiner:
 
     def test_extract_sql_method_calls(self, miner: GitHubRepositoryMiner, tmp_path: Path):
         """Test extracting SQL from method calls."""
-        code = '''
+        code = """
 import ibis
 
 result = t.sql("SELECT user_id, name FROM users WHERE age > 18")
 other = con.sql("SELECT COUNT(*) FROM events")
-'''
+"""
         test_file = tmp_path / "test.py"
         test_file.write_text(code)
 
@@ -270,10 +261,10 @@ other = con.sql("SELECT COUNT(*) FROM events")
 
     def test_extract_direct_sql_calls(self, miner: GitHubRepositoryMiner, tmp_path: Path):
         """Test extracting direct SQL calls."""
-        code = '''
+        code = """
 con.sql("SELECT * FROM users")
 backend.sql("SELECT id FROM products")
-'''
+"""
         test_file = tmp_path / "test.py"
 
         examples = miner._extract_direct_sql_calls(code, test_file)
@@ -300,11 +291,7 @@ GROUP BY user_id
         assert examples[0].source_type == "multiline_sql"
         assert "GROUP BY" in examples[0].sql_code
 
-    def test_extract_sql_examples_combined(
-        self,
-        miner: GitHubRepositoryMiner,
-        tmp_path: Path
-    ):
+    def test_extract_sql_examples_combined(self, miner: GitHubRepositoryMiner, tmp_path: Path):
         """Test extracting all SQL patterns from a file."""
         code = '''
 import ibis
@@ -336,10 +323,7 @@ WHERE age > 18
         assert "direct_sql" in source_types
         assert "multiline_sql" in source_types
 
-    def test_extract_sql_examples_file_read_error(
-        self,
-        miner: GitHubRepositoryMiner
-    ):
+    def test_extract_sql_examples_file_read_error(self, miner: GitHubRepositoryMiner):
         """Test handling file read errors."""
         examples = miner.extract_sql_examples(Path("/nonexistent/file.py"))
 
@@ -363,11 +347,7 @@ class TestRepositoryScanner:
         """Test scanner initialization."""
         assert scanner.miner == miner
 
-    def test_get_scan_paths_with_target_dirs(
-        self,
-        scanner: RepositoryScanner,
-        tmp_path: Path
-    ):
+    def test_get_scan_paths_with_target_dirs(self, scanner: RepositoryScanner, tmp_path: Path):
         """Test getting scan paths with specific directories."""
         repo_path = tmp_path / "repo"
         target_dirs = ["src", "tests"]
@@ -378,11 +358,7 @@ class TestRepositoryScanner:
         assert paths[0] == repo_path / "src"
         assert paths[1] == repo_path / "tests"
 
-    def test_get_scan_paths_without_target_dirs(
-        self,
-        scanner: RepositoryScanner,
-        tmp_path: Path
-    ):
+    def test_get_scan_paths_without_target_dirs(self, scanner: RepositoryScanner, tmp_path: Path):
         """Test getting scan paths without specific directories."""
         repo_path = tmp_path / "repo"
 
@@ -391,11 +367,7 @@ class TestRepositoryScanner:
         assert len(paths) == 1
         assert paths[0] == repo_path
 
-    def test_get_directory_label_repo_root(
-        self,
-        scanner: RepositoryScanner,
-        tmp_path: Path
-    ):
+    def test_get_directory_label_repo_root(self, scanner: RepositoryScanner, tmp_path: Path):
         """Test directory label for repo root."""
         repo_path = tmp_path / "repo"
 
@@ -403,11 +375,7 @@ class TestRepositoryScanner:
 
         assert label == "test-repo"
 
-    def test_get_directory_label_subdirectory(
-        self,
-        scanner: RepositoryScanner,
-        tmp_path: Path
-    ):
+    def test_get_directory_label_subdirectory(self, scanner: RepositoryScanner, tmp_path: Path):
         """Test directory label for subdirectory."""
         repo_path = tmp_path / "repo"
         subdir = repo_path / "src" / "tests"
@@ -417,11 +385,7 @@ class TestRepositoryScanner:
         assert "src" in label
         assert "tests" in label
 
-    def test_scan_python_files(
-        self,
-        scanner: RepositoryScanner,
-        tmp_path: Path
-    ):
+    def test_scan_python_files(self, scanner: RepositoryScanner, tmp_path: Path):
         """Test scanning Python files."""
         repo_path = tmp_path / "repo"
         repo_path.mkdir()
@@ -502,7 +466,8 @@ class TestConfigParsing:
     def test_load_repository_config(self, tmp_path: Path):
         """Test loading full repository configuration."""
         config_file = tmp_path / "repos.txt"
-        config_file.write_text("""
+        config_file.write_text(
+            """
 # Comment line
 https://github.com/user/repo1.git|repo1|src,tests
 
@@ -510,7 +475,8 @@ https://github.com/user/repo1.git|repo1|src,tests
 https://github.com/user/repo2.git|repo2|
 
 https://github.com/user/repo3.git|repo3
-""")
+"""
+        )
 
         configs = load_repository_config(config_file)
 
@@ -524,12 +490,14 @@ https://github.com/user/repo3.git|repo3
     def test_load_repository_config_with_empty_lines(self, tmp_path: Path):
         """Test loading config with blank lines."""
         config_file = tmp_path / "repos.txt"
-        config_file.write_text("""
+        config_file.write_text(
+            """
 https://github.com/user/repo1.git|repo1|src
 
 
 https://github.com/user/repo2.git|repo2|
-""")
+"""
+        )
 
         configs = load_repository_config(config_file)
 
@@ -539,48 +507,28 @@ https://github.com/user/repo2.git|repo2|
 class TestMineRepository:
     """Test suite for the mine_repository function."""
 
-    @patch.object(GitHubRepositoryMiner, 'clone_repository')
-    @patch.object(RepositoryScanner, 'scan_repository')
-    def test_mine_repository_success(
-        self,
-        mock_scan,
-        mock_clone,
-        tmp_path: Path
-    ):
+    @patch.object(GitHubRepositoryMiner, "clone_repository")
+    @patch.object(RepositoryScanner, "scan_repository")
+    def test_mine_repository_success(self, mock_scan, mock_clone, tmp_path: Path):
         """Test successful repository mining."""
         repo_path = tmp_path / "repo"
         mock_clone.return_value = repo_path
         mock_scan.return_value = [{"sql": "SELECT 1"}]
 
         miner = GitHubRepositoryMiner(tmp_path / "cache")
-        examples = mine_repository(
-            "https://github.com/user/repo.git",
-            "repo",
-            ["src"],
-            miner
-        )
+        examples = mine_repository("https://github.com/user/repo.git", "repo", ["src"], miner)
 
         assert len(examples) == 1
         mock_clone.assert_called_once()
         mock_scan.assert_called_once()
 
-    @patch.object(GitHubRepositoryMiner, 'clone_repository')
-    def test_mine_repository_clone_failure(
-        self,
-        mock_clone,
-        tmp_path: Path,
-        capsys
-    ):
+    @patch.object(GitHubRepositoryMiner, "clone_repository")
+    def test_mine_repository_clone_failure(self, mock_clone, tmp_path: Path, capsys):
         """Test handling clone failure."""
-        mock_clone.side_effect = subprocess.CalledProcessError(1, 'git')
+        mock_clone.side_effect = subprocess.CalledProcessError(1, "git")
 
         miner = GitHubRepositoryMiner(tmp_path / "cache")
-        examples = mine_repository(
-            "https://github.com/user/repo.git",
-            "repo",
-            None,
-            miner
-        )
+        examples = mine_repository("https://github.com/user/repo.git", "repo", None, miner)
 
         assert examples == []
 
@@ -599,16 +547,20 @@ class TestIntegration:
 
         # Create Python files with different SQL patterns
         code_file1 = repo_dir / "users.py"
-        code_file1.write_text('users_query = t.sql("SELECT user_id FROM users WHERE active = true")')
+        code_file1.write_text(
+            'users_query = t.sql("SELECT user_id FROM users WHERE active = true")'
+        )
 
         code_file2 = repo_dir / "orders.py"
-        code_file2.write_text('''
+        code_file2.write_text(
+            '''
 sql = """
 SELECT product_id, SUM(quantity) as total
 FROM orders
 GROUP BY product_id
 """
-''')
+'''
+        )
 
         # Create miner and scanner
         miner = GitHubRepositoryMiner(tmp_path / "cache")
@@ -624,5 +576,3 @@ GROUP BY product_id
         sql_codes = [ex["sql"] for ex in examples]
         assert any("users" in sql.lower() for sql in sql_codes)
         assert any("orders" in sql.lower() for sql in sql_codes)
-
-

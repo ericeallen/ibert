@@ -1,10 +1,10 @@
 """Tests for multi-task data generation system."""
 
 import json
-import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
-import uuid
+
+import pytest
 
 from src.datagen.multitask.generate_multitask_data import MultitaskDataGenerator
 
@@ -20,7 +20,8 @@ class TestMultitaskDataGenerator:
         # Create code_completion templates
         cc_dir = templates_dir / "code_completion"
         cc_dir.mkdir(parents=True)
-        (cc_dir / "test_template.yaml").write_text("""
+        (cc_dir / "test_template.yaml").write_text(
+            """
 name: test_completion
 task: code_completion
 system_prompt: "Complete the code"
@@ -38,12 +39,14 @@ variations:
         table:
           schema:
             age: "int64"
-""")
+"""
+        )
 
         # Create documentation templates
         doc_dir = templates_dir / "documentation"
         doc_dir.mkdir(parents=True)
-        (doc_dir / "test_doc.yaml").write_text("""
+        (doc_dir / "test_doc.yaml").write_text(
+            """
 name: test_docs
 task: documentation
 system_prompt: "Generate docstring"
@@ -56,12 +59,14 @@ variations:
       style: "google"
     target:
       docstring: '\"\"\"A function.\\n\\nReturns:\\n    None\"\"\"'
-""")
+"""
+        )
 
         # Create Q&A templates
         qa_dir = templates_dir / "qa"
         qa_dir.mkdir(parents=True)
-        (qa_dir / "test_qa.yaml").write_text("""
+        (qa_dir / "test_qa.yaml").write_text(
+            """
 name: test_qa
 task: qa
 system_prompt: "Answer questions"
@@ -73,7 +78,8 @@ variations:
       question: "How do I filter?"
     target:
       answer: "Use the filter method to select rows meeting criteria."
-""")
+"""
+        )
 
         return templates_dir
 
@@ -96,7 +102,7 @@ variations:
         templates_dir.mkdir()
         output_dir = tmp_path / "nested" / "output"
 
-        generator = MultitaskDataGenerator(templates_dir, output_dir)
+        MultitaskDataGenerator(templates_dir, output_dir)
 
         assert output_dir.exists()
         assert output_dir.is_dir()
@@ -132,7 +138,7 @@ variations:
         """Test writing JSONL output."""
         examples = [
             {"id": "1", "task": "test", "data": "example1"},
-            {"id": "2", "task": "test", "data": "example2"}
+            {"id": "2", "task": "test", "data": "example2"},
         ]
 
         generator._write_jsonl("test_output", examples)
@@ -170,7 +176,7 @@ variations:
 
     def test_generate_code_completion_creates_unique_ids(self, generator):
         """Test that each example gets a unique ID."""
-        count = generator._generate_code_completion()
+        generator._generate_code_completion()
 
         output_file = generator.output_dir / "code_completion.jsonl"
         with open(output_file) as f:
@@ -186,10 +192,12 @@ variations:
         sql_data_dir = tmp_path / "data" / "sql2ibis"
         sql_data_dir.mkdir(parents=True)
         train_file = sql_data_dir / "train.jsonl"
-        train_file.write_text('{"task":"sql_to_ibis","data":"test1"}\n{"task":"sql_to_ibis","data":"test2"}\n')
+        train_file.write_text(
+            '{"task":"sql_to_ibis","data":"test1"}\n{"task":"sql_to_ibis","data":"test2"}\n'
+        )
 
         # Patch Path class to return our temporary file location
-        with patch('src.datagen.multitask.generate_multitask_data.Path') as mock_path_cls:
+        with patch("src.datagen.multitask.generate_multitask_data.Path") as mock_path_cls:
             # When Path("data/sql2ibis/train.jsonl") is called, return our temp file
             mock_path_cls.return_value = train_file
 
@@ -201,7 +209,7 @@ variations:
     def test_generate_sql_to_ibis_handles_missing_file(self, generator):
         """Test SQL→Ibis handles missing existing file."""
         # The method checks for data/sql2ibis/train.jsonl which won't exist in test
-        with patch.object(Path, 'exists', return_value=False):
+        with patch.object(Path, "exists", return_value=False):
             count = generator._generate_sql_to_ibis()
 
             # Should return 0 and print warning
@@ -213,7 +221,8 @@ variations:
         # Create ibis_to_sql template
         ibis_sql_dir = temp_templates / "ibis_to_sql"
         ibis_sql_dir.mkdir()
-        (ibis_sql_dir / "test.yaml").write_text("""
+        (ibis_sql_dir / "test.yaml").write_text(
+            """
 name: test_ibis_to_sql
 task: ibis_to_sql
 system_prompt: "Translate to SQL"
@@ -224,7 +233,8 @@ variations:
       dialect: "duckdb"
     target:
       sql: "SELECT * FROM table WHERE age > 18"
-""")
+"""
+        )
 
         count = generator._generate_ibis_to_sql()
 
@@ -243,7 +253,8 @@ variations:
         # Create error_resolution template
         err_dir = temp_templates / "error_resolution"
         err_dir.mkdir()
-        (err_dir / "test.yaml").write_text("""
+        (err_dir / "test.yaml").write_text(
+            """
 name: test_errors
 task: error_resolution
 system_prompt: "Fix errors"
@@ -256,7 +267,8 @@ variations:
       fixed_code: "x = int('1') + 1"
       explanation: "Convert string to int"
     error_type: "type"
-""")
+"""
+        )
 
         count = generator._generate_error_resolution()
 
@@ -356,10 +368,17 @@ variations:
 
         assert isinstance(stats, dict)
         assert len(stats) == 6
-        assert all(task in stats for task in [
-            "code_completion", "sql_to_ibis", "ibis_to_sql",
-            "error_resolution", "qa", "documentation"
-        ])
+        assert all(
+            task in stats
+            for task in [
+                "code_completion",
+                "sql_to_ibis",
+                "ibis_to_sql",
+                "error_resolution",
+                "qa",
+                "documentation",
+            ]
+        )
 
     def test_generate_all_creates_all_files(self, generator):
         """Test that generate_all creates all output files."""
@@ -369,13 +388,17 @@ variations:
             "code_completion.jsonl",
             "documentation.jsonl",
             "qa.jsonl",
-            "train_complete.jsonl"
+            "train_complete.jsonl",
         ]
 
         for filename in expected_files:
             path = generator.output_dir / filename
             if filename != "sql_to_ibis.jsonl":  # May not exist if no source
-                assert path.exists() or filename == "error_resolution.jsonl" or filename == "ibis_to_sql.jsonl"
+                assert (
+                    path.exists()
+                    or filename == "error_resolution.jsonl"
+                    or filename == "ibis_to_sql.jsonl"
+                )
 
 
 class TestIntegration:
@@ -389,7 +412,8 @@ class TestIntegration:
         # Code completion
         cc_dir = templates_dir / "code_completion"
         cc_dir.mkdir(parents=True)
-        (cc_dir / "filters.yaml").write_text("""
+        (cc_dir / "filters.yaml").write_text(
+            """
 name: filter_examples
 task: code_completion
 system_prompt: "Complete Ibis code"
@@ -404,12 +428,14 @@ variations:
       partial_code: "table.filter(table.name =="
     target:
       completed_code: 'table.filter(table.name == "Alice")'
-""")
+"""
+        )
 
         # Q&A
         qa_dir = templates_dir / "qa"
         qa_dir.mkdir()
-        (qa_dir / "basic.yaml").write_text("""
+        (qa_dir / "basic.yaml").write_text(
+            """
 name: basic_qa
 task: qa
 system_prompt: "Answer questions about Ibis"
@@ -424,7 +450,8 @@ variations:
       question: "How do I filter rows?"
     target:
       answer: "Use the filter method with a boolean expression."
-""")
+"""
+        )
 
         # Run generation
         output_dir = tmp_path / "output"
@@ -454,7 +481,8 @@ variations:
         qa_dir.mkdir(parents=True)
 
         # Create multiple template files
-        (qa_dir / "basic.yaml").write_text("""
+        (qa_dir / "basic.yaml").write_text(
+            """
 name: basic
 task: qa
 variations:
@@ -463,9 +491,11 @@ variations:
       question: "Question 1?"
     target:
       answer: "Answer 1"
-""")
+"""
+        )
 
-        (qa_dir / "advanced.yaml").write_text("""
+        (qa_dir / "advanced.yaml").write_text(
+            """
 name: advanced
 task: qa
 variations:
@@ -474,7 +504,8 @@ variations:
       question: "Question 2?"
     target:
       answer: "Answer 2"
-""")
+"""
+        )
 
         output_dir = tmp_path / "output"
         generator = MultitaskDataGenerator(templates_dir, output_dir)
@@ -488,7 +519,8 @@ variations:
         doc_dir = templates_dir / "documentation"
         doc_dir.mkdir(parents=True)
 
-        (doc_dir / "test.yaml").write_text("""
+        (doc_dir / "test.yaml").write_text(
+            """
 name: test_template
 task: documentation
 system_prompt: "Generate docs"
@@ -501,7 +533,8 @@ variations:
       style: "google"
     target:
       docstring: "Complete docstring"
-""")
+"""
+        )
 
         output_dir = tmp_path / "output"
         generator = MultitaskDataGenerator(templates_dir, output_dir)
@@ -534,8 +567,8 @@ variations:
 class TestMainFunction:
     """Tests for the main() function CLI."""
 
-    @patch('src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator')
-    @patch('sys.argv', ['script.py'])
+    @patch("src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator")
+    @patch("sys.argv", ["script.py"])
     def test_main_default_all_tasks(self, mock_generator_cls):
         """Test main() with no arguments generates all tasks."""
         from src.datagen.multitask.generate_multitask_data import main
@@ -547,7 +580,7 @@ class TestMainFunction:
             "ibis_to_sql": 15,
             "error_resolution": 5,
             "qa": 8,
-            "documentation": 12
+            "documentation": 12,
         }
         mock_generator_cls.return_value = mock_generator
 
@@ -557,8 +590,8 @@ class TestMainFunction:
         mock_generator.generate_all.assert_called_once()
         mock_generator.generate_task.assert_not_called()
 
-    @patch('src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator')
-    @patch('sys.argv', ['script.py', '--task', 'code_completion'])
+    @patch("src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator")
+    @patch("sys.argv", ["script.py", "--task", "code_completion"])
     def test_main_specific_task(self, mock_generator_cls):
         """Test main() with --task argument."""
         from src.datagen.multitask.generate_multitask_data import main
@@ -570,11 +603,13 @@ class TestMainFunction:
         main()
 
         # Should call generate_task with specified task
-        mock_generator.generate_task.assert_called_once_with('code_completion')
+        mock_generator.generate_task.assert_called_once_with("code_completion")
         mock_generator.generate_all.assert_not_called()
 
-    @patch('src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator')
-    @patch('sys.argv', ['script.py', '--templates', '/custom/templates', '--output', '/custom/output'])
+    @patch("src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator")
+    @patch(
+        "sys.argv", ["script.py", "--templates", "/custom/templates", "--output", "/custom/output"]
+    )
     def test_main_custom_paths(self, mock_generator_cls):
         """Test main() with custom paths."""
         from src.datagen.multitask.generate_multitask_data import main
@@ -587,11 +622,11 @@ class TestMainFunction:
 
         # Check generator was initialized with custom paths
         args = mock_generator_cls.call_args[0]
-        assert str(args[0]) == '/custom/templates'
-        assert str(args[1]) == '/custom/output'
+        assert str(args[0]) == "/custom/templates"
+        assert str(args[1]) == "/custom/output"
 
-    @patch('src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator')
-    @patch('sys.argv', ['script.py', '--task', 'qa'])
+    @patch("src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator")
+    @patch("sys.argv", ["script.py", "--task", "qa"])
     def test_main_prints_single_task_stats(self, mock_generator_cls, capsys):
         """Test main() prints stats for single task."""
         from src.datagen.multitask.generate_multitask_data import main
@@ -606,8 +641,8 @@ class TestMainFunction:
         assert "42" in captured.out
         assert "qa" in captured.out
 
-    @patch('src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator')
-    @patch('sys.argv', ['script.py'])
+    @patch("src.datagen.multitask.generate_multitask_data.MultitaskDataGenerator")
+    @patch("sys.argv", ["script.py"])
     def test_main_prints_all_tasks_summary(self, mock_generator_cls, capsys):
         """Test main() prints summary for all tasks."""
         from src.datagen.multitask.generate_multitask_data import main
@@ -619,7 +654,7 @@ class TestMainFunction:
             "ibis_to_sql": 15,
             "error_resolution": 5,
             "qa": 8,
-            "documentation": 12
+            "documentation": 12,
         }
         mock_generator_cls.return_value = mock_generator
 

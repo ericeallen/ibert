@@ -1,7 +1,5 @@
 """Tests for SQL to Ibis translation task."""
 
-import pytest
-
 from src.ibert.tasks import SQLToIbisTask
 
 
@@ -25,18 +23,14 @@ class TestSQLToIbisTask:
     def test_format_prompt_with_table_name(self, mock_model):
         """Test prompt formatting with table name."""
         task = SQLToIbisTask(mock_model)
-        prompt = task.format_prompt(
-            "SELECT * FROM users WHERE age > 18",
-            table_name="users"
-        )
+        prompt = task.format_prompt("SELECT * FROM users WHERE age > 18", table_name="users")
         assert "users" in prompt
 
     def test_format_prompt_with_schema(self, mock_model):
         """Test prompt formatting with schema."""
         task = SQLToIbisTask(mock_model)
         prompt = task.format_prompt(
-            "SELECT * FROM users WHERE age > 18",
-            schema="id: int, name: string, age: int"
+            "SELECT * FROM users WHERE age > 18", schema="id: int, name: string, age: int"
         )
         assert "id: int" in prompt
         assert "name: string" in prompt

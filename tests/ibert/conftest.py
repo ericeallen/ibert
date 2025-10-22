@@ -41,6 +41,8 @@ def mock_model():
 @pytest.fixture
 def mock_model_with_response():
     """Create a mock model factory with custom response."""
+
     def _create_mock(response):
         return MockModel(response=response)
+
     return _create_mock

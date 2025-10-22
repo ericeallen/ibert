@@ -1,12 +1,11 @@
 """Tests for SQL/Ibis validator."""
 
-import pytest
-import pandas as pd
 import ibis
-from pathlib import Path
+import pandas as pd
+import pytest
 
-from src.datagen.sql2ibis.eval.validator import Validator, ValidationError
 from src.datagen.sql2ibis.eval.fixtures import get_test_tables
+from src.datagen.sql2ibis.eval.validator import Validator
 
 
 class TestValidator:
@@ -42,7 +41,7 @@ class TestValidator:
     def test_register_tables(self, validator, test_tables):
         """Test table registration."""
         # Tables should be accessible
-        for table_name in test_tables.keys():
+        for table_name in test_tables:
             table = validator.con.table(table_name)
             assert table is not None
 
@@ -62,15 +61,9 @@ class TestValidator:
     def test_validate_example_valid_simple(self, validator):
         """Test validation of simple valid example."""
         example = {
-            "input": {
-                "sql": "SELECT * FROM events"
-            },
-            "target": {
-                "ibis": "events"
-            },
-            "context": {
-                "tables": {"events": {}}
-            }
+            "input": {"sql": "SELECT * FROM events"},
+            "target": {"ibis": "events"},
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -81,15 +74,9 @@ class TestValidator:
     def test_validate_example_valid_filter(self, validator):
         """Test validation with filter."""
         example = {
-            "input": {
-                "sql": "SELECT * FROM events WHERE user_id = 1"
-            },
-            "target": {
-                "ibis": "events.filter(events.user_id == 1)"
-            },
-            "context": {
-                "tables": {"events": {}}
-            }
+            "input": {"sql": "SELECT * FROM events WHERE user_id = 1"},
+            "target": {"ibis": "events.filter(events.user_id == 1)"},
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -99,15 +86,9 @@ class TestValidator:
     def test_validate_example_sql_error(self, validator):
         """Test validation with invalid SQL."""
         example = {
-            "input": {
-                "sql": "SELECT * FROMMMM events"  # Typo
-            },
-            "target": {
-                "ibis": "events"
-            },
-            "context": {
-                "tables": {"events": {}}
-            }
+            "input": {"sql": "SELECT * FROMMMM events"},  # Typo
+            "target": {"ibis": "events"},
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -118,15 +99,9 @@ class TestValidator:
     def test_validate_example_ibis_error(self, validator):
         """Test validation with invalid Ibis code."""
         example = {
-            "input": {
-                "sql": "SELECT * FROM events"
-            },
-            "target": {
-                "ibis": "events.nonexistent_method()"
-            },
-            "context": {
-                "tables": {"events": {}}
-            }
+            "input": {"sql": "SELECT * FROM events"},
+            "target": {"ibis": "events.nonexistent_method()"},
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -137,15 +112,9 @@ class TestValidator:
     def test_validate_example_with_imports(self, validator):
         """Test validation with Ibis code that has imports."""
         example = {
-            "input": {
-                "sql": "SELECT * FROM events"
-            },
-            "target": {
-                "ibis": "import ibis\nevents"
-            },
-            "context": {
-                "tables": {"events": {}}
-            }
+            "input": {"sql": "SELECT * FROM events"},
+            "target": {"ibis": "import ibis\nevents"},
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -156,17 +125,13 @@ class TestValidator:
     def test_validate_example_multiline_ibis(self, validator):
         """Test validation with multi-line Ibis code."""
         example = {
-            "input": {
-                "sql": "SELECT user_id, COUNT(*) as count FROM events GROUP BY user_id"
-            },
+            "input": {"sql": "SELECT user_id, COUNT(*) as count FROM events GROUP BY user_id"},
             "target": {
                 "ibis": """events.group_by('user_id').aggregate(
     count=events.count()
 )"""
             },
-            "context": {
-                "tables": {"events": {}}
-            }
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -276,7 +241,7 @@ class TestGetTestTables:
         """Test that returned DataFrames are valid."""
         tables = get_test_tables()
 
-        for name, df in tables.items():
+        for _name, df in tables.items():
             assert isinstance(df, pd.DataFrame)
             assert len(df) > 0  # Not empty
 
@@ -316,11 +281,9 @@ class TestIntegration:
 
         # Register test data
         test_data = {
-            "products": pd.DataFrame({
-                "id": [1, 2, 3],
-                "name": ["A", "B", "C"],
-                "price": [10.0, 20.0, 30.0]
-            })
+            "products": pd.DataFrame(
+                {"id": [1, 2, 3], "name": ["A", "B", "C"], "price": [10.0, 20.0, 30.0]}
+            )
         }
         validator.register_tables(test_data)
 
@@ -329,13 +292,13 @@ class TestIntegration:
             {
                 "input": {"sql": "SELECT * FROM products"},
                 "target": {"ibis": "products"},
-                "context": {"tables": {"products": {}}}
+                "context": {"tables": {"products": {}}},
             },
             {
                 "input": {"sql": "SELECT * FROM products WHERE price > 15"},
                 "target": {"ibis": "products.filter(products.price > 15)"},
-                "context": {"tables": {"products": {}}}
-            }
+                "context": {"tables": {"products": {}}},
+            },
         ]
 
         # Validate each
@@ -355,13 +318,9 @@ class TestIntegration:
 
         # Group by example
         example = {
-            "input": {
-                "sql": "SELECT user_id, COUNT(*) as cnt FROM events GROUP BY user_id"
-            },
-            "target": {
-                "ibis": "events.group_by('user_id').aggregate(cnt=events.count())"
-            },
-            "context": {"tables": {"events": {}}}
+            "input": {"sql": "SELECT user_id, COUNT(*) as cnt FROM events GROUP BY user_id"},
+            "target": {"ibis": "events.group_by('user_id').aggregate(cnt=events.count())"},
+            "context": {"tables": {"events": {}}},
         }
 
         success, error = validator.validate_example(example)
@@ -388,7 +347,7 @@ class TestIntegration:
     events.user_id, users.name, events.amount
 )"""
             },
-            "context": {"tables": {"events": {}, "users": {}}}
+            "context": {"tables": {"events": {}, "users": {}}},
         }
 
         success, error = validator.validate_example(example)

@@ -8,19 +8,17 @@ from pathlib import Path
 src_path = Path(__file__).parent.parent / "src"
 sys.path.insert(0, str(src_path))
 
-from ibert.cli_utils import read_input
-from ibert.config import load_config
-from ibert.models import create_model
-from ibert.tasks import QATask
+from ibert.cli_utils import read_input  # noqa: E402
+from ibert.config import load_config  # noqa: E402
+from ibert.models import create_model  # noqa: E402
+from ibert.tasks import QATask  # noqa: E402
 
 
 def main():
     """Answer questions about Ibis."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Answer questions about Ibis"
-    )
+    parser = argparse.ArgumentParser(description="Answer questions about Ibis")
     parser.add_argument(
         "input",
         nargs="?",

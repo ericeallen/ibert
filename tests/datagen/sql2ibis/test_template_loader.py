@@ -1,22 +1,15 @@
 """Tests for SQL→Ibis template loading and rendering system."""
 
-import json
 import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch
 
-from src.datagen.sql2ibis.template_loader.loader import (
-    Template,
-    load_templates,
-    generate_examples
-)
 from src.datagen.sql2ibis.template_loader.expander import (
-    expand_parameter_space,
-    expand_template_variations,
+    ParameterSpaceConfig,
     apply_substitutions,
     create_column_variations,
-    ParameterSpaceConfig
+    expand_parameter_space,
+    expand_template_variations,
 )
+from src.datagen.sql2ibis.template_loader.loader import Template, generate_examples, load_templates
 
 
 class TestParameterSpaceExpander:
@@ -24,10 +17,7 @@ class TestParameterSpaceExpander:
 
     def test_expand_parameter_space_simple(self):
         """Test expanding simple parameter space."""
-        param_space = {
-            "col": ["age", "price"],
-            "op": [">", "<"]
-        }
+        param_space = {"col": ["age", "price"], "op": [">", "<"]}
 
         combinations = list(expand_parameter_space(param_space))
 
@@ -55,11 +45,7 @@ class TestParameterSpaceExpander:
 
     def test_expand_parameter_space_three_dimensions(self):
         """Test expanding multi-dimensional parameter space."""
-        param_space = {
-            "col": ["a", "b"],
-            "op": [">", "<", "=="],
-            "val": [10, 20]
-        }
+        param_space = {"col": ["a", "b"], "op": [">", "<", "=="], "val": [10, 20]}
 
         combinations = list(expand_parameter_space(param_space))
 
@@ -67,14 +53,8 @@ class TestParameterSpaceExpander:
 
     def test_expand_template_variations_simple(self):
         """Test expanding template variations."""
-        base_variation = {
-            "name": "filter",
-            "params": {"table": "events"}
-        }
-        param_space = {
-            "col": ["age", "amount"],
-            "threshold": [10, 20]
-        }
+        base_variation = {"name": "filter", "params": {"table": "events"}}
+        param_space = {"col": ["age", "amount"], "threshold": [10, 20]}
 
         variations = expand_template_variations(base_variation, param_space)
 
@@ -88,16 +68,11 @@ class TestParameterSpaceExpander:
 
     def test_expand_template_variations_name_pattern(self):
         """Test variation naming with custom pattern."""
-        base_variation = {
-            "name": "simple_filter",
-            "params": {}
-        }
+        base_variation = {"name": "simple_filter", "params": {}}
         param_space = {"op": [">", "<"]}
 
         variations = expand_template_variations(
-            base_variation,
-            param_space,
-            name_pattern="{base_name}_v{idx}"
+            base_variation, param_space, name_pattern="{base_name}_v{idx}"
         )
 
         assert variations[0]["name"] == "simple_filter_v0"
@@ -142,10 +117,7 @@ class TestParameterSpaceExpander:
     def test_create_column_variations(self):
         """Test creating column name variations."""
         base_params = {"threshold": 10}
-        column_mapping = {
-            "amount": ["revenue", "cost"],
-            "user": ["customer_id", "account_id"]
-        }
+        column_mapping = {"amount": ["revenue", "cost"], "user": ["customer_id", "account_id"]}
 
         variations = create_column_variations(base_params, column_mapping)
 
@@ -199,9 +171,7 @@ class TestTemplate:
             "name": "simple_filter",
             "sql_template": "SELECT * FROM {table}",
             "ibis_template": "{table}",
-            "variations": [
-                {"name": "v1", "params": {"table": "events"}}
-            ]
+            "variations": [{"name": "v1", "params": {"table": "events"}}],
         }
 
         template = Template(data)
@@ -237,7 +207,7 @@ class TestTemplate:
             "sql_template": "SELECT * FROM {table}",
             "ibis_template": "{table}",
             "variations": [{"name": "v1", "params": {}}],
-            "context": {"tables": {"events": {}}}
+            "context": {"tables": {"events": {}}},
         }
 
         template = Template(data)
@@ -254,13 +224,13 @@ class TestTemplate:
             "name": "filter_template",
             "sql_template": "SELECT * FROM {table} WHERE {col} > {threshold}",
             "ibis_template": "{table}.filter({table}.{col} > {threshold})",
-            "features": ["filter"]
+            "features": ["filter"],
         }
 
         template = Template(data)
         variation = {
             "name": "age_filter",
-            "params": {"table": "users", "col": "age", "threshold": "18"}
+            "params": {"table": "users", "col": "age", "threshold": "18"},
         }
 
         example = template.render(variation)
@@ -280,7 +250,7 @@ class TestTemplate:
             "name": "test",
             "sql_template": "SELECT 1",
             "ibis_template": "expr",
-            "context": {"tables": {"events": {"schema": {"age": "int64"}}}}
+            "context": {"tables": {"events": {"schema": {"age": "int64"}}}},
         }
 
         template = Template(data)
@@ -296,12 +266,8 @@ class TestTemplate:
             "name": "expandable",
             "sql_template": "SELECT {col}",
             "ibis_template": "{table}.{col}",
-            "variations": [
-                {"name": "base", "params": {"table": "events"}}
-            ],
-            "parameter_space": {
-                "col": ["age", "amount"]
-            }
+            "variations": [{"name": "base", "params": {"table": "events"}}],
+            "parameter_space": {"col": ["age", "amount"]},
         }
 
         template = Template(data)
@@ -319,13 +285,10 @@ class TestTemplate:
                 {
                     "name": "v1",
                     "params": {"table": "events"},
-                    "parameter_space": {"col": ["a", "b"]}
+                    "parameter_space": {"col": ["a", "b"]},
                 },
-                {
-                    "name": "v2",
-                    "params": {"table": "users"}
-                }
-            ]
+                {"name": "v2", "params": {"table": "users"}},
+            ],
         }
 
         template = Template(data)
@@ -360,7 +323,8 @@ class TestTemplateLoading:
         templates_dir.mkdir()
 
         # Template 1
-        (templates_dir / "template1.yaml").write_text("""
+        (templates_dir / "template1.yaml").write_text(
+            """
 name: simple_select
 sql_template: "SELECT * FROM {table}"
 ibis_template: "{table}"
@@ -369,10 +333,12 @@ variations:
   - name: events_table
     params:
       table: events
-""")
+"""
+        )
 
         # Template 2
-        (templates_dir / "template2.yaml").write_text("""
+        (templates_dir / "template2.yaml").write_text(
+            """
 name: filter_query
 sql_template: "SELECT * FROM {table} WHERE {col} > {val}"
 ibis_template: "{table}.filter({table}.{col} > {val})"
@@ -389,7 +355,8 @@ variations:
       table: transactions
       col: amount
       val: 100
-""")
+"""
+        )
 
         return templates_dir
 
@@ -416,17 +383,21 @@ variations:
         templates_dir = tmp_path / "templates"
         templates_dir.mkdir()
 
-        (templates_dir / "z_last.yaml").write_text("""
+        (templates_dir / "z_last.yaml").write_text(
+            """
 name: last
 sql_template: "SELECT 1"
 ibis_template: "expr"
-""")
+"""
+        )
 
-        (templates_dir / "a_first.yaml").write_text("""
+        (templates_dir / "a_first.yaml").write_text(
+            """
 name: first
 sql_template: "SELECT 1"
 ibis_template: "expr"
-""")
+"""
+        )
 
         templates = load_templates(templates_dir)
 
@@ -455,11 +426,13 @@ ibis_template: "expr"
         templates_dir = tmp_path / "templates"
         templates_dir.mkdir()
 
-        (templates_dir / "no_vars.yaml").write_text("""
+        (templates_dir / "no_vars.yaml").write_text(
+            """
 name: no_variations
 sql_template: "SELECT 1"
 ibis_template: "expr"
-""")
+"""
+        )
 
         templates = load_templates(templates_dir)
         examples = generate_examples(templates)
@@ -490,7 +463,8 @@ class TestIntegration:
         templates_dir = tmp_path / "templates"
         templates_dir.mkdir()
 
-        (templates_dir / "comprehensive.yaml").write_text("""
+        (templates_dir / "comprehensive.yaml").write_text(
+            """
 name: group_by_aggregate
 description: "GROUP BY with aggregation"
 difficulty: medium
@@ -511,7 +485,8 @@ variations:
       agg_col: amount
       agg_func: SUM
       ibis_agg: sum
-""")
+"""
+        )
 
         # Load and generate
         templates = load_templates(templates_dir)
@@ -540,7 +515,8 @@ variations:
         templates_dir = tmp_path / "templates"
         templates_dir.mkdir()
 
-        (templates_dir / "expandable.yaml").write_text("""
+        (templates_dir / "expandable.yaml").write_text(
+            """
 name: filter_variations
 sql_template: "SELECT * FROM events WHERE {col} {op} {val}"
 ibis_template: "events.filter(events.{col} {op} {val})"
@@ -551,7 +527,8 @@ parameter_space:
 variations:
   - name: base
     params: {}
-""")
+"""
+        )
 
         templates = load_templates(templates_dir)
         examples = generate_examples(templates)
@@ -569,7 +546,8 @@ variations:
         templates_dir.mkdir()
 
         # Template with expansion
-        (templates_dir / "t1.yaml").write_text("""
+        (templates_dir / "t1.yaml").write_text(
+            """
 name: t1
 sql_template: "SELECT {col}"
 ibis_template: "table.{col}"
@@ -578,17 +556,20 @@ variations:
     params: {}
     parameter_space:
       col: [a, b]
-""")
+"""
+        )
 
         # Template without expansion
-        (templates_dir / "t2.yaml").write_text("""
+        (templates_dir / "t2.yaml").write_text(
+            """
 name: t2
 sql_template: "SELECT 1"
 ibis_template: "expr"
 variations:
   - name: static
     params: {}
-""")
+"""
+        )
 
         templates = load_templates(templates_dir)
         examples = generate_examples(templates)

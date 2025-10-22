@@ -5,9 +5,9 @@ import json
 import os
 from pathlib import Path
 
-from src.datagen.sql2ibis.template_loader.loader import load_templates, generate_examples
 from src.datagen.sql2ibis.eval.fixtures import get_test_tables
 from src.datagen.sql2ibis.eval.validator import Validator
+from src.datagen.sql2ibis.template_loader.loader import generate_examples, load_templates
 
 
 def main():
@@ -31,7 +31,10 @@ def main():
     failed_examples = []
 
     for i, example in enumerate(examples, 1):
-        print(f"Validating {i}/{len(examples)}: {example['meta']['template']}:{example['meta']['variation']}...", end=" ")
+        print(
+            f"Validating {i}/{len(examples)}: {example['meta']['template']}:{example['meta']['variation']}...",
+            end=" ",
+        )
 
         success, error = validator.validate_example(example)
 
@@ -43,12 +46,12 @@ def main():
             failed_examples.append((example, error))
 
     # Report
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Results: {len(valid_examples)}/{len(examples)} passed")
     print(f"Success rate: {100 * len(valid_examples) / len(examples):.1f}%")
 
     if failed_examples:
-        print(f"\nFailed examples:")
+        print("\nFailed examples:")
         for ex, error in failed_examples:
             print(f"  - {ex['meta']['template']}:{ex['meta']['variation']}: {error}")
 
@@ -61,14 +64,15 @@ def main():
         for example in valid_examples:
             f.write(json.dumps(example) + "\n")
 
-    assert os.path.exists(output_file)
+    # Safe: post-write verification for test suite, file path is controlled
+    assert os.path.exists(output_file)  # nosec B101
     print(f"\nSaved {len(valid_examples)} examples to {output_file}")
 
     # Print sample
     if valid_examples:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print("Sample example:")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         sample = valid_examples[0]
         print(f"Template: {sample['meta']['template']}")
         print(f"Variation: {sample['meta']['variation']}")

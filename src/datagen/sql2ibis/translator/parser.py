@@ -1,6 +1,6 @@
 """SQL parser using sqlglot."""
 
-from typing import Optional, Tuple
+from typing import Tuple
 
 import sqlglot
 from sqlglot import Expression
@@ -91,4 +91,4 @@ def normalize_sql(sql: str, dialect: str = "duckdb") -> str:
         Normalized SQL string
     """
     ast, _ = parse_sql(sql, dialect)
-    return ast.sql(dialect=dialect, pretty=True)
+    return str(ast.sql(dialect=dialect, pretty=True))

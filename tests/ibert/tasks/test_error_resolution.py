@@ -1,7 +1,5 @@
 """Tests for error resolution task."""
 
-import pytest
-
 from src.ibert.tasks import ErrorResolutionTask
 
 
@@ -26,10 +24,7 @@ class TestErrorResolutionTask:
         """Test prompt formatting with error message."""
         task = ErrorResolutionTask(mock_model)
         error = "TypeError: '>' not supported between 'IntegerColumn' and 'str'"
-        prompt = task.format_prompt(
-            'table.filter(table.age > "18")',
-            error=error
-        )
+        prompt = task.format_prompt('table.filter(table.age > "18")', error=error)
         assert error in prompt
         assert 'table.filter(table.age > "18")' in prompt
 
@@ -37,8 +32,7 @@ class TestErrorResolutionTask:
         """Test prompt formatting with context."""
         task = ErrorResolutionTask(mock_model)
         prompt = task.format_prompt(
-            'table.filter(table.age > "18")',
-            context="age is an integer column"
+            'table.filter(table.age > "18")', context="age is an integer column"
         )
         assert "age is an integer column" in prompt
 

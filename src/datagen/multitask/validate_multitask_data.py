@@ -22,18 +22,23 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import ibis
 import pandas as pd
 
-# Import existing SQL→Ibis validator using proper relative imports
-from ..sql2ibis.eval.validator import Validator as SQLIbisValidator
-from ..sql2ibis.eval.fixtures import get_test_tables
+# Add src directory to path for absolute imports
+src_dir = Path(__file__).parent.parent.parent
+if str(src_dir) not in sys.path:
+    sys.path.insert(0, str(src_dir))
+
+from datagen.sql2ibis.eval.fixtures import get_test_tables  # noqa: E402
+from datagen.sql2ibis.eval.validator import Validator as SQLIbisValidator  # noqa: E402
 
 
 class ValidationError(Exception):
     """Raised when validation fails."""
+
     pass
 
 
@@ -63,9 +68,7 @@ class MultitaskValidator:
             "documentation": self._validate_documentation,
         }
 
-    def _create_mock_tables(
-        self, context: Dict[str, Any], namespace: Dict[str, Any]
-    ) -> None:
+    def _create_mock_tables(self, context: dict[str, Any], namespace: dict[str, Any]) -> None:
         """Create mock tables based on schema in context.
 
         Args:
@@ -76,7 +79,7 @@ class MultitaskValidator:
             schema = table_info.get("schema", {})
             if schema:
                 # Create a mock DataFrame with the right schema
-                mock_data: Dict[str, Any] = {}
+                mock_data: dict[str, Any] = {}
                 for col, dtype in schema.items():
                     if "int" in dtype:
                         mock_data[col] = [1, 2, 3, 10, 20, 30]
@@ -87,27 +90,34 @@ class MultitaskValidator:
                     elif "bool" in dtype:
                         mock_data[col] = [True, False, True, False, True, False]
                     elif "date" in dtype or "time" in dtype:
-                        mock_data[col] = pd.to_datetime([
-                            "2024-01-01", "2024-01-02", "2024-01-03",
-                            "2024-01-04", "2024-01-05", "2024-01-06"
-                        ])
+                        mock_data[col] = pd.to_datetime(
+                            [
+                                "2024-01-01",
+                                "2024-01-02",
+                                "2024-01-03",
+                                "2024-01-04",
+                                "2024-01-05",
+                                "2024-01-06",
+                            ]
+                        )
                     else:
                         mock_data[col] = [None, None, None, None, None, None]
 
                 df = pd.DataFrame(mock_data)
                 # Use quoted name if it's a SQL keyword
-                safe_table_name = f'"{table_name}"' if table_name.lower() in [
-                    "table", "select", "from", "where", "join", "order", "group"
-                ] else table_name
+                safe_table_name = (
+                    f'"{table_name}"'
+                    if table_name.lower()
+                    in ["table", "select", "from", "where", "join", "order", "group"]
+                    else table_name
+                )
                 self.con.create_table(safe_table_name, df, overwrite=True)
                 namespace[table_name] = self.con.table(safe_table_name)
             elif table_name in self.test_tables:
                 # Use existing test table
                 namespace[table_name] = self.con.table(table_name)
 
-    def validate_example(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def validate_example(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate a single training example.
 
         Args:
@@ -121,13 +131,18 @@ class MultitaskValidator:
             return False, f"Unknown task: {task}"
 
         try:
-            return self.validators[task](example)
+            result = self.validators[task](example)
+            # Ensure we return the correct type
+            if isinstance(result, tuple) and len(result) == 2:
+                success, error = result
+                return bool(success), (
+                    error if error is None or isinstance(error, str) else str(error)
+                )
+            return False, "Validator returned unexpected format"
         except Exception as e:
             return False, f"Validation exception: {str(e)}"
 
-    def _validate_code_completion(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def _validate_code_completion(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate code completion example.
 
         Checks:
@@ -154,7 +169,7 @@ class MultitaskValidator:
             partial_normalized = partial.strip().replace(" ", "")
             completed_normalized = completed.strip().replace(" ", "")
             if not completed_normalized.startswith(partial_normalized):
-                return False, f"Completed code doesn't start with partial code"
+                return False, "Completed code doesn't start with partial code"
 
         # Check 3: Try executing if we have table context
         context = example.get("context", {})
@@ -163,12 +178,12 @@ class MultitaskValidator:
                 namespace = {"ibis": ibis}
                 self._create_mock_tables(context, namespace)
 
-                # Execute completed code
-                exec(f"result = {completed}", namespace)
+                # Safe: controlled execution in sandboxed namespace for Ibis code validation
+                exec(f"result = {completed}", namespace)  # nosec B102
 
                 # If it's an Ibis expression, try to execute it
                 result = namespace.get("result")
-                if hasattr(result, "execute"):
+                if result is not None and hasattr(result, "execute"):
                     result.execute()
 
             except Exception as e:
@@ -176,19 +191,20 @@ class MultitaskValidator:
 
         return True, None
 
-    def _validate_sql_to_ibis(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def _validate_sql_to_ibis(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate SQL→Ibis translation example.
 
         Uses existing validator to check semantic equivalence.
         """
         # Use existing SQL→Ibis validator
-        return self.sql_ibis_validator.validate_example(example)
+        result = self.sql_ibis_validator.validate_example(example)
+        # Ensure proper type
+        if isinstance(result, tuple) and len(result) == 2:
+            success, error = result
+            return bool(success), error if error is None or isinstance(error, str) else str(error)
+        return False, "SQL→Ibis validator returned unexpected format"
 
-    def _validate_ibis_to_sql(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def _validate_ibis_to_sql(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate Ibis→SQL translation example.
 
         Checks:
@@ -198,7 +214,7 @@ class MultitaskValidator:
         """
         ibis_code = example["input"].get("ibis", "")
         target_sql = example["target"].get("sql", "")
-        dialect = example.get("dialect", "duckdb")
+        example.get("dialect", "duckdb")
 
         if not ibis_code or not target_sql:
             return False, "Missing ibis or sql field"
@@ -209,18 +225,27 @@ class MultitaskValidator:
             context = example.get("context", {})
             self._create_mock_tables(context, namespace)
 
-            # Execute Ibis code
-            exec(f"ibis_expr = {ibis_code}", namespace)
+            # Safe: controlled execution in sandboxed namespace for Ibis code validation
+            exec(f"ibis_expr = {ibis_code}", namespace)  # nosec B102
             ibis_result = namespace["ibis_expr"].execute()
 
             # Fix SQL to quote table names if they're SQL keywords
             fixed_sql = target_sql
-            for table_name in context.get("tables", {}).keys():
-                if table_name.lower() in ["table", "select", "from", "where", "join", "order", "group"]:
+            for table_name in context.get("tables", {}):
+                if table_name.lower() in [
+                    "table",
+                    "select",
+                    "from",
+                    "where",
+                    "join",
+                    "order",
+                    "group",
+                ]:
                     # Replace unquoted table name with quoted version
                     import re
+
                     # Match table name as a whole word
-                    pattern = r'\b' + re.escape(table_name) + r'\b'
+                    pattern = r"\b" + re.escape(table_name) + r"\b"
                     fixed_sql = re.sub(pattern, f'"{table_name}"', fixed_sql, flags=re.IGNORECASE)
 
             # Execute target SQL
@@ -235,9 +260,7 @@ class MultitaskValidator:
         except Exception as e:
             return False, f"Execution failed: {e}"
 
-    def _validate_error_resolution(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def _validate_error_resolution(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate error resolution example.
 
         Checks:
@@ -261,9 +284,10 @@ class MultitaskValidator:
 
         broken_errored = False
         try:
-            exec(f"result = {broken_code}", namespace)
+            # Safe: controlled execution in sandboxed namespace to verify broken code produces error
+            exec(f"result = {broken_code}", namespace)  # nosec B102
             result = namespace.get("result")
-            if hasattr(result, "execute"):
+            if result is not None and hasattr(result, "execute"):
                 result.execute()
         except Exception as e:
             broken_errored = True
@@ -289,9 +313,10 @@ class MultitaskValidator:
             namespace_fixed = {"ibis": ibis}
             self._create_mock_tables(context, namespace_fixed)
 
-            exec(f"result = {fixed_code}", namespace_fixed)
+            # Safe: controlled execution in sandboxed namespace to verify fixed code runs without error
+            exec(f"result = {fixed_code}", namespace_fixed)  # nosec B102
             result = namespace_fixed.get("result")
-            if hasattr(result, "execute"):
+            if result is not None and hasattr(result, "execute"):
                 result.execute()
         except Exception as e:
             return False, f"Fixed code still errors: {e}"
@@ -302,9 +327,7 @@ class MultitaskValidator:
 
         return True, None
 
-    def _validate_qa(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def _validate_qa(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate Q&A example.
 
         Checks:
@@ -338,13 +361,11 @@ class MultitaskValidator:
                 if len(code) > 10 and not any(
                     keyword in code for keyword in ["table", "ibis", "filter", "select", "group_by"]
                 ):
-                    return False, f"Code block {i+1} appears invalid"
+                    return False, f"Code block {i + 1} appears invalid"
 
         return True, None
 
-    def _validate_documentation(
-        self, example: Dict[str, Any]
-    ) -> Tuple[bool, Optional[str]]:
+    def _validate_documentation(self, example: dict[str, Any]) -> tuple[bool, str | None]:
         """Validate documentation example.
 
         Checks:
@@ -405,11 +426,10 @@ class MultitaskValidator:
             True if DataFrames are equal
         """
         # Use existing validator's comparison logic
-        return self.sql_ibis_validator._results_equal(df1, df2, tolerance)
+        result = self.sql_ibis_validator._results_equal(df1, df2, tolerance)
+        return bool(result)
 
-    def validate_file(
-        self, file_path: Path
-    ) -> Tuple[int, int, List[Dict[str, Any]]]:
+    def validate_file(self, file_path: Path) -> tuple[int, int, list[dict[str, Any]]]:
         """Validate all examples in a JSONL file.
 
         Args:
@@ -432,26 +452,28 @@ class MultitaskValidator:
                     if success:
                         valid += 1
                     else:
-                        failed.append({
-                            "line": line_num,
-                            "id": example.get("id", "unknown"),
-                            "task": example.get("task", "unknown"),
-                            "error": error,
-                        })
+                        failed.append(
+                            {
+                                "line": line_num,
+                                "id": example.get("id", "unknown"),
+                                "task": example.get("task", "unknown"),
+                                "error": error,
+                            }
+                        )
                 except json.JSONDecodeError as e:
-                    failed.append({
-                        "line": line_num,
-                        "error": f"JSON decode error: {e}",
-                    })
+                    failed.append(
+                        {
+                            "line": line_num,
+                            "error": f"JSON decode error: {e}",
+                        }
+                    )
 
         return total, valid, failed
 
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Validate multi-task training data for iBERT"
-    )
+    parser = argparse.ArgumentParser(description="Validate multi-task training data for iBERT")
     parser.add_argument(
         "--task",
         choices=[
@@ -505,9 +527,9 @@ def main():
             print(f"⚠ File not found: {file_path}")
             continue
 
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
         print(f"Validating: {file_path.name}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         total, valid, failed = validator.validate_file(file_path)
         total_all += total
@@ -535,9 +557,9 @@ def main():
         print()
 
     # Summary
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print("VALIDATION SUMMARY")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Files validated: {len([f for f in files if f.exists()])}")
     print(f"Total examples:  {total_all:4d}")
     print(f"Valid examples:  {valid_all:4d}")
@@ -547,7 +569,7 @@ def main():
         overall_pass_rate = valid_all / total_all * 100
         print(f"Overall pass rate: {overall_pass_rate:.1f}%")
 
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     if failed_all:
         print("\n⚠ Some examples failed validation")

@@ -10,15 +10,14 @@ These extracted pairs serve as high-quality training data since they come
 from official documentation and tutorials.
 """
 
-import re
 import json
+import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional, NamedTuple
-
+from typing import Any, NamedTuple
 
 # Regex patterns for extracting code blocks
-PATTERN_QUARTO_PYTHON = r'```\{python\}(.+?)```'
-PATTERN_CODE_BLOCK = r'```(\w+)\n(.+?)```'
+PATTERN_QUARTO_PYTHON = r"```\{python\}(.+?)```"
+PATTERN_CODE_BLOCK = r"```(\w+)\n(.+?)```"
 PATTERN_SQL_CALL = r'\.sql\(\s*["\'](.+?)["\']\s*\)'
 PATTERN_SQL_STRING = r'["\']SELECT\s+.+?["\']'
 
@@ -43,13 +42,14 @@ class DocumentExample(NamedTuple):
     context : str or None
         Additional context from surrounding code
     """
+
     source_type: str
     file_path: str
     sql_code: str
-    ibis_code: Optional[str] = None
-    context: Optional[str] = None
+    ibis_code: str | None = None
+    context: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary format for JSON serialization.
 
         Returns
@@ -87,7 +87,7 @@ class MarkdownExtractor:
         self.file_path = file_path
         self.content = self._read_file_safely()
 
-    def _read_file_safely(self) -> Optional[str]:
+    def _read_file_safely(self) -> str | None:
         """Read file content with error handling.
 
         Returns
@@ -97,10 +97,10 @@ class MarkdownExtractor:
         """
         try:
             return self.file_path.read_text(encoding="utf-8")
-        except (IOError, UnicodeDecodeError):
+        except (OSError, UnicodeDecodeError):
             return None
 
-    def extract_examples(self) -> List[DocumentExample]:
+    def extract_examples(self) -> list[DocumentExample]:
         """Extract all SQL→Ibis examples from the document.
 
         Returns
@@ -120,7 +120,7 @@ class MarkdownExtractor:
 
         return examples
 
-    def _extract_quarto_examples(self) -> List[DocumentExample]:
+    def _extract_quarto_examples(self) -> list[DocumentExample]:
         """Extract SQL from Quarto Python code blocks.
 
         Pattern: ```{python}
@@ -132,7 +132,10 @@ class MarkdownExtractor:
         list of DocumentExample
             Extracted examples
         """
-        examples = []
+        examples: list[DocumentExample] = []
+
+        if self.content is None:
+            return examples
 
         for match in re.finditer(PATTERN_QUARTO_PYTHON, self.content, re.DOTALL):
             code_block = match.group(1).strip()
@@ -142,16 +145,18 @@ class MarkdownExtractor:
                 sql_code = sql_match.group(1).strip()
 
                 if self._is_valid_sql(sql_code):
-                    examples.append(DocumentExample(
-                        source_type="quarto_doc",
-                        file_path=str(self.file_path),
-                        sql_code=sql_code,
-                        context=code_block
-                    ))
+                    examples.append(
+                        DocumentExample(
+                            source_type="quarto_doc",
+                            file_path=str(self.file_path),
+                            sql_code=sql_code,
+                            context=code_block,
+                        )
+                    )
 
         return examples
 
-    def _extract_sequential_blocks(self) -> List[DocumentExample]:
+    def _extract_sequential_blocks(self) -> list[DocumentExample]:
         """Extract SQL blocks followed by Python/Ibis blocks.
 
         Looks for sequential code blocks where SQL is followed by
@@ -162,7 +167,10 @@ class MarkdownExtractor:
         list of DocumentExample
             Extracted examples
         """
-        examples = []
+        examples: list[DocumentExample] = []
+
+        if self.content is None:
+            return examples
 
         code_blocks = list(re.finditer(PATTERN_CODE_BLOCK, self.content, re.DOTALL))
 
@@ -177,16 +185,18 @@ class MarkdownExtractor:
                 next_code = next_match.group(2).strip()
 
                 if next_language == "python" and IBIS_KEYWORD in next_code.lower():
-                    examples.append(DocumentExample(
-                        source_type="markdown_doc",
-                        file_path=str(self.file_path),
-                        sql_code=code,
-                        ibis_code=next_code
-                    ))
+                    examples.append(
+                        DocumentExample(
+                            source_type="markdown_doc",
+                            file_path=str(self.file_path),
+                            sql_code=code,
+                            ibis_code=next_code,
+                        )
+                    )
 
         return examples
 
-    def _extract_python_sql_strings(self) -> List[DocumentExample]:
+    def _extract_python_sql_strings(self) -> list[DocumentExample]:
         """Extract SQL strings from Python code blocks.
 
         Returns
@@ -194,7 +204,10 @@ class MarkdownExtractor:
         list of DocumentExample
             Extracted examples
         """
-        examples = []
+        examples: list[DocumentExample] = []
+
+        if self.content is None:
+            return examples
 
         for match in re.finditer(PATTERN_CODE_BLOCK, self.content, re.DOTALL):
             language = match.group(1).lower()
@@ -202,19 +215,17 @@ class MarkdownExtractor:
 
             if language in ["python", "py"]:
                 # Search for SQL SELECT statements in strings
-                for sql_match in re.finditer(
-                    PATTERN_SQL_STRING,
-                    code,
-                    re.DOTALL | re.IGNORECASE
-                ):
-                    sql_code = sql_match.group(0).strip('"\'')
+                for sql_match in re.finditer(PATTERN_SQL_STRING, code, re.DOTALL | re.IGNORECASE):
+                    sql_code = sql_match.group(0).strip("\"'")
 
-                    examples.append(DocumentExample(
-                        source_type="python_code_block",
-                        file_path=str(self.file_path),
-                        sql_code=sql_code,
-                        context=code
-                    ))
+                    examples.append(
+                        DocumentExample(
+                            source_type="python_code_block",
+                            file_path=str(self.file_path),
+                            sql_code=sql_code,
+                            context=code,
+                        )
+                    )
 
         return examples
 
@@ -248,7 +259,7 @@ class JupyterExtractor:
         self.notebook_path = notebook_path
         self.notebook_data = self._load_notebook()
 
-    def _load_notebook(self) -> Optional[Dict[str, Any]]:
+    def _load_notebook(self) -> dict[str, Any] | None:
         """Load and parse the Jupyter notebook JSON.
 
         Returns
@@ -257,12 +268,15 @@ class JupyterExtractor:
             Notebook data, or None if load failed
         """
         try:
-            with open(self.notebook_path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except (IOError, json.JSONDecodeError):
+            with open(self.notebook_path, encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+                return None
+        except (OSError, json.JSONDecodeError):
             return None
 
-    def extract_examples(self) -> List[DocumentExample]:
+    def extract_examples(self) -> list[DocumentExample]:
         """Extract SQL→Ibis examples from notebook cells.
 
         Returns
@@ -283,11 +297,8 @@ class JupyterExtractor:
         return examples
 
     def _extract_from_cell(
-        self,
-        cell: Dict[str, Any],
-        cell_index: int,
-        all_cells: List[Dict[str, Any]]
-    ) -> List[DocumentExample]:
+        self, cell: dict[str, Any], cell_index: int, all_cells: list[dict[str, Any]]
+    ) -> list[DocumentExample]:
         """Extract examples from a single notebook cell.
 
         Parameters
@@ -318,16 +329,18 @@ class JupyterExtractor:
                 # Get context from next cell if available
                 context = self._get_next_cell_context(cell_index, all_cells)
 
-                examples.append(DocumentExample(
-                    source_type="jupyter_notebook",
-                    file_path=str(self.notebook_path),
-                    sql_code=sql_code,
-                    context=context
-                ))
+                examples.append(
+                    DocumentExample(
+                        source_type="jupyter_notebook",
+                        file_path=str(self.notebook_path),
+                        sql_code=sql_code,
+                        context=context,
+                    )
+                )
 
         return examples
 
-    def _extract_sql_from_source(self, source: str) -> Optional[str]:
+    def _extract_sql_from_source(self, source: str) -> str | None:
         """Extract SQL code from cell source.
 
         Parameters
@@ -348,10 +361,8 @@ class JupyterExtractor:
         return None
 
     def _get_next_cell_context(
-        self,
-        current_index: int,
-        all_cells: List[Dict[str, Any]]
-    ) -> Optional[str]:
+        self, current_index: int, all_cells: list[dict[str, Any]]
+    ) -> str | None:
         """Get source from the next cell for context.
 
         Parameters
@@ -388,7 +399,7 @@ class DocumentationMiner:
         self.repository_path = repository_path
         self.docs_directory = repository_path / "docs"
 
-    def mine_all_documentation(self) -> List[Dict[str, Any]]:
+    def mine_all_documentation(self) -> list[dict[str, Any]]:
         """Mine examples from all documentation sources.
 
         Returns
@@ -406,7 +417,7 @@ class DocumentationMiner:
 
         return examples
 
-    def _mine_markdown_files(self) -> List[Dict[str, Any]]:
+    def _mine_markdown_files(self) -> list[dict[str, Any]]:
         """Mine examples from Markdown and Quarto files.
 
         Returns
@@ -414,15 +425,14 @@ class DocumentationMiner:
         list of dict
             Extracted examples
         """
-        examples = []
+        examples: list[dict[str, Any]] = []
 
         if not self.docs_directory.exists():
             return examples
 
         # Find all markdown and Quarto files
-        markdown_files = (
-            list(self.docs_directory.rglob("*.md")) +
-            list(self.docs_directory.rglob("*.qmd"))
+        markdown_files = list(self.docs_directory.rglob("*.md")) + list(
+            self.docs_directory.rglob("*.qmd")
         )
 
         print(f"Scanning {len(markdown_files)} markdown/quarto files...")
@@ -439,7 +449,7 @@ class DocumentationMiner:
 
         return examples
 
-    def _mine_notebooks(self) -> List[Dict[str, Any]]:
+    def _mine_notebooks(self) -> list[dict[str, Any]]:
         """Mine examples from Jupyter notebooks.
 
         Returns
@@ -447,7 +457,7 @@ class DocumentationMiner:
         list of dict
             Extracted examples
         """
-        examples = []
+        examples: list[dict[str, Any]] = []
 
         notebooks = list(self.repository_path.rglob("*.ipynb"))
 
@@ -469,7 +479,7 @@ class DocumentationMiner:
         return examples
 
 
-def extract_from_markdown(markdown_file: Path) -> List[Dict[str, Any]]:
+def extract_from_markdown(markdown_file: Path) -> list[dict[str, Any]]:
     """Extract SQL→Ibis examples from a Markdown or Quarto file.
 
     This is a convenience function for the public API.
@@ -489,7 +499,7 @@ def extract_from_markdown(markdown_file: Path) -> List[Dict[str, Any]]:
     return [ex.to_dict() for ex in examples]
 
 
-def extract_from_jupyter(notebook_path: Path) -> List[Dict[str, Any]]:
+def extract_from_jupyter(notebook_path: Path) -> list[dict[str, Any]]:
     """Extract SQL→Ibis examples from a Jupyter notebook.
 
     This is a convenience function for the public API.
@@ -509,10 +519,7 @@ def extract_from_jupyter(notebook_path: Path) -> List[Dict[str, Any]]:
     return [ex.to_dict() for ex in examples]
 
 
-def save_examples_to_jsonl(
-    examples: List[Dict[str, Any]],
-    output_path: Path
-) -> None:
+def save_examples_to_jsonl(examples: list[dict[str, Any]], output_path: Path) -> None:
     """Save extracted examples to JSONL file.
 
     Parameters

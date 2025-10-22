@@ -157,18 +157,43 @@ cd ibert
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# 3. Install production dependencies
-pip install -r requirements.txt
+# 3. Install dependencies
+# Option A: Modern installation (recommended)
+pip install -e .              # Production dependencies only
+pip install -e .[dev]         # With development tools (testing, linting, pre-commit)
 
-# 4. Install development dependencies (for testing/linting)
-pip install -r requirements-dev.txt
+# Option B: Traditional installation
+pip install -r requirements.txt      # Production dependencies
+pip install -r requirements-dev.txt  # Development dependencies
 
-# 5. Copy example configuration
+# 4. Copy example configuration
 cp config.yaml.example config.yaml
 
-# 6. Download model (one-time, ~3GB, 2-5 minutes)
+# 5. Download model (one-time, ~3GB, 2-5 minutes)
 echo "What is Ibis?" | .venv/bin/python bin/ibert-qa
 ```
+
+### Developer Setup (For Contributors)
+
+If you're contributing to iBERT, set up pre-commit hooks for automatic code quality checks:
+
+```bash
+# Install pre-commit hooks (runs linting/formatting on every git commit)
+.venv/bin/pre-commit install
+
+# Optional: Run hooks manually on all files to check current state
+.venv/bin/pre-commit run --all-files
+```
+
+**What pre-commit hooks do:**
+- ✅ Check trailing whitespace and end-of-file formatting
+- ✅ Run Ruff (linter and Black-compatible formatter)
+- ✅ Run isort (import sorting)
+- ✅ Run mypy (type checking)
+- ✅ Run Bandit (security scanning)
+- ✅ Run pydocstyle (docstring linting)
+
+**See [CONTRIBUTING.md](CONTRIBUTING.md) for complete development guidelines.**
 
 ### Verify Installation
 
@@ -176,7 +201,7 @@ echo "What is Ibis?" | .venv/bin/python bin/ibert-qa
 # Run tests to verify everything works
 PYTHONPATH=. .venv/bin/python -m pytest tests/ -v
 
-# Should see: ======================== 443 passed, 7 skipped in ~4s ========================
+# Should see: ======================== 450 passed, 7 skipped in ~4s ========================
 ```
 
 ---
@@ -1266,14 +1291,17 @@ isort src/ tests/
 
 6. **Format code:**
    ```bash
-   black src/ tests/
-   isort src/ tests/
+   # If pre-commit hooks are installed, they run automatically on commit
+   # Or run manually:
+   .venv/bin/black src/ tests/
+   .venv/bin/isort src/ tests/
+   .venv/bin/ruff check src/ tests/ --fix
    ```
 
 7. **Commit and push:**
    ```bash
    git add .
-   git commit -m "Add my new feature"
+   git commit -m "Add my new feature"  # Pre-commit hooks run automatically
    git push origin feature/my-new-feature
    ```
 
@@ -1730,10 +1758,19 @@ We welcome contributions! Here's how:
 2. **Clone your fork:**
    ```bash
    git clone https://github.com/your-username/ibert.git
+   cd ibert
    ```
 3. **Install dev dependencies:**
    ```bash
+   # Modern approach (recommended)
+   pip install -e .[dev]
+
+   # Traditional approach
    pip install -r requirements-dev.txt
+   ```
+4. **Set up pre-commit hooks:**
+   ```bash
+   .venv/bin/pre-commit install
    ```
 
 ### Making Changes

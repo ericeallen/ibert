@@ -1,7 +1,5 @@
 """Tests for Q&A task."""
 
-import pytest
-
 from src.ibert.tasks import QATask
 
 
@@ -26,10 +24,7 @@ class TestQATask:
         """Test prompt formatting with context."""
         task = QATask(mock_model)
         question = "How do I use window functions?"
-        prompt = task.format_prompt(
-            question,
-            context="I'm working with a sales table"
-        )
+        prompt = task.format_prompt(question, context="I'm working with a sales table")
         assert question in prompt
         assert "sales table" in prompt
 

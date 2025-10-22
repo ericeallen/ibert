@@ -1,13 +1,10 @@
 """Tests for CLI utility functions."""
 
-import io
-import sys
+from unittest.mock import patch
+
 import pytest
-from pathlib import Path
-from unittest.mock import patch, MagicMock, mock_open
 
 # Import the module to ensure it's loaded for coverage
-import src.ibert.cli_utils
 from src.ibert.cli_utils import read_input
 
 
@@ -56,13 +53,13 @@ class TestReadInput:
         captured = capsys.readouterr()
         assert "Error reading file" in captured.err
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_from_stdin_with_select(self, mock_stdin):
         """Test reading from stdin when data is available."""
         mock_stdin.read.return_value = "stdin content"
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             # Simulate data available on stdin
             mock_select.return_value = ([mock_stdin], [], [])
 
@@ -70,29 +67,29 @@ class TestReadInput:
 
         assert result == "stdin content"
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_from_stdin_no_select(self, mock_stdin):
         """Test reading from stdin when select() fails."""
         mock_stdin.read.return_value = "stdin content"
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select', side_effect=OSError("select not available")):
+        with patch("select.select", side_effect=OSError("select not available")):
             result = read_input(None, "test-script")
 
         assert result == "stdin content"
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_stdin_value_error(self, mock_stdin):
         """Test handling ValueError from select."""
         mock_stdin.read.return_value = "stdin content"
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select', side_effect=ValueError("bad fd")):
+        with patch("select.select", side_effect=ValueError("bad fd")):
             result = read_input(None, "test-script")
 
         assert result == "stdin content"
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_tty_no_file_exits(self, mock_stdin, capsys):
         """Test interactive terminal with no file exits with usage."""
         mock_stdin.isatty.return_value = True
@@ -106,13 +103,13 @@ class TestReadInput:
         assert "Usage:" in captured.err
         assert "my-script" in captured.err
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_empty_stdin_exits(self, mock_stdin, capsys):
         """Test empty stdin exits with error."""
         mock_stdin.read.return_value = ""
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             mock_select.return_value = ([mock_stdin], [], [])
 
             with pytest.raises(SystemExit) as exc_info:
@@ -122,13 +119,13 @@ class TestReadInput:
         captured = capsys.readouterr()
         assert "No input provided" in captured.err
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_whitespace_only_stdin_exits(self, mock_stdin, capsys):
         """Test whitespace-only stdin exits with error."""
         mock_stdin.read.return_value = "   \n\t  \n  "
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             mock_select.return_value = ([mock_stdin], [], [])
 
             with pytest.raises(SystemExit) as exc_info:
@@ -162,12 +159,12 @@ class TestReadInput:
         captured = capsys.readouterr()
         assert "No input provided" in captured.err
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_no_data_ready_on_select(self, mock_stdin, capsys):
         """Test when select shows no data ready on stdin."""
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             # No data ready
             mock_select.return_value = ([], [], [])
 
@@ -228,14 +225,14 @@ class TestReadInput:
         # Should use default "script" name
         assert "script" in captured.err
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_stdin_with_content(self, mock_stdin):
         """Test reading actual content from stdin."""
         test_content = "SELECT * FROM table WHERE id = 1"
         mock_stdin.read.return_value = test_content
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             mock_select.return_value = ([mock_stdin], [], [])
 
             result = read_input(None, "sql-tool")
@@ -246,7 +243,7 @@ class TestReadInput:
         """Test reading file with Unicode characters."""
         unicode_content = "Hello 世界 🌍 Привет"
         input_file = tmp_path / "unicode.txt"
-        input_file.write_text(unicode_content, encoding='utf-8')
+        input_file.write_text(unicode_content, encoding="utf-8")
 
         result = read_input(str(input_file))
 
@@ -254,13 +251,13 @@ class TestReadInput:
         assert "世界" in result
         assert "🌍" in result
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_select_timeout(self, mock_stdin):
         """Test that select is called with timeout."""
         mock_stdin.read.return_value = "content"
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             mock_select.return_value = ([mock_stdin], [], [])
 
             read_input(None, "test")
@@ -276,7 +273,7 @@ class TestEdgeCases:
 
     def test_read_input_none_as_file_path(self, capsys):
         """Test None file path tries to read from stdin."""
-        with patch('sys.stdin') as mock_stdin:
+        with patch("sys.stdin") as mock_stdin:
             mock_stdin.isatty.return_value = True
 
             with pytest.raises(SystemExit):
@@ -294,13 +291,13 @@ class TestEdgeCases:
 
         assert result == "content via symlink"
 
-    @patch('sys.stdin')
+    @patch("sys.stdin")
     def test_read_input_stdin_binary_mode(self, mock_stdin):
         """Test reading text from stdin."""
         mock_stdin.read.return_value = "text content"
         mock_stdin.isatty.return_value = False
 
-        with patch('select.select') as mock_select:
+        with patch("select.select") as mock_select:
             mock_select.return_value = ([mock_stdin], [], [])
 
             result = read_input(None)

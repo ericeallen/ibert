@@ -113,12 +113,28 @@ cd ibert
 python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install dependencies (includes transformers, torch for local model)
-pip install -r requirements.txt
+# Option 1: Modern installation (recommended)
+pip install -e .              # Production dependencies only
+pip install -e .[dev]         # With development tools (testing, linting, pre-commit)
 
-# Install development dependencies (for testing)
-pip install -r requirements-dev.txt
+# Option 2: Traditional installation
+pip install -r requirements.txt      # Production dependencies
+pip install -r requirements-dev.txt  # Development dependencies
 ```
+
+### Developer Setup (After Installation)
+
+If you're contributing to iBERT, set up pre-commit hooks for automatic code quality checks:
+
+```bash
+# Install pre-commit hooks (runs linting/formatting on git commit)
+.venv/bin/pre-commit install
+
+# Optional: Run hooks manually on all files
+.venv/bin/pre-commit run --all-files
+```
+
+**See [CONTRIBUTING.md](CONTRIBUTING.md) for complete development guidelines.**
 
 ### Local Model Setup
 

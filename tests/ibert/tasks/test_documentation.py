@@ -1,7 +1,5 @@
 """Tests for function documentation task."""
 
-import pytest
-
 from src.ibert.tasks import FunctionDocumentationTask
 
 

@@ -1,6 +1,6 @@
 """Type system helpers for SQL→Ibis translation."""
 
-from typing import Dict, Optional
+from typing import Dict
 
 # SQL type → Ibis dtype mapping
 SQL_TO_IBIS_TYPES: Dict[str, str] = {

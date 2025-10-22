@@ -66,10 +66,12 @@ dev = [
     "pytest-timeout>=2.1.0",
     "pytest-randomly>=3.13.0",
     # Code quality
-    "black>=23.7.0",
-    "isort>=5.12.0",
-    "ruff>=0.1.0",
+    "ruff>=0.1.0",  # Replaces Black, Flake8, isort (for linting and formatting)
+    "isort>=5.12.0",  # Still used for import sorting
     "mypy>=1.5.0",
+    "pre-commit>=3.5.0",
+    "bandit>=1.7.5",
+    "pydocstyle>=6.3.0",
     # Type stubs
     "types-PyYAML",
     "types-requests",
@@ -205,3 +207,24 @@ mypy_path = "."
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
+
+# Bandit configuration
+[tool.bandit]
+exclude_dirs = ["tests", "data/mining"]
+skips = ["B101"]  # Skip assert_used (common in tests)
+
+# Pydocstyle configuration
+[tool.pydocstyle]
+convention = "numpy"
+add-ignore = [
+    "D104",  # Missing docstring in public package (many __init__.py files)
+    "D107",  # Missing docstring in __init__ (many simple constructors)
+    "D203",  # 1 blank line required before class docstring (conflicts with D211)
+    "D213",  # Multi-line docstring summary should start at the second line (conflicts with D212)
+    "D300",  # Use """triple double quotes""" (conflicts with existing code)
+    "D301",  # Use r""" if any backslashes (many regex examples)
+    "D401",  # First line should be in imperative mood (too strict)
+    "D406",  # Section name should end with a newline (numpy style difference)
+    "D407",  # Missing dashed underline after section (numpy style difference)
+]
+match-dir = "^(?!data|\\.venv|build|dist).*"

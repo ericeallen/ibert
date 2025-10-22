@@ -10,16 +10,16 @@ ensuring correct behavior for:
 """
 
 import json
-import pytest
 from pathlib import Path
-from typing import List, Dict, Any
-from unittest.mock import Mock, patch, mock_open
+from typing import Any
+
+import pytest
 
 from src.datagen.concatenate_datasets import (
+    REPOS_DIRNAME,
+    SQL2IBIS_TRAINING_FILES,
     DatasetConcatenator,
     StatisticsPrinter,
-    SQL2IBIS_TRAINING_FILES,
-    REPOS_DIRNAME,
 )
 
 
@@ -61,7 +61,7 @@ class TestDatasetConcatenator:
         return DatasetConcatenator(temp_data_dir)
 
     @pytest.fixture
-    def sample_examples(self) -> List[Dict[str, Any]]:
+    def sample_examples(self) -> list[dict[str, Any]]:
         """Create sample training examples.
 
         Returns
@@ -74,19 +74,19 @@ class TestDatasetConcatenator:
                 "task": "sql_to_ibis",
                 "sql": "SELECT * FROM users",
                 "ibis": "users.select()",
-                "meta": {"source": "synthetic"}
+                "meta": {"source": "synthetic"},
             },
             {
                 "task": "sql_to_ibis",
                 "sql": "SELECT name FROM users WHERE age > 18",
                 "ibis": "users.filter(users.age > 18).select('name')",
-                "meta": {"source": "synthetic"}
+                "meta": {"source": "synthetic"},
             },
             {
                 "source": "jupyter_notebook",
                 "file": "example.ipynb",
-                "sql": "SELECT COUNT(*) FROM events"
-            }
+                "sql": "SELECT COUNT(*) FROM events",
+            },
         ]
 
     def test_initialization(self, temp_data_dir: Path):
@@ -103,9 +103,7 @@ class TestDatasetConcatenator:
         assert files == []
 
     def test_find_sql2ibis_files_with_data(
-        self,
-        concatenator: DatasetConcatenator,
-        sample_examples: List[Dict[str, Any]]
+        self, concatenator: DatasetConcatenator, sample_examples: list[dict[str, Any]]
     ):
         """Test finding SQL2Ibis files when they exist."""
         # Create sql2ibis directory
@@ -123,10 +121,7 @@ class TestDatasetConcatenator:
         assert all(f.exists() for f in files)
         assert all(f.name in SQL2IBIS_TRAINING_FILES for f in files)
 
-    def test_find_mined_files_excludes_repos(
-        self,
-        concatenator: DatasetConcatenator
-    ):
+    def test_find_mined_files_excludes_repos(self, concatenator: DatasetConcatenator):
         """Test that mined files exclude test fixtures in repos directory."""
         # Create mining directory structure
         concatenator.mining_dir.mkdir()
@@ -150,7 +145,7 @@ class TestDatasetConcatenator:
         self,
         concatenator: DatasetConcatenator,
         tmp_path: Path,
-        sample_examples: List[Dict[str, Any]]
+        sample_examples: list[dict[str, Any]],
     ):
         """Test loading examples from valid JSONL file."""
         jsonl_file = tmp_path / "test.jsonl"
@@ -165,18 +160,16 @@ class TestDatasetConcatenator:
         assert all("source_file" in ex for ex in loaded)
 
     def test_load_examples_from_file_with_blank_lines(
-        self,
-        concatenator: DatasetConcatenator,
-        tmp_path: Path
+        self, concatenator: DatasetConcatenator, tmp_path: Path
     ):
         """Test loading JSONL with blank lines."""
         jsonl_file = tmp_path / "test_blanks.jsonl"
 
         with open(jsonl_file, "w") as f:
             f.write('{"id": 1}\n')
-            f.write('\n')
+            f.write("\n")
             f.write('{"id": 2}\n')
-            f.write('   \n')
+            f.write("   \n")
             f.write('{"id": 3}\n')
 
         loaded = concatenator.load_examples_from_file(jsonl_file)
@@ -186,10 +179,7 @@ class TestDatasetConcatenator:
         assert loaded[2]["id"] == 3
 
     def test_load_examples_from_file_malformed_json(
-        self,
-        concatenator: DatasetConcatenator,
-        tmp_path: Path,
-        capsys
+        self, concatenator: DatasetConcatenator, tmp_path: Path, capsys
     ):
         """Test graceful handling of malformed JSON."""
         jsonl_file = tmp_path / "test_malformed.jsonl"
@@ -217,11 +207,7 @@ class TestDatasetConcatenator:
         assert result["test"] == "data"
         assert result["value"] == 123
 
-    def test_parse_json_line_invalid(
-        self,
-        concatenator: DatasetConcatenator,
-        capsys
-    ):
+    def test_parse_json_line_invalid(self, concatenator: DatasetConcatenator, capsys):
         """Test parsing invalid JSON line."""
         line = '{"invalid": '
         result = concatenator._parse_json_line(line, Path("test.jsonl"), 5)
@@ -242,10 +228,7 @@ class TestDatasetConcatenator:
         assert "source_file" in example
         assert "test.jsonl" in example["source_file"]
 
-    def test_add_source_metadata_preserves_existing(
-        self,
-        concatenator: DatasetConcatenator
-    ):
+    def test_add_source_metadata_preserves_existing(self, concatenator: DatasetConcatenator):
         """Test that existing source_file is not overwritten."""
         example = {"sql": "SELECT 1", "source_file": "original.jsonl"}
         file_path = Path("data/test.jsonl")
@@ -262,12 +245,7 @@ class TestDatasetConcatenator:
 
         assert "data/test.jsonl" in result or "data\\test.jsonl" in result
 
-    def test_concatenate_no_files(
-        self,
-        concatenator: DatasetConcatenator,
-        tmp_path: Path,
-        capsys
-    ):
+    def test_concatenate_no_files(self, concatenator: DatasetConcatenator, tmp_path: Path, capsys):
         """Test concatenation when no files are found."""
         output_path = tmp_path / "output.jsonl"
 
@@ -281,8 +259,8 @@ class TestDatasetConcatenator:
     def test_concatenate_success(
         self,
         concatenator: DatasetConcatenator,
-        sample_examples: List[Dict[str, Any]],
-        tmp_path: Path
+        sample_examples: list[dict[str, Any]],
+        tmp_path: Path,
     ):
         """Test successful concatenation of multiple files."""
         # Create sql2ibis directory with files
@@ -317,9 +295,7 @@ class TestDatasetConcatenator:
         assert "jupyter_notebook" in stats["by_source_type"]
 
     def test_write_jsonl_creates_parent_dirs(
-        self,
-        concatenator: DatasetConcatenator,
-        tmp_path: Path
+        self, concatenator: DatasetConcatenator, tmp_path: Path
     ):
         """Test that _write_jsonl creates parent directories."""
         output_path = tmp_path / "nested" / "dir" / "output.jsonl"
@@ -331,19 +307,13 @@ class TestDatasetConcatenator:
         assert output_path.parent.exists()
 
     def test_compute_statistics(
-        self,
-        concatenator: DatasetConcatenator,
-        sample_examples: List[Dict[str, Any]]
+        self, concatenator: DatasetConcatenator, sample_examples: list[dict[str, Any]]
     ):
         """Test statistics computation."""
         file_breakdown = {"file1.jsonl": 2, "file2.jsonl": 1}
         source_files = [Path("file1.jsonl"), Path("file2.jsonl")]
 
-        stats = concatenator._compute_statistics(
-            sample_examples,
-            source_files,
-            file_breakdown
-        )
+        stats = concatenator._compute_statistics(sample_examples, source_files, file_breakdown)
 
         assert stats["total_examples"] == 3
         assert stats["source_files"] == 2
@@ -352,9 +322,7 @@ class TestDatasetConcatenator:
         assert "by_task" in stats
 
     def test_count_by_source_type(
-        self,
-        concatenator: DatasetConcatenator,
-        sample_examples: List[Dict[str, Any]]
+        self, concatenator: DatasetConcatenator, sample_examples: list[dict[str, Any]]
     ):
         """Test counting examples by source type."""
         counts = concatenator._count_by_source_type(sample_examples)
@@ -363,9 +331,7 @@ class TestDatasetConcatenator:
         assert counts["jupyter_notebook"] == 1
 
     def test_count_by_task(
-        self,
-        concatenator: DatasetConcatenator,
-        sample_examples: List[Dict[str, Any]]
+        self, concatenator: DatasetConcatenator, sample_examples: list[dict[str, Any]]
     ):
         """Test counting examples by task type."""
         counts = concatenator._count_by_task(sample_examples)
@@ -373,30 +339,21 @@ class TestDatasetConcatenator:
         assert counts["sql_to_ibis"] == 2
         assert counts["unknown"] == 1
 
-    def test_extract_source_type_from_meta(
-        self,
-        concatenator: DatasetConcatenator
-    ):
+    def test_extract_source_type_from_meta(self, concatenator: DatasetConcatenator):
         """Test extracting source type from meta field."""
         example = {"meta": {"source": "synthetic"}}
         source = concatenator._extract_source_type(example)
 
         assert source == "synthetic"
 
-    def test_extract_source_type_from_top_level(
-        self,
-        concatenator: DatasetConcatenator
-    ):
+    def test_extract_source_type_from_top_level(self, concatenator: DatasetConcatenator):
         """Test extracting source type from top-level field."""
         example = {"source": "jupyter_notebook"}
         source = concatenator._extract_source_type(example)
 
         assert source == "jupyter_notebook"
 
-    def test_extract_source_type_unknown(
-        self,
-        concatenator: DatasetConcatenator
-    ):
+    def test_extract_source_type_unknown(self, concatenator: DatasetConcatenator):
         """Test extracting source type when not present."""
         example = {"task": "sql_to_ibis"}
         source = concatenator._extract_source_type(example)
@@ -408,7 +365,7 @@ class TestStatisticsPrinter:
     """Test suite for the StatisticsPrinter class."""
 
     @pytest.fixture
-    def sample_stats(self) -> Dict[str, Any]:
+    def sample_stats(self) -> dict[str, Any]:
         """Create sample statistics for testing.
 
         Returns
@@ -422,18 +379,13 @@ class TestStatisticsPrinter:
             "file_breakdown": {
                 "train.jsonl": 60,
                 "train_augmented.jsonl": 30,
-                "ibis_mined.jsonl": 10
+                "ibis_mined.jsonl": 10,
             },
-            "by_source_type": {
-                "synthetic": 90,
-                "jupyter_notebook": 10
-            },
-            "by_task": {
-                "sql_to_ibis": 100
-            }
+            "by_source_type": {"synthetic": 90, "jupyter_notebook": 10},
+            "by_task": {"sql_to_ibis": 100},
         }
 
-    def test_initialization(self, sample_stats: Dict[str, Any]):
+    def test_initialization(self, sample_stats: dict[str, Any]):
         """Test StatisticsPrinter initialization."""
         printer = StatisticsPrinter(sample_stats)
 
@@ -446,7 +398,7 @@ class TestStatisticsPrinter:
 
         assert printer.total_examples == 0
 
-    def test_calculate_percentage(self, sample_stats: Dict[str, Any]):
+    def test_calculate_percentage(self, sample_stats: dict[str, Any]):
         """Test percentage calculation."""
         printer = StatisticsPrinter(sample_stats)
 
@@ -460,7 +412,7 @@ class TestStatisticsPrinter:
 
         assert printer._calculate_percentage(10) == 0.0
 
-    def test_print_all(self, sample_stats: Dict[str, Any], capsys):
+    def test_print_all(self, sample_stats: dict[str, Any], capsys):
         """Test printing all statistics."""
         printer = StatisticsPrinter(sample_stats)
         printer.print_all()
@@ -476,7 +428,7 @@ class TestStatisticsPrinter:
         assert "Examples by source type:" in output
         assert "Examples by task:" in output
 
-    def test_print_summary(self, sample_stats: Dict[str, Any], capsys):
+    def test_print_summary(self, sample_stats: dict[str, Any], capsys):
         """Test printing summary section."""
         printer = StatisticsPrinter(sample_stats)
         printer._print_summary()
@@ -486,7 +438,7 @@ class TestStatisticsPrinter:
         assert "Total examples: 100" in captured.out
         assert "Source files: 3" in captured.out
 
-    def test_print_file_breakdown(self, sample_stats: Dict[str, Any], capsys):
+    def test_print_file_breakdown(self, sample_stats: dict[str, Any], capsys):
         """Test printing file breakdown."""
         printer = StatisticsPrinter(sample_stats)
         printer._print_file_breakdown()
@@ -499,11 +451,7 @@ class TestStatisticsPrinter:
         assert "train_augmented.jsonl: 30 (30.0%)" in output
         assert "ibis_mined.jsonl: 10 (10.0%)" in output
 
-    def test_print_source_type_breakdown(
-        self,
-        sample_stats: Dict[str, Any],
-        capsys
-    ):
+    def test_print_source_type_breakdown(self, sample_stats: dict[str, Any], capsys):
         """Test printing source type breakdown."""
         printer = StatisticsPrinter(sample_stats)
         printer._print_source_type_breakdown()
@@ -515,7 +463,7 @@ class TestStatisticsPrinter:
         assert "synthetic: 90 (90.0%)" in output
         assert "jupyter_notebook: 10 (10.0%)" in output
 
-    def test_print_task_breakdown(self, sample_stats: Dict[str, Any], capsys):
+    def test_print_task_breakdown(self, sample_stats: dict[str, Any], capsys):
         """Test printing task breakdown."""
         printer = StatisticsPrinter(sample_stats)
         printer._print_task_breakdown()
@@ -528,11 +476,7 @@ class TestStatisticsPrinter:
 
     def test_print_with_empty_sections(self, capsys):
         """Test printing when optional sections are empty."""
-        stats = {
-            "total_examples": 50,
-            "source_files": 1,
-            "file_breakdown": {}
-        }
+        stats = {"total_examples": 50, "source_files": 1, "file_breakdown": {}}
 
         printer = StatisticsPrinter(stats)
         printer.print_all()
@@ -564,13 +508,9 @@ class TestIntegration:
         mining_dir.mkdir()
 
         # Create sample data files
-        train_data = [
-            {"task": "sql_to_ibis", "sql": "SELECT 1", "meta": {"source": "synthetic"}}
-        ]
+        train_data = [{"task": "sql_to_ibis", "sql": "SELECT 1", "meta": {"source": "synthetic"}}]
 
-        mined_data = [
-            {"source": "jupyter_notebook", "sql": "SELECT 2"}
-        ]
+        mined_data = [{"source": "jupyter_notebook", "sql": "SELECT 2"}]
 
         with open(sql2ibis_dir / "train.jsonl", "w") as f:
             for ex in train_data:

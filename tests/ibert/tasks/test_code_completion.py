@@ -1,7 +1,5 @@
 """Tests for code completion task."""
 
-import pytest
-
 from src.ibert.tasks import CodeCompletionTask
 
 
@@ -26,8 +24,7 @@ class TestCodeCompletionTask:
         """Test prompt formatting with context."""
         task = CodeCompletionTask(mock_model)
         prompt = task.format_prompt(
-            "table.filter(",
-            context="We have a users table with age column"
+            "table.filter(", context="We have a users table with age column"
         )
         assert "table.filter(" in prompt
         assert "users table" in prompt

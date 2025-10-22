@@ -1,7 +1,6 @@
 """Base class for task handlers."""
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from ..models.base import BaseModel
 
@@ -42,12 +41,12 @@ class BaseTask(ABC):
         """
         pass
 
-    def format_prompt(self, input_text: str, **kwargs) -> str:
+    def format_prompt(self, input_text: str, **kwargs) -> str:  # noqa: ARG002
         """Format the user prompt for this task.
 
         Args:
             input_text: Input text to process
-            **kwargs: Additional task-specific parameters
+            **kwargs: Additional task-specific parameters (used by subclasses)
 
         Returns:
             Formatted prompt string

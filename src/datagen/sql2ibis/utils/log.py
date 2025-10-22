@@ -1,7 +1,6 @@
 """Structured logging utilities."""
 
 import logging
-import sys
 from pathlib import Path
 from typing import Optional
 
@@ -50,9 +49,7 @@ def setup_logger(
         log_file.parent.mkdir(parents=True, exist_ok=True)
         file_handler = logging.FileHandler(log_file)
         file_handler.setLevel(logging.DEBUG)
-        formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 

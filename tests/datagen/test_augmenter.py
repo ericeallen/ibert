@@ -1,12 +1,8 @@
 """Tests for synthetic data augmentation."""
 
 import pytest
-import copy
 
-from src.datagen.augmentation.augmenter import (
-    SyntheticAugmenter,
-    augment_dataset
-)
+from src.datagen.augmentation.augmenter import SyntheticAugmenter, augment_dataset
 
 
 class TestSyntheticAugmenter:
@@ -24,13 +20,15 @@ class TestSyntheticAugmenter:
             "input": {"sql": "SELECT user_id, amount FROM events WHERE amount > 10"},
             "target": {"ibis": "events.filter(events.amount > 10)[['user_id', 'amount']]"},
             "meta": {"source": "test"},
-            "context": {"tables": {"events": {"schema": {"user_id": "int64", "amount": "float64"}}}},
+            "context": {
+                "tables": {"events": {"schema": {"user_id": "int64", "amount": "float64"}}}
+            },
         }
 
     def test_augmenter_initialization(self, augmenter):
         """Test augmenter initializes with substitution dictionaries."""
-        assert hasattr(augmenter, 'COLUMN_SUBSTITUTIONS')
-        assert hasattr(augmenter, 'TABLE_SUBSTITUTIONS')
+        assert hasattr(augmenter, "COLUMN_SUBSTITUTIONS")
+        assert hasattr(augmenter, "TABLE_SUBSTITUTIONS")
         assert isinstance(augmenter.COLUMN_SUBSTITUTIONS, dict)
         assert isinstance(augmenter.TABLE_SUBSTITUTIONS, dict)
 
@@ -174,7 +172,10 @@ class TestSyntheticAugmenter:
         assert len(variations) > 0
         # Should replace the value 10
         for var in variations:
-            assert "10" not in var["input"]["sql"] or var["input"]["sql"] != base_example["input"]["sql"]
+            assert (
+                "10" not in var["input"]["sql"]
+                or var["input"]["sql"] != base_example["input"]["sql"]
+            )
 
     def test_augment_by_value_permutation_default_ranges(self, augmenter, base_example):
         """Test value permutation with default value ranges."""
@@ -185,7 +186,8 @@ class TestSyntheticAugmenter:
         for var in variations:
             # Extract numeric value from SQL
             import re
-            match = re.search(r'> (\d+)', var["input"]["sql"])
+
+            match = re.search(r"> (\d+)", var["input"]["sql"])
             if match:
                 values_found.add(match.group(1))
 
@@ -200,7 +202,9 @@ class TestSyntheticAugmenter:
             "year": [2020, 2021],
         }
 
-        variations = augmenter.augment_by_value_permutation(base_example, value_ranges=custom_ranges)
+        variations = augmenter.augment_by_value_permutation(
+            base_example, value_ranges=custom_ranges
+        )
 
         # Should use custom values
         assert len(variations) > 0
@@ -333,7 +337,7 @@ class TestAugmentDataset:
         augmented_only = [ex for ex in augmented if "augmentation" in ex.get("meta", {})]
 
         # Should have variations from different augmentation types
-        aug_types = set(ex["meta"]["augmentation"].split("_")[0] for ex in augmented_only)
+        aug_types = {ex["meta"]["augmentation"].split("_")[0] for ex in augmented_only}
         # Expect column, table, and value augmentations
         assert "column" in aug_types or "table" in aug_types or "value" in aug_types
 
@@ -353,12 +357,14 @@ class TestAugmentDataset:
 
     def test_augment_dataset_single_example(self):
         """Test augmenting single example."""
-        single = [{
-            "input": {"sql": "SELECT user_id, amount FROM events"},
-            "target": {"ibis": "events[['user_id', 'amount']]"},
-            "meta": {},
-            "context": {"tables": {"events": {}}},
-        }]
+        single = [
+            {
+                "input": {"sql": "SELECT user_id, amount FROM events"},
+                "target": {"ibis": "events[['user_id', 'amount']]"},
+                "meta": {},
+                "context": {"tables": {"events": {}}},
+            }
+        ]
 
         augmented = augment_dataset(single, max_variations_per_example=3)
 

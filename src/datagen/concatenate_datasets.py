@@ -11,10 +11,9 @@ comprehensive statistics about data distribution.
 """
 
 import json
+from collections import Counter
 from pathlib import Path
-from typing import List, Dict, Any, Optional
-from collections import defaultdict, Counter
-
+from typing import Any
 
 # Constants for dataset organization
 SQL2IBIS_TRAINING_FILES = ["train.jsonl", "train_augmented.jsonl"]
@@ -44,7 +43,7 @@ class DatasetConcatenator:
         self.mining_dir = data_dir / "mining"
         self.multitask_dir = data_dir / "multitask"
 
-    def find_training_files(self) -> List[Path]:
+    def find_training_files(self) -> list[Path]:
         """Discover all JSONL files containing training data.
 
         Searches for:
@@ -70,7 +69,7 @@ class DatasetConcatenator:
 
         return sorted(training_files)
 
-    def _find_sql2ibis_files(self) -> List[Path]:
+    def _find_sql2ibis_files(self) -> list[Path]:
         """Find template-generated SQL→Ibis training files.
 
         Returns
@@ -88,7 +87,7 @@ class DatasetConcatenator:
 
         return files
 
-    def _find_mined_files(self) -> List[Path]:
+    def _find_mined_files(self) -> list[Path]:
         """Find mined training data files, excluding test fixtures.
 
         Returns
@@ -106,7 +105,7 @@ class DatasetConcatenator:
 
         return files
 
-    def _find_multitask_files(self) -> List[Path]:
+    def _find_multitask_files(self) -> list[Path]:
         """Find multi-task training data files, excluding combined file.
 
         Returns
@@ -124,7 +123,7 @@ class DatasetConcatenator:
 
         return files
 
-    def load_examples_from_file(self, file_path: Path) -> List[Dict[str, Any]]:
+    def load_examples_from_file(self, file_path: Path) -> list[dict[str, Any]]:
         """Load and parse examples from a JSONL file.
 
         Adds source file metadata to each example for provenance tracking.
@@ -143,32 +142,27 @@ class DatasetConcatenator:
         examples = []
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 for line_number, line in enumerate(f, start=1):
                     line = line.strip()
 
                     if not line:  # Skip blank lines
                         continue
 
-                    example = self._parse_json_line(
-                        line, file_path, line_number
-                    )
+                    example = self._parse_json_line(line, file_path, line_number)
 
                     if example:
                         self._add_source_metadata(example, file_path)
                         examples.append(example)
 
-        except IOError as e:
+        except OSError as e:
             print(f"Error reading {file_path}: {e}")
 
         return examples
 
     def _parse_json_line(
-        self,
-        line: str,
-        file_path: Path,
-        line_number: int
-    ) -> Optional[Dict[str, Any]]:
+        self, line: str, file_path: Path, line_number: int
+    ) -> dict[str, Any] | None:
         """Parse a single JSON line with error handling.
 
         Parameters
@@ -186,16 +180,15 @@ class DatasetConcatenator:
             Parsed JSON object, or None if parsing failed
         """
         try:
-            return json.loads(line)
+            result = json.loads(line)
+            if isinstance(result, dict):
+                return result
+            return None
         except json.JSONDecodeError as e:
             print(f"Warning: Invalid JSON at {file_path}:{line_number}: {e}")
             return None
 
-    def _add_source_metadata(
-        self,
-        example: Dict[str, Any],
-        file_path: Path
-    ) -> None:
+    def _add_source_metadata(self, example: dict[str, Any], file_path: Path) -> None:
         """Add source file metadata to example for provenance tracking.
 
         Modifies the example dict in place.
@@ -230,7 +223,7 @@ class DatasetConcatenator:
         except ValueError:
             return str(path)
 
-    def concatenate(self, output_path: Path) -> Dict[str, Any]:
+    def concatenate(self, output_path: Path) -> dict[str, Any]:
         """Concatenate all training datasets into a single file.
 
         Parameters
@@ -266,15 +259,13 @@ class DatasetConcatenator:
         self._write_jsonl(output_path, all_examples)
 
         # Generate and return statistics
-        stats = self._compute_statistics(
-            all_examples, training_files, file_stats
-        )
+        stats = self._compute_statistics(all_examples, training_files, file_stats)
 
         self._print_completion_message(output_path, stats)
 
         return stats
 
-    def _print_discovered_files(self, file_paths: List[Path]) -> None:
+    def _print_discovered_files(self, file_paths: list[Path]) -> None:
         """Print list of discovered training files.
 
         Parameters
@@ -288,9 +279,8 @@ class DatasetConcatenator:
             print(f"  - {relative_path}")
 
     def _load_all_examples(
-        self,
-        file_paths: List[Path]
-    ) -> tuple[List[Dict[str, Any]], Dict[str, int]]:
+        self, file_paths: list[Path]
+    ) -> tuple[list[dict[str, Any]], dict[str, int]]:
         """Load examples from all files and track per-file statistics.
 
         Parameters
@@ -319,11 +309,7 @@ class DatasetConcatenator:
 
         return all_examples, file_stats
 
-    def _write_jsonl(
-        self,
-        output_path: Path,
-        examples: List[Dict[str, Any]]
-    ) -> None:
+    def _write_jsonl(self, output_path: Path, examples: list[dict[str, Any]]) -> None:
         """Write examples to JSONL file.
 
         Parameters
@@ -342,10 +328,10 @@ class DatasetConcatenator:
 
     def _compute_statistics(
         self,
-        examples: List[Dict[str, Any]],
-        source_files: List[Path],
-        file_breakdown: Dict[str, int]
-    ) -> Dict[str, Any]:
+        examples: list[dict[str, Any]],
+        source_files: list[Path],
+        file_breakdown: dict[str, int],
+    ) -> dict[str, Any]:
         """Compute comprehensive statistics about the dataset.
 
         Parameters
@@ -370,10 +356,7 @@ class DatasetConcatenator:
             "by_task": self._count_by_task(examples),
         }
 
-    def _count_by_source_type(
-        self,
-        examples: List[Dict[str, Any]]
-    ) -> Dict[str, int]:
+    def _count_by_source_type(self, examples: list[dict[str, Any]]) -> dict[str, int]:
         """Count examples by source type.
 
         Checks both 'meta.source' and top-level 'source' fields.
@@ -388,12 +371,10 @@ class DatasetConcatenator:
         dict
             Source type counts
         """
-        source_types = (
-            self._extract_source_type(ex) for ex in examples
-        )
+        source_types = (self._extract_source_type(ex) for ex in examples)
         return dict(Counter(source_types))
 
-    def _extract_source_type(self, example: Dict[str, Any]) -> str:
+    def _extract_source_type(self, example: dict[str, Any]) -> str:
         """Extract source type from example metadata.
 
         Parameters
@@ -407,13 +388,16 @@ class DatasetConcatenator:
             Source type identifier
         """
         # Check nested metadata first, then top-level
-        meta_source = example.get("meta", {}).get("source")
-        return meta_source or example.get("source", "unknown")
+        meta = example.get("meta")
+        if isinstance(meta, dict):
+            meta_source = meta.get("source")
+            if isinstance(meta_source, str):
+                return meta_source
 
-    def _count_by_task(
-        self,
-        examples: List[Dict[str, Any]]
-    ) -> Dict[str, int]:
+        source = example.get("source", "unknown")
+        return source if isinstance(source, str) else "unknown"
+
+    def _count_by_task(self, examples: list[dict[str, Any]]) -> dict[str, int]:
         """Count examples by task type.
 
         Parameters
@@ -441,11 +425,7 @@ class DatasetConcatenator:
         print(title)
         print("=" * HEADER_WIDTH)
 
-    def _print_completion_message(
-        self,
-        output_path: Path,
-        stats: Dict[str, Any]
-    ) -> None:
+    def _print_completion_message(self, output_path: Path, stats: dict[str, Any]) -> None:
         """Print completion message with summary.
 
         Parameters
@@ -465,7 +445,7 @@ class DatasetConcatenator:
 class StatisticsPrinter:
     """Formats and prints dataset statistics in human-readable form."""
 
-    def __init__(self, stats: Dict[str, Any]):
+    def __init__(self, stats: dict[str, Any]):
         """Initialize printer with statistics.
 
         Parameters
@@ -549,7 +529,7 @@ class StatisticsPrinter:
         """
         if self.total_examples == 0:
             return 0.0
-        return (count / self.total_examples) * 100
+        return float((count / self.total_examples) * 100)
 
 
 def main() -> None:

@@ -7,43 +7,42 @@ This module provides a singleton logging infrastructure with:
 - Performance tracking utilities
 """
 
+import functools
 import logging
 import logging.handlers
 import sys
 import time
-import functools
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Any, Optional
+from typing import Any, Optional
 
 
 class ColoredFormatter(logging.Formatter):
     """Formatter that adds color to console output."""
 
     COLORS = {
-        'DEBUG': '\033[36m',      # Cyan
-        'INFO': '\033[32m',       # Green
-        'WARNING': '\033[33m',    # Yellow
-        'ERROR': '\033[31m',      # Red
-        'CRITICAL': '\033[35m',   # Magenta
+        "DEBUG": "\033[36m",  # Cyan
+        "INFO": "\033[32m",  # Green
+        "WARNING": "\033[33m",  # Yellow
+        "ERROR": "\033[31m",  # Red
+        "CRITICAL": "\033[35m",  # Magenta
     }
-    RESET = '\033[0m'
+    RESET = "\033[0m"
 
     def format(self, record: logging.LogRecord) -> str:
         """Format log record with color."""
         if record.levelname in self.COLORS:
-            record.levelname = (
-                f"{self.COLORS[record.levelname]}{record.levelname}{self.RESET}"
-            )
+            record.levelname = f"{self.COLORS[record.levelname]}{record.levelname}{self.RESET}"
         return super().format(record)
 
 
 class IBERTLogger:
     """Singleton logger for iBERT with structured logging."""
 
-    _instance: Optional['IBERTLogger'] = None
+    _instance: Optional["IBERTLogger"] = None
     _initialized: bool = False
 
-    def __new__(cls) -> 'IBERTLogger':
+    def __new__(cls) -> "IBERTLogger":
         """Ensure singleton instance."""
         if cls._instance is None:
             cls._instance = super().__new__(cls)
@@ -63,8 +62,7 @@ class IBERTLogger:
         console_handler = logging.StreamHandler(sys.stderr)
         console_handler.setLevel(logging.INFO)
         console_formatter = ColoredFormatter(
-            "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S"
+            "%(asctime)s | %(levelname)-8s | %(name)s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
         )
         console_handler.setFormatter(console_formatter)
         self._logger.addHandler(console_handler)
@@ -77,12 +75,12 @@ class IBERTLogger:
             log_dir / "ibert.log",
             maxBytes=10_000_000,  # 10MB
             backupCount=5,
-            encoding='utf-8'
+            encoding="utf-8",
         )
         file_handler.setLevel(logging.DEBUG)
         file_formatter = logging.Formatter(
             "%(asctime)s | %(levelname)-8s | %(name)s:%(lineno)d | %(funcName)s | %(message)s",
-            datefmt="%Y-%m-%d %H:%M:%S"
+            datefmt="%Y-%m-%d %H:%M:%S",
         )
         file_handler.setFormatter(file_formatter)
         self._logger.addHandler(file_handler)
@@ -194,11 +192,7 @@ def log_performance(func: Callable) -> Callable:
             result = func(*args, **kwargs)
             elapsed = time.perf_counter() - start_time
 
-            logger.info(
-                "Completed %s in %.2f seconds",
-                func_name,
-                elapsed
-            )
+            logger.info("Completed %s in %.2f seconds", func_name, elapsed)
 
             return result
 
@@ -206,11 +200,7 @@ def log_performance(func: Callable) -> Callable:
             elapsed = time.perf_counter() - start_time
 
             logger.error(
-                "Failed %s after %.2f seconds: %s",
-                func_name,
-                elapsed,
-                str(e),
-                exc_info=True
+                "Failed %s after %.2f seconds: %s", func_name, elapsed, str(e), exc_info=True
             )
             raise
 
@@ -239,9 +229,9 @@ class LogContext:
         """
         self.logger = get_logger(logger_name)
         self.operation = operation
-        self.start_time: Optional[float] = None
+        self.start_time: float | None = None
 
-    def __enter__(self) -> 'LogContext':
+    def __enter__(self) -> "LogContext":
         """Enter context."""
         self.start_time = time.perf_counter()
         self.logger.info("→ %s started", self.operation)
@@ -253,15 +243,8 @@ class LogContext:
             elapsed = time.perf_counter() - self.start_time
 
             if exc_type is None:
-                self.logger.info(
-                    "✓ %s completed in %.2f seconds",
-                    self.operation,
-                    elapsed
-                )
+                self.logger.info("✓ %s completed in %.2f seconds", self.operation, elapsed)
             else:
                 self.logger.error(
-                    "✗ %s failed after %.2f seconds: %s",
-                    self.operation,
-                    elapsed,
-                    str(exc_val)
+                    "✗ %s failed after %.2f seconds: %s", self.operation, elapsed, str(exc_val)
                 )

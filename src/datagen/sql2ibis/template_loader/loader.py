@@ -6,10 +6,7 @@ from typing import Any, Dict, List
 
 import yaml
 
-from src.datagen.sql2ibis.template_loader.expander import (
-    expand_template_variations,
-    ParameterSpaceConfig,
-)
+from src.datagen.sql2ibis.template_loader.expander import expand_template_variations
 
 
 class Template:
@@ -42,9 +39,7 @@ class Template:
         if self.parameter_space:
             for base_variation in self.variations:
                 expanded_vars = expand_template_variations(
-                    base_variation,
-                    self.parameter_space,
-                    name_pattern="{base_name}_{idx}"
+                    base_variation, self.parameter_space, name_pattern="{base_name}_{idx}"
                 )
                 expanded.extend(expanded_vars)
         else:
@@ -55,9 +50,7 @@ class Template:
                 if var_param_space:
                     # Expand this variation
                     expanded_vars = expand_template_variations(
-                        base_variation,
-                        var_param_space,
-                        name_pattern="{base_name}_{idx}"
+                        base_variation, var_param_space, name_pattern="{base_name}_{idx}"
                     )
                     expanded.extend(expanded_vars)
                 else:

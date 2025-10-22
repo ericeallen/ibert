@@ -1,7 +1,5 @@
 """Code completion task for Ibis expressions."""
 
-from typing import Optional
-
 from .base import BaseTask
 
 
@@ -77,9 +75,7 @@ Provide only the completed code."""
         system_prompt = self.get_system_prompt()
         user_prompt = self.format_prompt(input_text, **kwargs)
 
-        output = self.model.generate(
-            prompt=user_prompt, system_prompt=system_prompt
-        )
+        output = self.model.generate(prompt=user_prompt, system_prompt=system_prompt)
 
         return self.post_process(output)
 

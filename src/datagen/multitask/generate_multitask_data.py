@@ -21,7 +21,7 @@ import json
 import sys
 import uuid
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 
 import yaml
 
@@ -50,7 +50,7 @@ class MultitaskDataGenerator:
             "documentation": self._generate_documentation,
         }
 
-    def generate_all(self) -> Dict[str, int]:
+    def generate_all(self) -> dict[str, int]:
         """Generate data for all tasks.
 
         Returns:
@@ -58,9 +58,9 @@ class MultitaskDataGenerator:
         """
         stats = {}
         for task_name, generator_func in self.generators.items():
-            print(f"\n{'='*60}")
+            print(f"\n{'=' * 60}")
             print(f"Generating {task_name} examples...")
-            print(f"{'='*60}")
+            print(f"{'=' * 60}")
             count = generator_func()
             stats[task_name] = count
             print(f"✓ Generated {count} examples for {task_name}")
@@ -84,14 +84,13 @@ class MultitaskDataGenerator:
         """
         if task_name not in self.generators:
             raise ValueError(
-                f"Unknown task: {task_name}. "
-                f"Supported tasks: {list(self.generators.keys())}"
+                f"Unknown task: {task_name}. Supported tasks: {list(self.generators.keys())}"
             )
 
         print(f"\nGenerating {task_name} examples...")
         return self.generators[task_name]()
 
-    def _load_templates(self, task_name: str) -> List[Dict[str, Any]]:
+    def _load_templates(self, task_name: str) -> list[dict[str, Any]]:
         """Load all templates for a task.
 
         Args:
@@ -117,7 +116,7 @@ class MultitaskDataGenerator:
 
         return templates
 
-    def _write_jsonl(self, task_name: str, examples: List[Dict[str, Any]]) -> None:
+    def _write_jsonl(self, task_name: str, examples: list[dict[str, Any]]) -> None:
         """Write examples to JSONL file.
 
         Args:
@@ -300,17 +299,15 @@ class MultitaskDataGenerator:
                         outfile.write(line)
                         total_count += 1
 
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"✓ Combined all tasks into {combined_path}")
         print(f"✓ Total examples: {total_count}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
 
 def main():
     """Main entry point."""
-    parser = argparse.ArgumentParser(
-        description="Generate multi-task training data for iBERT"
-    )
+    parser = argparse.ArgumentParser(description="Generate multi-task training data for iBERT")
     parser.add_argument(
         "--task",
         choices=[

@@ -1,16 +1,13 @@
 """Tests for multi-task data validation system."""
 
 import json
-import pytest
-from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
-import pandas as pd
-import ibis
+from unittest.mock import MagicMock, patch
 
-from src.datagen.multitask.validate_multitask_data import (
-    MultitaskValidator,
-    ValidationError,
-)
+import ibis
+import pandas as pd
+import pytest
+
+from src.datagen.multitask.validate_multitask_data import MultitaskValidator
 
 
 class TestMultitaskValidator:
@@ -33,13 +30,7 @@ class TestMultitaskValidator:
         """Test mock table creation from schema."""
         context = {
             "tables": {
-                "test_table": {
-                    "schema": {
-                        "age": "int64",
-                        "name": "string",
-                        "active": "bool"
-                    }
-                }
+                "test_table": {"schema": {"age": "int64", "name": "string", "active": "bool"}}
             }
         }
         namespace = {"ibis": ibis}
@@ -51,13 +42,7 @@ class TestMultitaskValidator:
 
     def test_create_mock_tables_handles_keywords(self, validator):
         """Test that SQL keywords are properly quoted."""
-        context = {
-            "tables": {
-                "table": {  # SQL keyword
-                    "schema": {"id": "int64"}
-                }
-            }
-        }
+        context = {"tables": {"table": {"schema": {"id": "int64"}}}}  # SQL keyword
         namespace = {"ibis": ibis}
 
         validator._create_mock_tables(context, namespace)
@@ -81,11 +66,7 @@ class TestMultitaskValidator:
             "task": "code_completion",
             "input": {"partial_code": "table.filter("},
             "target": {"completed_code": "table.filter(table.age > 18)"},
-            "context": {
-                "tables": {
-                    "table": {"schema": {"age": "int64"}}
-                }
-            }
+            "context": {"tables": {"table": {"schema": {"age": "int64"}}}},
         }
 
         success, error = validator._validate_code_completion(example)
@@ -99,7 +80,7 @@ class TestMultitaskValidator:
             "task": "code_completion",
             "input": {"partial_code": "table.filter("},
             "target": {"completed_code": "table.filter(table.age > "},  # Incomplete
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_code_completion(example)
@@ -113,7 +94,7 @@ class TestMultitaskValidator:
             "task": "code_completion",
             "input": {"partial_code": "table.filter("},
             "target": {"completed_code": ""},
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_code_completion(example)
@@ -127,7 +108,7 @@ class TestMultitaskValidator:
             "task": "code_completion",
             "input": {"partial_code": "table.filter(table.age"},
             "target": {"completed_code": "other_table.filter(table.age > 18)"},
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_code_completion(example)
@@ -142,10 +123,10 @@ class TestMultitaskValidator:
             "task": "sql_to_ibis",
             "input": {"sql": "SELECT * FROM events"},
             "target": {"ibis": "events"},
-            "context": {"tables": {"events": {}}}
+            "context": {"tables": {"events": {}}},
         }
 
-        with patch.object(validator.sql_ibis_validator, 'validate_example') as mock_validate:
+        with patch.object(validator.sql_ibis_validator, "validate_example") as mock_validate:
             mock_validate.return_value = (True, None)
 
             success, error = validator._validate_sql_to_ibis(example)
@@ -158,18 +139,9 @@ class TestMultitaskValidator:
         """Test valid Ibis→SQL translation."""
         example = {
             "task": "ibis_to_sql",
-            "input": {
-                "ibis": "users.filter(users.age > 18)",
-                "dialect": "duckdb"
-            },
-            "target": {
-                "sql": "SELECT * FROM users WHERE age > 18"
-            },
-            "context": {
-                "tables": {
-                    "users": {"schema": {"age": "int64", "name": "string"}}
-                }
-            }
+            "input": {"ibis": "users.filter(users.age > 18)", "dialect": "duckdb"},
+            "target": {"sql": "SELECT * FROM users WHERE age > 18"},
+            "context": {"tables": {"users": {"schema": {"age": "int64", "name": "string"}}}},
         }
 
         success, error = validator._validate_ibis_to_sql(example)
@@ -184,7 +156,7 @@ class TestMultitaskValidator:
             "task": "ibis_to_sql",
             "input": {"ibis": "table.filter(table.age > 18)"},
             "target": {},  # Missing sql
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_ibis_to_sql(example)
@@ -199,17 +171,13 @@ class TestMultitaskValidator:
             "task": "error_resolution",
             "input": {
                 "broken_code": "table.filter(table.age > '18')",  # Type error
-                "error": "TypeError"
+                "error": "TypeError",
             },
             "target": {
                 "fixed_code": "table.filter(table.age > 18)",
-                "explanation": "Removed quotes to compare as integer"
+                "explanation": "Removed quotes to compare as integer",
             },
-            "context": {
-                "tables": {
-                    "table": {"schema": {"age": "int64"}}
-                }
-            }
+            "context": {"tables": {"table": {"schema": {"age": "int64"}}}},
         }
 
         success, error = validator._validate_error_resolution(example)
@@ -224,7 +192,7 @@ class TestMultitaskValidator:
             "input": {"broken_code": "table.filter()"},
             "target": {"fixed_code": "table.filter(table.age > 18)"},
             # Missing error and explanation
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_error_resolution(example)
@@ -236,15 +204,12 @@ class TestMultitaskValidator:
         """Test when fixed code has syntax error."""
         example = {
             "task": "error_resolution",
-            "input": {
-                "broken_code": "table.filter(table.age > '18')",
-                "error": "TypeError"
-            },
+            "input": {"broken_code": "table.filter(table.age > '18')", "error": "TypeError"},
             "target": {
                 "fixed_code": "table.filter(table.age >",  # Incomplete
-                "explanation": "Convert string to int"
+                "explanation": "Convert string to int",
             },
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_error_resolution(example)
@@ -256,15 +221,12 @@ class TestMultitaskValidator:
         """Test when explanation is too short."""
         example = {
             "task": "error_resolution",
-            "input": {
-                "broken_code": "x = 1",
-                "error": "Error"
-            },
+            "input": {"broken_code": "x = 1", "error": "Error"},
             "target": {
                 "fixed_code": "x = 2",
-                "explanation": "Fix"  # Too short
+                "explanation": "Fix",  # Too short
             },
-            "context": {}
+            "context": {},
         }
 
         success, error = validator._validate_error_resolution(example)
@@ -280,7 +242,7 @@ class TestMultitaskValidator:
             "input": {"question": "How do I filter rows in Ibis?"},
             "target": {
                 "answer": "You can filter rows using the .filter() method. For example: table.filter(table.age > 18)"
-            }
+            },
         }
 
         success, error = validator._validate_qa(example)
@@ -290,11 +252,7 @@ class TestMultitaskValidator:
 
     def test_validate_qa_empty_question(self, validator):
         """Test with empty question."""
-        example = {
-            "task": "qa",
-            "input": {"question": ""},
-            "target": {"answer": "Some answer"}
-        }
+        example = {"task": "qa", "input": {"question": ""}, "target": {"answer": "Some answer"}}
 
         success, error = validator._validate_qa(example)
 
@@ -306,7 +264,7 @@ class TestMultitaskValidator:
         example = {
             "task": "qa",
             "input": {"question": "How to filter?"},
-            "target": {"answer": "Use filter"}  # Too short
+            "target": {"answer": "Use filter"},  # Too short
         }
 
         success, error = validator._validate_qa(example)
@@ -327,7 +285,7 @@ table.filter(table.age > 18)
 ```
 
 This will filter rows where age is greater than 18."""
-            }
+            },
         }
 
         success, error = validator._validate_qa(example)
@@ -341,11 +299,11 @@ This will filter rows where age is greater than 18."""
             "task": "documentation",
             "input": {
                 "code": "def filter_adults(table):\n    return table.filter(table.age >= 18)",
-                "style": "google"
+                "style": "google",
             },
             "target": {
                 "docstring": '"""Filter table to adults.\n\nArgs:\n    table: Input table\n\nReturns:\n    Filtered table"""'
-            }
+            },
         }
 
         success, error = validator._validate_documentation(example)
@@ -358,11 +316,11 @@ This will filter rows where age is greater than 18."""
             "task": "documentation",
             "input": {
                 "code": "def filter_adults(table):\n    return table.filter(table.age >= 18)",
-                "style": "numpy"
+                "style": "numpy",
             },
             "target": {
                 "docstring": '"""Filter table.\n\nParameters\n----------\ntable\n\nReturns\n-------\nFiltered table"""'
-            }
+            },
         }
 
         success, error = validator._validate_documentation(example)
@@ -374,7 +332,7 @@ This will filter rows where age is greater than 18."""
         example = {
             "task": "documentation",
             "input": {"code": "", "style": "google"},
-            "target": {"docstring": "Some docstring"}
+            "target": {"docstring": "Some docstring"},
         }
 
         success, error = validator._validate_documentation(example)
@@ -385,13 +343,8 @@ This will filter rows where age is greater than 18."""
         """Test docstring missing required sections."""
         example = {
             "task": "documentation",
-            "input": {
-                "code": "def foo():\n    pass",
-                "style": "google"
-            },
-            "target": {
-                "docstring": '"""Just a function"""'  # Missing Args/Returns
-            }
+            "input": {"code": "def foo():\n    pass", "style": "google"},
+            "target": {"docstring": '"""Just a function"""'},  # Missing Args/Returns
         }
 
         success, error = validator._validate_documentation(example)
@@ -403,11 +356,8 @@ This will filter rows where age is greater than 18."""
         """Test docstring that's too short."""
         example = {
             "task": "documentation",
-            "input": {
-                "code": "def foo():\n    pass",
-                "style": "google"
-            },
-            "target": {"docstring": '"""Short"""'}
+            "input": {"code": "def foo():\n    pass", "style": "google"},
+            "target": {"docstring": '"""Short"""'},
         }
 
         success, error = validator._validate_documentation(example)
@@ -421,9 +371,9 @@ This will filter rows where age is greater than 18."""
             "task": "documentation",
             "input": {
                 "code": "def foo(",  # Incomplete
-                "style": "google"
+                "style": "google",
             },
-            "target": {"docstring": '"""A function.\n\nReturns:\n    None"""'}
+            "target": {"docstring": '"""A function.\n\nReturns:\n    None"""'},
         }
 
         success, error = validator._validate_documentation(example)
@@ -450,19 +400,23 @@ This will filter rows where age is greater than 18."""
                 "id": "1",
                 "task": "qa",
                 "input": {"question": "How to use Ibis?"},
-                "target": {"answer": "Ibis is a Python library for data manipulation that works with many backends."}
+                "target": {
+                    "answer": "Ibis is a Python library for data manipulation that works with many backends."
+                },
             },
             {
                 "id": "2",
                 "task": "qa",
                 "input": {"question": "What is filtering?"},
-                "target": {"answer": "Filtering is selecting rows that meet certain conditions using the filter method."}
-            }
+                "target": {
+                    "answer": "Filtering is selecting rows that meet certain conditions using the filter method."
+                },
+            },
         ]
 
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             for ex in examples:
-                f.write(json.dumps(ex) + '\n')
+                f.write(json.dumps(ex) + "\n")
 
         total, valid, failed = validator.validate_file(test_file)
 
@@ -478,19 +432,19 @@ This will filter rows where age is greater than 18."""
                 "id": "1",
                 "task": "qa",
                 "input": {"question": "Valid question?"},
-                "target": {"answer": "This is a valid answer that is long enough."}
+                "target": {"answer": "This is a valid answer that is long enough."},
             },
             {
                 "id": "2",
                 "task": "qa",
                 "input": {"question": ""},  # Invalid
-                "target": {"answer": "Answer"}
-            }
+                "target": {"answer": "Answer"},
+            },
         ]
 
-        with open(test_file, 'w') as f:
+        with open(test_file, "w") as f:
             for ex in examples:
-                f.write(json.dumps(ex) + '\n')
+                f.write(json.dumps(ex) + "\n")
 
         total, valid, failed = validator.validate_file(test_file)
 
@@ -503,16 +457,22 @@ This will filter rows where age is greater than 18."""
         """Test validation with invalid JSON."""
         test_file = tmp_path / "test.jsonl"
 
-        with open(test_file, 'w') as f:
-            f.write('{"valid": "json", "task": "qa", "input": {"question": "test"}, "target": {"answer": "test answer"}}\n')
-            f.write('invalid json here\n')
+        with open(test_file, "w") as f:
+            f.write(
+                '{"valid": "json", "task": "qa", "input": {"question": "test"}, "target": {"answer": "test answer"}}\n'
+            )
+            f.write("invalid json here\n")
 
         total, valid, failed = validator.validate_file(test_file)
 
         assert total == 2
         assert len(failed) >= 1  # At least the invalid JSON should fail
         # Check that at least one failure is due to JSON error
-        json_errors = [f for f in failed if "JSON" in f.get("error", "").upper() or "json" in f.get("error", "")]
+        json_errors = [
+            f
+            for f in failed
+            if "JSON" in f.get("error", "").upper() or "json" in f.get("error", "")
+        ]
         assert len(json_errors) >= 1
 
     def test_validate_file_empty(self, validator, tmp_path):
@@ -540,30 +500,32 @@ class TestIntegration:
                 "task": "code_completion",
                 "input": {"partial_code": "table.filter("},
                 "target": {"completed_code": "table.filter(table.age > 18)"},
-                "context": {"tables": {"table": {"schema": {"age": "int64"}}}}
+                "context": {"tables": {"table": {"schema": {"age": "int64"}}}},
             },
             {
                 "id": "2",
                 "task": "qa",
                 "input": {"question": "What is Ibis?"},
-                "target": {"answer": "Ibis is a Python dataframe library that works with many different backends."}
+                "target": {
+                    "answer": "Ibis is a Python dataframe library that works with many different backends."
+                },
             },
             {
                 "id": "3",
                 "task": "documentation",
                 "input": {
                     "code": "def filter_data(table):\n    return table.filter(table.age > 18)",
-                    "style": "google"
+                    "style": "google",
                 },
                 "target": {
                     "docstring": '"""Filter data.\n\nArgs:\n    table: Input table\n\nReturns:\n    Filtered table"""'
-                }
-            }
+                },
+            },
         ]
 
-        with open(data_file, 'w') as f:
+        with open(data_file, "w") as f:
             for ex in examples:
-                f.write(json.dumps(ex) + '\n')
+                f.write(json.dumps(ex) + "\n")
 
         # Run validation
         validator = MultitaskValidator()
@@ -588,36 +550,36 @@ class TestIntegration:
                 "task": "code_completion",
                 "input": {"partial_code": "t.select("},
                 "target": {"completed_code": "t.select(t.col1, t.col2)"},
-                "context": {}
+                "context": {},
             },
             "sql_to_ibis": {
                 "task": "sql_to_ibis",
                 "input": {"sql": "SELECT * FROM users WHERE age > 18"},
                 "target": {"ibis": "users.filter(users.age > 18)"},
-                "context": {"tables": {"users": {}}}
+                "context": {"tables": {"users": {}}},
             },
             "ibis_to_sql": {
                 "task": "ibis_to_sql",
                 "input": {"ibis": "t.filter(t.age > 18)", "dialect": "duckdb"},
                 "target": {"sql": "SELECT * FROM t WHERE age > 18"},
-                "context": {"tables": {"t": {"schema": {"age": "int64"}}}}
+                "context": {"tables": {"t": {"schema": {"age": "int64"}}}},
             },
             "error_resolution": {
                 "task": "error_resolution",
                 "input": {"broken_code": "x = ", "error": "SyntaxError"},
                 "target": {"fixed_code": "x = 1", "explanation": "Added value to assignment"},
-                "context": {}
+                "context": {},
             },
             "qa": {
                 "task": "qa",
                 "input": {"question": "How to filter?"},
-                "target": {"answer": "Use the filter method to select rows that meet conditions."}
+                "target": {"answer": "Use the filter method to select rows that meet conditions."},
             },
             "documentation": {
                 "task": "documentation",
                 "input": {"code": "def foo():\n    pass", "style": "google"},
-                "target": {"docstring": '"""A function.\n\nReturns:\n    None"""'}
-            }
+                "target": {"docstring": '"""A function.\n\nReturns:\n    None"""'},
+            },
         }
 
         results = {}
@@ -627,6 +589,5 @@ class TestIntegration:
 
         # All tasks should at least validate without crashing
         assert len(results) == 6
-        for task_name, (success, error) in results.items():
+        for task_name, (success, _error) in results.items():
             assert isinstance(success, bool), f"{task_name} validation returned non-bool"
-
